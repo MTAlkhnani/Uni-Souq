@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # unisouq
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Uni-Souq
+>>>>>>> 9c8292866e25f7c4da27db8e5a4d4ed41a9fef22
