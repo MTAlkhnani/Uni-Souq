@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1091791953567",
+    "project_id": "uni-souq",
+    "storage_bucket": "uni-souq.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091791953567:android:ae5994974f0eefa8c94caa",
+        "android_client_info": {
+          "package_name": "com.team1.unisouq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzfMrYYxKgJUlvgHj0om82_VwDbLjlRko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
