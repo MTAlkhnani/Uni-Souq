@@ -96,7 +96,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     lastContext = context;
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey[100],
         body: Background(
           child: Stack(
