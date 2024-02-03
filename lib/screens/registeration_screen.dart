@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import '../components/background.dart';
 import 'customer_screen.dart';
@@ -10,7 +11,7 @@ import 'login_screen.dart';
 class RegistrationScreen extends StatefulWidget {
   static String id = '/sign-up';
 
-  const RegistrationScreen({super.key});
+  const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -62,7 +63,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Navigator.of(lastContext!).pop();
       Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
     } on FirebaseAuthException catch (error) {
-      var message = 'An error occurd, please check your credentials!';
+      var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
         ScaffoldMessenger.of(lastContext!)
@@ -96,7 +97,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     lastContext = context;
     return SafeArea(
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey[100],
         body: Background(
           child: Stack(
@@ -130,290 +130,145 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          // UserImage(profileImage: _pickedImage),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                key: const ValueKey('Username'),
-                                controller: usernameController,
-                                keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.person),
-                                  hintText: 'Username',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                validator: (val) {
-                                  if (val!.isEmpty) {
-                                    return 'Please fill in this field';
-                                  } else if (val.length > 30) {
-                                    return 'Name too long';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (username) {
-                                  usernameController.text = username!;
-                                },
-                              ),
-                            ),
+                          MyTextField(
+                            controller: usernameController,
+                            hintText: 'Username',
+                            keyboardType: TextInputType.name,
+                            prefixIcon: Icons.person,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (val.length > 30) {
+                                return 'Name too long';
+                              }
+                              return null;
+                            },
+                            onSaved: (username) {
+                              usernameController.text = username;
+                            },
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                controller: phoneController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: const ValueKey('Phone'),
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.phone),
-                                  hintText: 'Phone Number',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value!.isEmpty || value.length != 10) {
-                                    return 'Please enter a valid phone number.';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (phone) {
-                                  phoneController.text = phone!;
-                                },
-                              ),
-                            ),
+                          MyTextField(
+                            autovalidate: true,
+                            controller: phoneController,
+                            hintText: 'Phone Number',
+                            keyboardType: TextInputType.phone,
+                            prefixIcon: Icons.phone,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length != 10) {
+                                return 'Please enter a valid phone number.';
+                              }
+                              return null;
+                            },
+                            onSaved: (phone) {
+                              phoneController.text = phone;
+                            },
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                controller: emailController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: const ValueKey('email'),
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.email),
-                                  hintText: 'Email',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                validator: (val) {
-                                  if (val!.isEmpty) {
-                                    return 'Please fill in this field';
-                                  } else if (!RegExp(
-                                          r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                                      .hasMatch(val)) {
-                                    return 'Please enter a valid email';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (userEmail) {
-                                  emailController.text = userEmail!;
-                                },
-                              ),
-                            ),
+                          MyTextField(
+                            autovalidate: true,
+                            controller: emailController,
+                            hintText: 'Email',
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: Icons.email,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (!RegExp(
+                                      r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                  .hasMatch(val)) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                            onSaved: (userEmail) {
+                              emailController.text = userEmail;
+                            },
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                controller: passwordController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: const ValueKey('password'),
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: obscurePassword,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  prefixIcon:
-                                      const Icon(CupertinoIcons.lock_fill),
-                                  hintText: 'Password',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        obscurePassword = !obscurePassword;
-                                        if (obscurePassword) {
-                                          iconPassword =
-                                              CupertinoIcons.eye_fill;
-                                        } else {
-                                          iconPassword =
-                                              CupertinoIcons.eye_slash_fill;
-                                        }
-                                      });
-                                    },
-                                    icon: Icon(iconPassword),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                onChanged: (val) {
-                                  if (val.contains(RegExp(r'[A-Z]'))) {
-                                    setState(() {
-                                      containsUpperCase = true;
-                                    });
+                          MyTextField(
+                            controller: passwordController,
+                            hintText: 'Password',
+                            keyboardType: TextInputType.visiblePassword,
+                            prefixIcon: CupertinoIcons.lock_fill,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  obscurePassword = !obscurePassword;
+                                  if (obscurePassword) {
+                                    iconPassword = CupertinoIcons.eye_fill;
                                   } else {
-                                    setState(() {
-                                      containsUpperCase = false;
-                                    });
+                                    iconPassword =
+                                        CupertinoIcons.eye_slash_fill;
                                   }
-                                  if (val.contains(RegExp(r'[a-z]'))) {
-                                    setState(() {
-                                      containsLowerCase = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      containsLowerCase = false;
-                                    });
-                                  }
-                                  if (val.contains(RegExp(r'[0-9]'))) {
-                                    setState(() {
-                                      containsNumber = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      containsNumber = false;
-                                    });
-                                  }
-                                  if (val.contains(RegExp(
-                                      r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
-                                    setState(() {
-                                      containsSpecialChar = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      containsSpecialChar = false;
-                                    });
-                                  }
-                                  if (val.length >= 8) {
-                                    setState(() {
-                                      contains8Length = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      contains8Length = false;
-                                    });
-                                  }
-                                  return;
-                                },
-                                validator: (val) {
-                                  if (val!.isEmpty) {
-                                    return 'Please fill in this field';
-                                  } else if (!RegExp(
-                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                      .hasMatch(val)) {
-                                    return 'Please enter a valid password';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (userPassword) {
-                                  passwordController.text = userPassword!;
-                                },
-                              ),
+                                });
+                              },
+                              icon: Icon(iconPassword),
                             ),
+                            onChanged: (val) {
+                              if (val.contains(RegExp(r'[A-Z]'))) {
+                                setState(() {
+                                  containsUpperCase = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsUpperCase = false;
+                                });
+                              }
+                              if (val.contains(RegExp(r'[a-z]'))) {
+                                setState(() {
+                                  containsLowerCase = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsLowerCase = false;
+                                });
+                              }
+                              if (val.contains(RegExp(r'[0-9]'))) {
+                                setState(() {
+                                  containsNumber = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsNumber = false;
+                                });
+                              }
+                              if (val.contains(RegExp(
+                                  r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
+                                setState(() {
+                                  containsSpecialChar = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsSpecialChar = false;
+                                });
+                              }
+                              if (val.length >= 8) {
+                                setState(() {
+                                  contains8Length = true;
+                                });
+                              } else {
+                                setState(() {
+                                  contains8Length = false;
+                                });
+                              }
+                              return;
+                            },
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (!RegExp(
+                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                  .hasMatch(val)) {
+                                return 'Please enter a valid password';
+                              }
+                              return null;
+                            },
+                            onSaved: (userPassword) {
+                              passwordController.text = userPassword;
+                            },
+                            obscureText: obscurePassword,
                           ),
                           const SizedBox(height: 10),
                           Row(
@@ -478,56 +333,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                controller: addressController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: const ValueKey('Address'),
-                                keyboardType: TextInputType.streetAddress,
-                                textInputAction: TextInputAction.done,
-                                decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.location_city),
-                                  hintText: 'Address',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter a valid address.';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (address) {
-                                  addressController.text = address!;
-                                },
-                              ),
-                            ),
+                          MyTextField(
+                            controller: addressController,
+                            hintText: 'Address',
+                            keyboardType: TextInputType.streetAddress,
+                            prefixIcon: Icons.location_city,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a valid address.';
+                              }
+                              return null;
+                            },
+                            onSaved: (address) {
+                              addressController.text = address;
+                            },
                           ),
                           const SizedBox(height: 10),
                           const SizedBox(height: 25),
@@ -564,16 +383,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               Positioned(
-                  top: 30,
-                  left: 5,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    color: const Color.fromRGBO(0, 0, 139, 1),
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.of(context).pop();
-                    },
-                  )),
+                top: 30,
+                left: 5,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  color: const Color.fromRGBO(0, 0, 139, 1),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
             ],
           ),
         ),
