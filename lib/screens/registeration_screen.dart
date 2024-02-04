@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
+import 'package:unisouq/components/fade_animationtest.dart';
 import '../components/background.dart';
 import 'customer_screen.dart';
 import 'login_screen.dart';
@@ -127,256 +128,259 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     const SizedBox(height: 20),
                     Form(
                       key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            controller: usernameController,
-                            hintText: 'Username',
-                            keyboardType: TextInputType.name,
-                            prefixIcon: Icons.person,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (val.length > 30) {
-                                return 'Name too long';
-                              }
-                              return null;
-                            },
-                            onSaved: (username) {
-                              usernameController.text = username;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            autovalidate: true,
-                            controller: phoneController,
-                            hintText: 'Phone Number',
-                            keyboardType: TextInputType.phone,
-                            prefixIcon: Icons.phone,
-                            validator: (value) {
-                              if (value!.isEmpty || value.length != 10) {
-                                return 'Please enter a valid phone number.';
-                              }
-                              return null;
-                            },
-                            onSaved: (phone) {
-                              phoneController.text = phone;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            autovalidate: true,
-                            controller: emailController,
-                            hintText: 'Email',
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: Icons.email,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
-                            onSaved: (userEmail) {
-                              emailController.text = userEmail;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            controller: passwordController,
-                            hintText: 'Password',
-                            keyboardType: TextInputType.visiblePassword,
-                            prefixIcon: CupertinoIcons.lock_fill,
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscurePassword = !obscurePassword;
-                                  if (obscurePassword) {
-                                    iconPassword = CupertinoIcons.eye_fill;
-                                  } else {
-                                    iconPassword =
-                                        CupertinoIcons.eye_slash_fill;
-                                  }
-                                });
+                      child: FadeInAnimation(
+                        delay: 2.2,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              controller: usernameController,
+                              hintText: 'Username',
+                              keyboardType: TextInputType.name,
+                              prefixIcon: Icons.person,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Please fill in this field';
+                                } else if (val.length > 30) {
+                                  return 'Name too long';
+                                }
+                                return null;
                               },
-                              icon: Icon(iconPassword),
+                              onSaved: (username) {
+                                usernameController.text = username;
+                              },
                             ),
-                            onChanged: (val) {
-                              if (val.contains(RegExp(r'[A-Z]'))) {
-                                setState(() {
-                                  containsUpperCase = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsUpperCase = false;
-                                });
-                              }
-                              if (val.contains(RegExp(r'[a-z]'))) {
-                                setState(() {
-                                  containsLowerCase = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsLowerCase = false;
-                                });
-                              }
-                              if (val.contains(RegExp(r'[0-9]'))) {
-                                setState(() {
-                                  containsNumber = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsNumber = false;
-                                });
-                              }
-                              if (val.contains(RegExp(
-                                  r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
-                                setState(() {
-                                  containsSpecialChar = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsSpecialChar = false;
-                                });
-                              }
-                              if (val.length >= 8) {
-                                setState(() {
-                                  contains8Length = true;
-                                });
-                              } else {
-                                setState(() {
-                                  contains8Length = false;
-                                });
-                              }
-                              return;
-                            },
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid password';
-                              }
-                              return null;
-                            },
-                            onSaved: (userPassword) {
-                              passwordController.text = userPassword;
-                            },
-                            obscureText: obscurePassword,
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "⚈  1 uppercase",
-                                    style: TextStyle(
-                                        color: containsUpperCase
-                                            ? Colors.green
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer),
-                                  ),
-                                  Text(
-                                    "⚈  1 lowercase",
-                                    style: TextStyle(
-                                        color: containsLowerCase
-                                            ? Colors.green
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer),
-                                  ),
-                                  Text(
-                                    "⚈  1 number",
-                                    style: TextStyle(
-                                        color: containsNumber
-                                            ? Colors.green
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "⚈  1 special character",
-                                    style: TextStyle(
-                                        color: containsSpecialChar
-                                            ? Colors.green
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer),
-                                  ),
-                                  Text(
-                                    "⚈  8 minimum character",
-                                    style: TextStyle(
-                                        color: contains8Length
-                                            ? Colors.green
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            controller: addressController,
-                            hintText: 'Address',
-                            keyboardType: TextInputType.streetAddress,
-                            prefixIcon: Icons.location_city,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a valid address.';
-                              }
-                              return null;
-                            },
-                            onSaved: (address) {
-                              addressController.text = address;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          const SizedBox(height: 25),
-                          if (isSigningUp)
-                            const CircularProgressIndicator(
-                                color: Color.fromRGBO(0, 0, 139, 1)),
-                          if (!isSigningUp)
-                            RoundedButton(
-                              text: 'Signup',
-                              color: const Color.fromRGBO(0, 0, 139, 1),
-                              press: _submit,
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              autovalidate: true,
+                              controller: phoneController,
+                              hintText: 'Phone Number',
+                              keyboardType: TextInputType.phone,
+                              prefixIcon: Icons.phone,
+                              validator: (value) {
+                                if (value!.isEmpty || value.length != 10) {
+                                  return 'Please enter a valid phone number.';
+                                }
+                                return null;
+                              },
+                              onSaved: (phone) {
+                                phoneController.text = phone;
+                              },
                             ),
-                          if (!isSigningUp)
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              autovalidate: true,
+                              controller: emailController,
+                              hintText: 'Email',
+                              keyboardType: TextInputType.emailAddress,
+                              prefixIcon: Icons.email,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Please fill in this field';
+                                } else if (!RegExp(
+                                        r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                    .hasMatch(val)) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              },
+                              onSaved: (userEmail) {
+                                emailController.text = userEmail;
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              controller: passwordController,
+                              hintText: 'Password',
+                              keyboardType: TextInputType.visiblePassword,
+                              prefixIcon: CupertinoIcons.lock_fill,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    obscurePassword = !obscurePassword;
+                                    if (obscurePassword) {
+                                      iconPassword = CupertinoIcons.eye_fill;
+                                    } else {
+                                      iconPassword =
+                                          CupertinoIcons.eye_slash_fill;
+                                    }
+                                  });
+                                },
+                                icon: Icon(iconPassword),
+                              ),
+                              onChanged: (val) {
+                                if (val.contains(RegExp(r'[A-Z]'))) {
+                                  setState(() {
+                                    containsUpperCase = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    containsUpperCase = false;
+                                  });
+                                }
+                                if (val.contains(RegExp(r'[a-z]'))) {
+                                  setState(() {
+                                    containsLowerCase = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    containsLowerCase = false;
+                                  });
+                                }
+                                if (val.contains(RegExp(r'[0-9]'))) {
+                                  setState(() {
+                                    containsNumber = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    containsNumber = false;
+                                  });
+                                }
+                                if (val.contains(RegExp(
+                                    r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
+                                  setState(() {
+                                    containsSpecialChar = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    containsSpecialChar = false;
+                                  });
+                                }
+                                if (val.length >= 8) {
+                                  setState(() {
+                                    contains8Length = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    contains8Length = false;
+                                  });
+                                }
+                                return;
+                              },
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Please fill in this field';
+                                } else if (!RegExp(
+                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                    .hasMatch(val)) {
+                                  return 'Please enter a valid password';
+                                }
+                                return null;
+                              },
+                              onSaved: (userPassword) {
+                                passwordController.text = userPassword;
+                              },
+                              obscureText: obscurePassword,
+                            ),
+                            const SizedBox(height: 10),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('I am a member!'),
-                                TextButton(
-                                  child: const Text(
-                                    'Login now',
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(0, 0, 139, 1)),
-                                  ),
-                                  onPressed: () => Navigator.of(context)
-                                      .pushReplacementNamed(LoginScreen.id),
-                                )
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "⚈  1 uppercase",
+                                      style: TextStyle(
+                                          color: containsUpperCase
+                                              ? Colors.green
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
+                                    ),
+                                    Text(
+                                      "⚈  1 lowercase",
+                                      style: TextStyle(
+                                          color: containsLowerCase
+                                              ? Colors.green
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
+                                    ),
+                                    Text(
+                                      "⚈  1 number",
+                                      style: TextStyle(
+                                          color: containsNumber
+                                              ? Colors.green
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "⚈  1 special character",
+                                      style: TextStyle(
+                                          color: containsSpecialChar
+                                              ? Colors.green
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
+                                    ),
+                                    Text(
+                                      "⚈  8 minimum character",
+                                      style: TextStyle(
+                                          color: contains8Length
+                                              ? Colors.green
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          const SizedBox(height: 80)
-                        ],
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              controller: addressController,
+                              hintText: 'Address',
+                              keyboardType: TextInputType.streetAddress,
+                              prefixIcon: Icons.location_city,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter a valid address.';
+                                }
+                                return null;
+                              },
+                              onSaved: (address) {
+                                addressController.text = address;
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            const SizedBox(height: 25),
+                            if (isSigningUp)
+                              const CircularProgressIndicator(
+                                  color: Color.fromRGBO(0, 0, 139, 1)),
+                            if (!isSigningUp)
+                              RoundedButton(
+                                text: 'Signup',
+                                color: const Color.fromRGBO(0, 0, 139, 1),
+                                press: _submit,
+                              ),
+                            if (!isSigningUp)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('I am a member!'),
+                                  TextButton(
+                                    child: const Text(
+                                      'Login now',
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(0, 0, 139, 1)),
+                                    ),
+                                    onPressed: () => Navigator.of(context)
+                                        .pushReplacementNamed(LoginScreen.id),
+                                  )
+                                ],
+                              ),
+                            const SizedBox(height: 80)
+                          ],
+                        ),
                       ),
                     )
                   ],
