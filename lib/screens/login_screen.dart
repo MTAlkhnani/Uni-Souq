@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'Transforming Campus Life with Every Login.',
+                      'Transforming Campus Life \nwith Every Login.',
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!

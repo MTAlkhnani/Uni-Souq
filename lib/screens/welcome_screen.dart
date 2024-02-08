@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
         body: Background(
           child: FadeInAnimation(
@@ -64,8 +64,7 @@ class _WelcomeScreenContent extends StatelessWidget {
         RoundedButton(
           text: 'SIGNUP',
           color: const Color.fromRGBO(0, 0, 139, 1),
-          press: () =>
-              Navigator.of(context).pushNamed(RegistrationScreen.id),
+          press: () => Navigator.of(context).pushNamed(RegistrationScreen.id),
         ),
         const SizedBox(height: 20), // Add additional space if needed
       ],
@@ -82,13 +81,14 @@ class _DesktopWelcomeScreenContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: Image.asset('assets/images/img_uni_souq_1.png', fit: BoxFit.cover),
+          child: Image.asset('assets/images/img_uni_souq_1.png',
+              fit: BoxFit.cover),
         ),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
+              const Text(
                 'Welcome to UNI_SOUQ📦',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -150,4 +150,3 @@ class Responsive extends StatelessWidget {
     );
   }
 }
-

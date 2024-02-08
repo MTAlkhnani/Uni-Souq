@@ -28,7 +28,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final phoneController = TextEditingController();
   bool twoFactorEnabled = false;
 
-
   final _formKey = GlobalKey<FormState>();
 
   IconData iconPassword = CupertinoIcons.eye_fill;
@@ -92,7 +91,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           firstnameController.text.trim(),
           lastnameController.text.trim(),
           phoneController.text.trim());
-
     }
   }
 
@@ -156,7 +154,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 firstnameController.text = firstname;
                               },
                             ),
-                            const SizedBox(height: 10), // Added consistent spacing
+                            const SizedBox(
+                                height: 10), // Added consistent spacing
                             MyTextField(
                               controller: lastnameController,
                               hintText: 'Last Name',
@@ -176,7 +175,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 lastnameController.text = lasttname;
                               },
                             ),
-                            const SizedBox(height: 10), // Added consistent spacing
+                            const SizedBox(
+                                height: 10), // Added consistent spacing
                             MyTextField(
                               autovalidate: true,
                               controller: phoneController,
@@ -193,7 +193,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 phoneController.text = phone;
                               },
                             ),
-                            const SizedBox(height: 10), // Added consistent spacing
+                            const SizedBox(
+                                height: 10), // Added consistent spacing
                             MyTextField(
                               autovalidate: true,
                               controller: emailController,
@@ -203,7 +204,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               validator: (val) {
                                 if (val!.isEmpty) {
                                   return 'Please fill in this field';
-                                } else if (!RegExp(r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$').hasMatch(val)) {
+                                } else if (!RegExp(
+                                        r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                    .hasMatch(val)) {
                                   return 'Please enter a valid email';
                                 }
                                 return null;
@@ -212,7 +215,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 emailController.text = userEmail;
                               },
                             ),
-                            const SizedBox(height: 10), // Added consistent spacing
+                            const SizedBox(
+                                height: 10), // Added consistent spacing
                             MyTextField(
                               controller: passwordController,
                               hintText: 'Password',
@@ -225,7 +229,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     if (obscurePassword) {
                                       iconPassword = CupertinoIcons.eye_fill;
                                     } else {
-                                      iconPassword = CupertinoIcons.eye_slash_fill;
+                                      iconPassword =
+                                          CupertinoIcons.eye_slash_fill;
                                     }
                                   });
                                 },
@@ -284,7 +289,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (val!.isEmpty) {
                                   return 'Please fill in this field';
                                 } else if (!RegExp(
-                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
                                     .hasMatch(val)) {
                                   return 'Please enter a valid password';
                                 }
@@ -309,8 +314,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: containsUpperCase
                                               ? Colors.green
                                               : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer),
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
                                     ),
                                     Text(
                                       "⚈  1 lowercase",
@@ -318,8 +323,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: containsLowerCase
                                               ? Colors.green
                                               : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer),
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
                                     ),
                                     Text(
                                       "⚈  1 number",
@@ -327,8 +332,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: containsNumber
                                               ? Colors.green
                                               : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer),
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
                                     ),
                                   ],
                                 ),
@@ -341,8 +346,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: containsSpecialChar
                                               ? Colors.green
                                               : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer),
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
                                     ),
                                     Text(
                                       "⚈  8 minimum character",
@@ -350,25 +355,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: contains8Length
                                               ? Colors.green
                                               : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer),
+                                                  .colorScheme
+                                                  .onSecondaryContainer),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10), // Added consistent spacing for the password rules
+                            const SizedBox(
+                                height:
+                                    10), // Added consistent spacing for the password rules
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 25), // Match the padding of other fields
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal:
+                                      25), // Match the padding of other fields
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         Icon(Icons.security),
-                                        SizedBox(width: 16), // Adjust space between the icon and text
-                                        Text('Enable Two-Factor Authentication'),
+                                        SizedBox(
+                                            width:
+                                                16), // Adjust space between the icon and text
+                                        Text(
+                                            'Enable Two-Factor Authentication'),
                                       ],
                                     ),
                                   ),
@@ -384,16 +397,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 10), // Added consistent spacing before signup button
+                            const SizedBox(
+                                height:
+                                    10), // Added consistent spacing before signup button
                             if (isSigningUp)
-                              const CircularProgressIndicator(color: Color.fromRGBO(0, 0, 139, 1)),
+                              const CircularProgressIndicator(
+                                  color: Color.fromRGBO(0, 0, 139, 1)),
                             if (!isSigningUp)
                               RoundedButton(
                                 text: 'Signup',
                                 color: const Color.fromRGBO(0, 0, 139, 1),
                                 press: _submit,
                               ),
-                            const SizedBox(height: 10), // Added before "I am a member" row for consistency
+                            const SizedBox(
+                                height:
+                                    10), // Added before "I am a member" row for consistency
                             if (!isSigningUp)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -402,18 +420,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   TextButton(
                                     child: const Text(
                                       'Login now',
-                                      style: TextStyle(color: Color.fromRGBO(0, 0, 139, 1)),
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(0, 0, 139, 1)),
                                     ),
-                                    onPressed: () => Navigator.of(context).pushReplacementNamed(LoginScreen.id),
+                                    onPressed: () => Navigator.of(context)
+                                        .pushReplacementNamed(LoginScreen.id),
                                   ),
                                 ],
                               ),
-                            const SizedBox(height: 80), // Consistent bottom spacing
+                            const SizedBox(
+                                height: 80), // Consistent bottom spacing
                           ],
                         ),
                       ),
                     )
-
                   ],
                 ),
               ),
