@@ -78,12 +78,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'Track Your Shipment Now!',
+                      'Transforming Campus Life with Every Login.',
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
                           .copyWith(
-                              fontSize: 23,
+                              fontSize: 20,
                               color: const Color.fromRGBO(0, 0, 139, 1),
                               fontWeight: FontWeight.bold),
                     ),
