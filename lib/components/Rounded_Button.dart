@@ -31,7 +31,7 @@ class RoundedButton extends StatelessWidget {
         width: width != double.infinity
             ? width
             : size.width *
-                0.98, // Use the width passed in or 80% of screen width
+                .98, // Use the width passed in or 80% of screen width
         height: height, // Use the height passed in
         constraints: const BoxConstraints(maxWidth: 300), // Set a maximum width
         child: ElevatedButton(

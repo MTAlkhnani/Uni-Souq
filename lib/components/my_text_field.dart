@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final TextInputAction? textInputAction;
   final String hintText;
   final TextInputType keyboardType;
   final IconData? prefixIcon;
@@ -18,6 +19,7 @@ class MyTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.keyboardType,
+    this.textInputAction = TextInputAction.next,
     this.prefixIcon,
     this.obscureText = false,
     this.suffixIcon,

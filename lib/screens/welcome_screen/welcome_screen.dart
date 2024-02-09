@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
-import 'login_screen.dart';
-import 'registeration_screen.dart';
-import '../components/background.dart';
-import '../components/Rounded_Button.dart';
+import '../sign_in_screen/login_screen.dart';
+import '../sign_up_screen/registeration_screen.dart';
+import '../../components/background.dart';
+import '../../components/Rounded_Button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String id = 'welcome_screen';
@@ -33,41 +33,43 @@ class _WelcomeScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Center(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset('assets/images/img_uni_souq_1.png'),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset('assets/images/img_uni_souq_1.png'),
+            ),
           ),
-        ),
-        const SizedBox(height: 80),
-        const Text(
-          'Welcome to UNI_SOUQ📦',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Color.fromRGBO(0, 0, 139, 1),
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
+          const SizedBox(height: 80),
+          const Text(
+            'Welcome to UNI_SOUQ📦',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color.fromRGBO(0, 0, 139, 1),
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
           ),
-        ),
-        const SizedBox(height: 50),
-        RoundedButton(
-          text: 'LOGIN',
-          color: const Color.fromRGBO(0, 0, 139, 1),
-          press: () {
-            Navigator.of(context).pushNamed(LoginScreen.id);
-          },
-        ),
-        const SizedBox(height: 15),
-        RoundedButton(
-          text: 'SIGNUP',
-          color: const Color.fromRGBO(0, 0, 139, 1),
-          press: () => Navigator.of(context).pushNamed(RegistrationScreen.id),
-        ),
-        const SizedBox(height: 20), // Add additional space if needed
-      ],
+          const SizedBox(height: 50),
+          RoundedButton(
+            text: 'LOGIN',
+            color: const Color.fromRGBO(0, 0, 139, 1),
+            press: () {
+              Navigator.of(context).pushNamed(LoginScreen.id);
+            },
+          ),
+          const SizedBox(height: 15),
+          RoundedButton(
+            text: 'SIGNUP',
+            color: const Color.fromRGBO(0, 0, 139, 1),
+            press: () => Navigator.of(context).pushNamed(RegistrationScreen.id),
+          ),
+          const SizedBox(height: 20), // Add additional space if needed
+        ],
+      ),
     );
   }
 }

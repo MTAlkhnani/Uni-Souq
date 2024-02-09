@@ -1,42 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/models/firebase_options.dart';
 import 'package:flutter/services.dart';
+import 'package:unisouq/routes/app_routes.dart';
 
-// Screens
-import 'screens/customer_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/registeration_screen.dart';
-import 'screens/welcome_screen.dart';
+import 'package:unisouq/utils/pref_utils.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const UniSouq());
-}
-
-class UniSouq extends StatelessWidget {
-  const UniSouq({super.key});
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
+  Future.wait([
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-      DeviceOrientation
-          .portraitDown, // this has to do with device being tilted i think
-    ]);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: WelcomeScreen.id,
-      routes: {
-        WelcomeScreen.id: (context) => const WelcomeScreen(),
-        LoginScreen.id: (context) => const LoginScreen(),
-        RegistrationScreen.id: (context) => const RegistrationScreen(),
-        CustomerScreen.id: (context) => const CustomerScreen(),
-        // ProfileScreen.id: (context) => const ProfileScreen(),
-      },
-    );
+    ]),
+    PrefUtils().init()
+  ]).then((value) {
+    runApp(ProviderScope(child: UniSouq()));
+  });
+}
+
+class UniSouq extends ConsumerWidget {
+  @override
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          initialRoute: AppRoutes.initialRoute,
+          routes: AppRoutes.routes);
+    });
   }
 }
