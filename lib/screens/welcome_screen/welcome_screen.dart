@@ -12,15 +12,13 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Scaffold(
-        body: Background(
-          child: FadeInAnimation(
-            delay: 2.2,
-            child: Responsive(
-              mobile: _WelcomeScreenContent(),
-              desktop: _DesktopWelcomeScreenContent(),
-            ),
+    return const Scaffold(
+      body: Background(
+        child: FadeInAnimation(
+          delay: 2.2,
+          child: Responsive(
+            mobile: _WelcomeScreenContent(),
+            desktop: _DesktopWelcomeScreenContent(),
           ),
         ),
       ),

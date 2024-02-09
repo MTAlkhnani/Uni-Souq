@@ -97,364 +97,356 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     lastContext = context;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        body: Background(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const SizedBox(height: 100),
-                    Text(
-                      'Hello There!',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge!
-                          .copyWith(
-                        fontSize: 40,
-                        color: const Color.fromRGBO(0, 0, 139, 1),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'GreatVibes', // Apply the GreatVibes font family here
-                      ),
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: Background(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(height: 100),
+                  Text(
+                    'Hello There!',
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 40,
+                          color: const Color.fromRGBO(0, 0, 139, 1),
+                          fontWeight: FontWeight.bold,
+                          fontFamily:
+                              'GreatVibes', // Apply the GreatVibes font family here
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Register below with your detail',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Register below with your detail',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-                    Form(
-                      key: _formKey,
-                      child: FadeInAnimation(
-                        delay: 2.2,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            MyTextField(
-                              controller: firstnameController,
-                              hintText: 'First Name',
-                              keyboardType: TextInputType.name,
-                              prefixIcon: Icons.person,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please fill in this field';
-                                } else if (val.length > 30) {
-                                  return 'Name too long';
-                                } else if (val.length < 2) {
-                                  return 'Name too short';
-                                }
-                                return null;
+                  ),
+                  const SizedBox(height: 20),
+                  Form(
+                    key: _formKey,
+                    child: FadeInAnimation(
+                      delay: 2.2,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const SizedBox(height: 10),
+                          MyTextField(
+                            controller: firstnameController,
+                            hintText: 'First Name',
+                            keyboardType: TextInputType.name,
+                            prefixIcon: Icons.person,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (val.length > 30) {
+                                return 'Name too long';
+                              } else if (val.length < 2) {
+                                return 'Name too short';
+                              }
+                              return null;
+                            },
+                            onSaved: (firstname) {
+                              firstnameController.text = firstname;
+                            },
+                          ),
+                          const SizedBox(
+                              height: 10), // Added consistent spacing
+                          MyTextField(
+                            controller: lastnameController,
+                            hintText: 'Last Name',
+                            keyboardType: TextInputType.name,
+                            prefixIcon: Icons.person,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (val.length > 30) {
+                                return 'Name too long';
+                              } else if (val.length < 2) {
+                                return 'Name too short';
+                              }
+                              return null;
+                            },
+                            onSaved: (lasttname) {
+                              lastnameController.text = lasttname;
+                            },
+                          ),
+                          const SizedBox(
+                              height: 10), // Added consistent spacing
+                          MyTextField(
+                            autovalidate: true,
+                            controller: phoneController,
+                            hintText: 'Phone Number',
+                            keyboardType: TextInputType.phone,
+                            prefixIcon: Icons.phone,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length != 10) {
+                                return 'Please enter a valid phone number.';
+                              }
+                              return null;
+                            },
+                            onSaved: (phone) {
+                              phoneController.text = phone;
+                            },
+                          ),
+                          const SizedBox(
+                              height: 10), // Added consistent spacing
+                          MyTextField(
+                            autovalidate: true,
+                            controller: emailController,
+                            hintText: 'Email',
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: Icons.email,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (!RegExp(
+                                      r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                  .hasMatch(val)) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                            onSaved: (userEmail) {
+                              emailController.text = userEmail;
+                            },
+                          ),
+                          const SizedBox(
+                              height: 10), // Added consistent spacing
+                          MyTextField(
+                            controller: passwordController,
+                            hintText: 'Password',
+                            keyboardType: TextInputType.visiblePassword,
+                            prefixIcon: CupertinoIcons.lock_fill,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  obscurePassword = !obscurePassword;
+                                  if (obscurePassword) {
+                                    iconPassword = CupertinoIcons.eye_fill;
+                                  } else {
+                                    iconPassword =
+                                        CupertinoIcons.eye_slash_fill;
+                                  }
+                                });
                               },
-                              onSaved: (firstname) {
-                                firstnameController.text = firstname;
-                              },
+                              icon: Icon(iconPassword),
                             ),
-                            const SizedBox(
-                                height: 10), // Added consistent spacing
-                            MyTextField(
-                              controller: lastnameController,
-                              hintText: 'Last Name',
-                              keyboardType: TextInputType.name,
-                              prefixIcon: Icons.person,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please fill in this field';
-                                } else if (val.length > 30) {
-                                  return 'Name too long';
-                                } else if (val.length < 2) {
-                                  return 'Name too short';
-                                }
-                                return null;
-                              },
-                              onSaved: (lasttname) {
-                                lastnameController.text = lasttname;
-                              },
-                            ),
-                            const SizedBox(
-                                height: 10), // Added consistent spacing
-                            MyTextField(
-                              autovalidate: true,
-                              controller: phoneController,
-                              hintText: 'Phone Number',
-                              keyboardType: TextInputType.phone,
-                              prefixIcon: Icons.phone,
-                              validator: (value) {
-                                if (value!.isEmpty || value.length != 10) {
-                                  return 'Please enter a valid phone number.';
-                                }
-                                return null;
-                              },
-                              onSaved: (phone) {
-                                phoneController.text = phone;
-                              },
-                            ),
-                            const SizedBox(
-                                height: 10), // Added consistent spacing
-                            MyTextField(
-                              autovalidate: true,
-                              controller: emailController,
-                              hintText: 'Email',
-                              keyboardType: TextInputType.emailAddress,
-                              prefixIcon: Icons.email,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please fill in this field';
-                                } else if (!RegExp(
-                                        r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                                    .hasMatch(val)) {
-                                  return 'Please enter a valid email';
-                                }
-                                return null;
-                              },
-                              onSaved: (userEmail) {
-                                emailController.text = userEmail;
-                              },
-                            ),
-                            const SizedBox(
-                                height: 10), // Added consistent spacing
-                            MyTextField(
-                              controller: passwordController,
-                              hintText: 'Password',
-                              keyboardType: TextInputType.visiblePassword,
-                              prefixIcon: CupertinoIcons.lock_fill,
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    obscurePassword = !obscurePassword;
-                                    if (obscurePassword) {
-                                      iconPassword = CupertinoIcons.eye_fill;
-                                    } else {
-                                      iconPassword =
-                                          CupertinoIcons.eye_slash_fill;
-                                    }
-                                  });
-                                },
-                                icon: Icon(iconPassword),
+                            onChanged: (val) {
+                              if (val.contains(RegExp(r'[A-Z]'))) {
+                                setState(() {
+                                  containsUpperCase = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsUpperCase = false;
+                                });
+                              }
+                              if (val.contains(RegExp(r'[a-z]'))) {
+                                setState(() {
+                                  containsLowerCase = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsLowerCase = false;
+                                });
+                              }
+                              if (val.contains(RegExp(r'[0-9]'))) {
+                                setState(() {
+                                  containsNumber = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsNumber = false;
+                                });
+                              }
+                              if (val.contains(RegExp(
+                                  r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
+                                setState(() {
+                                  containsSpecialChar = true;
+                                });
+                              } else {
+                                setState(() {
+                                  containsSpecialChar = false;
+                                });
+                              }
+                              if (val.length >= 8) {
+                                setState(() {
+                                  contains8Length = true;
+                                });
+                              } else {
+                                setState(() {
+                                  contains8Length = false;
+                                });
+                              }
+                              return;
+                            },
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Please fill in this field';
+                              } else if (!RegExp(
+                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                  .hasMatch(val)) {
+                                return 'Please enter a valid password';
+                              }
+                              return null;
+                            },
+                            onSaved: (userPassword) {
+                              passwordController.text = userPassword;
+                            },
+                            obscureText: obscurePassword,
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "⚈  1 uppercase",
+                                    style: TextStyle(
+                                        color: containsUpperCase
+                                            ? Colors.green
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer),
+                                  ),
+                                  Text(
+                                    "⚈  1 lowercase",
+                                    style: TextStyle(
+                                        color: containsLowerCase
+                                            ? Colors.green
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer),
+                                  ),
+                                  Text(
+                                    "⚈  1 number",
+                                    style: TextStyle(
+                                        color: containsNumber
+                                            ? Colors.green
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer),
+                                  ),
+                                ],
                               ),
-                              onChanged: (val) {
-                                if (val.contains(RegExp(r'[A-Z]'))) {
-                                  setState(() {
-                                    containsUpperCase = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    containsUpperCase = false;
-                                  });
-                                }
-                                if (val.contains(RegExp(r'[a-z]'))) {
-                                  setState(() {
-                                    containsLowerCase = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    containsLowerCase = false;
-                                  });
-                                }
-                                if (val.contains(RegExp(r'[0-9]'))) {
-                                  setState(() {
-                                    containsNumber = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    containsNumber = false;
-                                  });
-                                }
-                                if (val.contains(RegExp(
-                                    r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
-                                  setState(() {
-                                    containsSpecialChar = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    containsSpecialChar = false;
-                                  });
-                                }
-                                if (val.length >= 8) {
-                                  setState(() {
-                                    contains8Length = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    contains8Length = false;
-                                  });
-                                }
-                                return;
-                              },
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please fill in this field';
-                                } else if (!RegExp(
-                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                    .hasMatch(val)) {
-                                  return 'Please enter a valid password';
-                                }
-                                return null;
-                              },
-                              onSaved: (userPassword) {
-                                passwordController.text = userPassword;
-                              },
-                              obscureText: obscurePassword,
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "⚈  1 special character",
+                                    style: TextStyle(
+                                        color: containsSpecialChar
+                                            ? Colors.green
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer),
+                                  ),
+                                  Text(
+                                    "⚈  8 minimum character",
+                                    style: TextStyle(
+                                        color: contains8Length
+                                            ? Colors.green
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                              height:
+                                  10), // Added consistent spacing for the password rules
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal:
+                                    25), // Match the padding of other fields
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "⚈  1 uppercase",
-                                      style: TextStyle(
-                                          color: containsUpperCase
-                                              ? Colors.green
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer),
-                                    ),
-                                    Text(
-                                      "⚈  1 lowercase",
-                                      style: TextStyle(
-                                          color: containsLowerCase
-                                              ? Colors.green
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer),
-                                    ),
-                                    Text(
-                                      "⚈  1 number",
-                                      style: TextStyle(
-                                          color: containsNumber
-                                              ? Colors.green
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer),
-                                    ),
-                                  ],
+                                const Expanded(
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.security),
+                                      SizedBox(
+                                          width:
+                                              16), // Adjust space between the icon and text
+                                      Text('Enable Two-Factor Authentication'),
+                                    ],
+                                  ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "⚈  1 special character",
-                                      style: TextStyle(
-                                          color: containsSpecialChar
-                                              ? Colors.green
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer),
-                                    ),
-                                    Text(
-                                      "⚈  8 minimum character",
-                                      style: TextStyle(
-                                          color: contains8Length
-                                              ? Colors.green
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer),
-                                    ),
-                                  ],
+                                Switch(
+                                  value: twoFactorEnabled,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      twoFactorEnabled = value;
+                                    });
+                                  },
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                                height:
-                                    10), // Added consistent spacing for the password rules
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal:
-                                      25), // Match the padding of other fields
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Expanded(
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.security),
-                                        SizedBox(
-                                            width:
-                                                16), // Adjust space between the icon and text
-                                        Text(
-                                            'Enable Two-Factor Authentication'),
-                                      ],
-                                    ),
-                                  ),
-                                  Switch(
-                                    value: twoFactorEnabled,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        twoFactorEnabled = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                          ),
 
-                            const SizedBox(
-                                height:
-                                    10), // Added consistent spacing before signup button
-                            if (isSigningUp)
-                              const CircularProgressIndicator(
-                                  color: Color.fromRGBO(0, 0, 139, 1)),
-                            if (!isSigningUp)
-                              RoundedButton(
-                                text: 'Signup',
-                                color: const Color.fromRGBO(0, 0, 139, 1),
-                                press: _submit,
-                              ),
-                            const SizedBox(
-                                height:
-                                    10), // Added before "I am a member" row for consistency
-                            if (!isSigningUp)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('I am a member!'),
-                                  TextButton(
-                                    child: const Text(
-                                      'Login now',
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 139, 1)),
-                                    ),
-                                    onPressed: () => Navigator.of(context)
-                                        .pushReplacementNamed(LoginScreen.id),
+                          const SizedBox(
+                              height:
+                                  10), // Added consistent spacing before signup button
+                          if (isSigningUp)
+                            const CircularProgressIndicator(
+                                color: Color.fromRGBO(0, 0, 139, 1)),
+                          if (!isSigningUp)
+                            RoundedButton(
+                              text: 'Signup',
+                              color: const Color.fromRGBO(0, 0, 139, 1),
+                              press: _submit,
+                            ),
+                          const SizedBox(
+                              height:
+                                  10), // Added before "I am a member" row for consistency
+                          if (!isSigningUp)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('I am a member!'),
+                                TextButton(
+                                  child: const Text(
+                                    'Login now',
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 139, 1)),
                                   ),
-                                ],
-                              ),
-                            const SizedBox(
-                                height: 80), // Consistent bottom spacing
-                          ],
-                        ),
+                                  onPressed: () => Navigator.of(context)
+                                      .pushReplacementNamed(LoginScreen.id),
+                                ),
+                              ],
+                            ),
+                          const SizedBox(
+                              height: 80), // Consistent bottom spacing
+                        ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-              Positioned(
-                top: 30,
-                left: 5,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded),
-                  color: const Color.fromRGBO(0, 0, 139, 1),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.of(context).pop();
-                  },
-                ),
+            ),
+            Positioned(
+              top: 30,
+              left: 5,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                color: const Color.fromRGBO(0, 0, 139, 1),
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.of(context).pop();
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
