@@ -207,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: SizedBox(
-                                    height: 300,
+                                    height: 100,
                                     width: double.infinity,
                                     child: Column(
                                       children: [
@@ -253,24 +253,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 35),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text('I am a member!'),
-                                    TextButton(
-                                      child: const Text(
-                                        'Register  now',
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromRGBO(0, 0, 139, 1)),
-                                      ),
-                                      onPressed: () => Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              RegistrationScreen.id),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    const Text('Not a member? '),
+    TextButton(
+    child: const Text(
+    'Register now',
+    style: TextStyle(
+    color: Color.fromRGBO(0, 0, 139, 1),
+    ),
+    ),
+    onPressed: () => Navigator.of(context).pushReplacementNamed(RegistrationScreen.id),
+    ),
+    ],
+    ),
+    Image.asset("assets/images/background.png"), // This places the image below the text and button
+    ],
+    )
+    ),
+
                           ],
                         ),
                       ),
