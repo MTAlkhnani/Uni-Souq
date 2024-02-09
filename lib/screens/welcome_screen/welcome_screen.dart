@@ -58,7 +58,7 @@ class _WelcomeScreenContent extends StatelessWidget {
           const SizedBox(height: 50),
           RoundedButton(
             text: 'LOGIN',
-            color: const Color.fromRGBO(0, 0, 139, 1),
+            color: Theme.of(context).primaryColor,
             press: () {
               Navigator.of(context).pushNamed(LoginScreen.id);
             },
@@ -66,7 +66,7 @@ class _WelcomeScreenContent extends StatelessWidget {
           const SizedBox(height: 15),
           RoundedButton(
             text: 'SIGNUP',
-            color: const Color.fromRGBO(0, 0, 139, 1),
+            color: Theme.of(context).primaryColor,
             press: () => Navigator.of(context).pushNamed(RegistrationScreen.id),
           ),
           const SizedBox(height: 20), // Add additional space if needed
@@ -104,7 +104,7 @@ class _DesktopWelcomeScreenContent extends StatelessWidget {
               const SizedBox(height: 50),
               RoundedButton(
                 text: 'LOGIN',
-                color: const Color.fromRGBO(0, 0, 139, 1),
+                color: Theme.of(context).primaryColor,
                 press: () {
                   Navigator.of(context).pushNamed(LoginScreen.id);
                 },
@@ -112,7 +112,7 @@ class _DesktopWelcomeScreenContent extends StatelessWidget {
               const SizedBox(height: 15),
               RoundedButton(
                 text: 'SIGNUP',
-                color: const Color.fromRGBO(0, 0, 139, 1),
+                color: Theme.of(context).primaryColor,
                 press: () =>
                     Navigator.of(context).pushNamed(RegistrationScreen.id),
               ),

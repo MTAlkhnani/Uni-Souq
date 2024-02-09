@@ -26,14 +26,50 @@ void main() async {
 class UniSouq extends ConsumerWidget {
   @override
   Widget build(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      ) {
     return Sizer(builder: (context, orientation, deviceType) {
+      // Define light theme data
+      final ThemeData lightTheme = ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Colors.blue[300], // Adjust to match light theme water drop color
+        hintColor: Colors.blue[800], // Adjust to match light theme accent color
+        scaffoldBackgroundColor: Colors.white, // White background color
+        iconTheme: IconThemeData(color: Colors.blue[800]), // Adjust to match light theme icon color
+        textTheme: TextTheme(
+          // Customize text theme to match light theme styles
+          bodyText1: TextStyle(color: Colors.blue[800]),
+          bodyText2: TextStyle(color: Colors.grey[800]),
+          // Other text styles...
+        ),
+        // Other theme properties...
+      );
+
+      // Define dark theme data
+      final ThemeData darkTheme = ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.blueGrey[800], // Adjust to match dark theme water drop color
+        hintColor: Colors.cyanAccent[700], // Adjust to match dark theme accent color
+        scaffoldBackgroundColor: Colors.black, // Black background color
+        iconTheme: IconThemeData(color: Colors.blueGrey[300]), // Adjust to match dark theme icon color
+        textTheme: TextTheme(
+          // Customize text theme to match dark theme styles
+          bodyText1: TextStyle(color: Colors.blueGrey[300]),
+          bodyText2: TextStyle(color: Colors.grey[300]),
+          // Other text styles...
+        ),
+        // Other theme properties...
+      );
+
       return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.initialRoute,
-          routes: AppRoutes.routes);
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme, // Set light theme here
+        darkTheme: darkTheme, // Set dark theme here
+        themeMode: ThemeMode.system, // Use system theme mode
+        initialRoute: AppRoutes.initialRoute,
+        routes: AppRoutes.routes,
+      );
     });
   }
 }
