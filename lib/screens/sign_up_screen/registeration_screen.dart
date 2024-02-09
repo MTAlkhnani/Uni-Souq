@@ -109,23 +109,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'HELLO THERE!',
+                      'Hello There!',
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
                           .copyWith(
-                              fontSize: 30,
-                              color: const Color.fromRGBO(0, 0, 139, 1),
-                              fontWeight: FontWeight.bold),
+                        fontSize: 40,
+                        color: const Color.fromRGBO(0, 0, 139, 1),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'GreatVibes', // Apply the GreatVibes font family here
+                      ),
                     ),
                     const SizedBox(height: 10),
                     const Text(
                       'Register below with your detail',
                       style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey,
+                        fontSize: 20,
+                        color: Colors.black,
+
                       ),
                     ),
+
                     const SizedBox(height: 20),
                     Form(
                       key: _formKey,

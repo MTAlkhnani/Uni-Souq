@@ -45,14 +45,16 @@ class _WelcomeScreenContent extends StatelessWidget {
           ),
           const SizedBox(height: 80),
           const Text(
-            'Welcome to UNI_SOUQ📦',
+            'Welcome to Uni_Souq📦',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Color.fromRGBO(0, 0, 139, 1),
+              color: Color.fromRGBO(0, 0, 139, 1), // Deep blue color
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 35,
+              fontFamily: 'GreatVibes', // Add your fancy font family here
             ),
           ),
+
           const SizedBox(height: 50),
           RoundedButton(
             text: 'LOGIN',

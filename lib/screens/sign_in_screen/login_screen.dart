@@ -83,21 +83,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'Transforming Campus Life \nwith Every Login.',
+                      'Transforming Campus Life',
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
                           .copyWith(
-                              fontSize: 20,
-                              color: const Color.fromRGBO(0, 0, 139, 1),
-                              fontWeight: FontWeight.bold),
+                        fontSize: 35,
+                        color: const Color.fromRGBO(0, 0, 139, 1),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'GreatVibes', // Apply the GreatVibes font family here
+                      ),
                     ),
+
                     const SizedBox(height: 30),
                     const Text(
                       'Welcome back, you\'ve been missed!',
                       style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey,
+                        fontSize: 17,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 20),
