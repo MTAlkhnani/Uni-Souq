@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
-import 'package:unisouq/components/common.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
-import 'package:unisouq/routes/app_routes.dart';
+
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
-import 'package:unisouq/utils/navigator_service.dart';
-import 'package:unisouq/utils/size_utils.dart';
+
 import '../../components/background.dart';
 import '../customer_screen.dart';
 import '../sign_up_screen/registeration_screen.dart';
@@ -73,226 +71,232 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[100],
-      body: Background(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 100),
-                  Text(
-                    'Transforming Campus Life',
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 35,
-                          color: const Color.fromRGBO(0, 0, 139, 1),
-                          fontWeight: FontWeight.bold,
-                          fontFamily:
-                              'GreatVibes', // Apply the GreatVibes font family here
-                        ),
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Welcome back, you\'ve been missed!',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
+      body: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Background(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: 100),
+                    Text(
+                      'Transforming Campus Life',
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                                fontFamily:
+                                    'GreatVibes', // Apply the GreatVibes font family here
+                              ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Form(
-                    key: _formKey,
-                    child: FadeInAnimation(
-                      delay: 2.2,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            autovalidate: true,
-                            controller: emailController,
-                            hintText: 'Email',
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: CupertinoIcons.mail_solid,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
-                            onSaved: (userEmail) {
-                              emailController.text = userEmail;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          MyTextField(
-                            controller: passwordController,
-                            hintText: 'Password',
-                            keyboardType: TextInputType.visiblePassword,
-                            prefixIcon: CupertinoIcons.lock_fill,
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscurePassword = !obscurePassword;
-                                  if (obscurePassword) {
-                                    iconPassword = CupertinoIcons.eye_fill;
-                                  } else {
-                                    iconPassword =
-                                        CupertinoIcons.eye_slash_fill;
-                                  }
-                                });
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Welcome back, you\'ve been missed!',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Form(
+                      key: _formKey,
+                      child: FadeInAnimation(
+                        delay: 2.2,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              autovalidate: true,
+                              controller: emailController,
+                              hintText: 'Email',
+                              keyboardType: TextInputType.emailAddress,
+                              prefixIcon: CupertinoIcons.mail_solid,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Please fill in this field';
+                                } else if (!RegExp(
+                                        r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                    .hasMatch(val)) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
                               },
-                              icon: Icon(iconPassword),
+                              onSaved: (userEmail) {
+                                emailController.text = userEmail;
+                              },
                             ),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid password';
-                              }
-                              return null;
-                            },
-                            onSaved: (userPassword) {
-                              passwordController.text = userPassword;
-                            },
-                            obscureText: obscurePassword,
-                          ),
-                          const SizedBox(height: 25),
-                          if (_isLogingIn)
-                            const CircularProgressIndicator(
-                              color: Color.fromRGBO(0, 0, 139, 1),
-                            ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 35),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: GestureDetector(
-                                onTap: () {
-                                  onTapTxtForgotPassword(context);
+                            const SizedBox(height: 10),
+                            MyTextField(
+                              controller: passwordController,
+                              hintText: 'Password',
+                              keyboardType: TextInputType.visiblePassword,
+                              prefixIcon: CupertinoIcons.lock_fill,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    obscurePassword = !obscurePassword;
+                                    if (obscurePassword) {
+                                      iconPassword = CupertinoIcons.eye_fill;
+                                    } else {
+                                      iconPassword =
+                                          CupertinoIcons.eye_slash_fill;
+                                    }
+                                  });
                                 },
-                                child: const Text(
-                                  "Forgot password",
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(0, 0, 139, 1),
+                                icon: Icon(iconPassword),
+                              ),
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Please fill in this field';
+                                } else if (!RegExp(
+                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                    .hasMatch(val)) {
+                                  return 'Please enter a valid password';
+                                }
+                                return null;
+                              },
+                              onSaved: (userPassword) {
+                                passwordController.text = userPassword;
+                              },
+                              obscureText: obscurePassword,
+                            ),
+                            const SizedBox(height: 25),
+                            if (_isLogingIn)
+                              CircularProgressIndicator(
+                                color: Theme.of(context).hintColor,
+                              ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 35),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    onTapTxtForgotPassword(context);
+                                  },
+                                  child: Text(
+                                    "Forgot password",
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 100,
-                          ),
-                          if (!_isLogingIn)
-                            RoundedButton(
-                              text: 'Login',
-                              color: const Color.fromRGBO(0, 0, 139, 1),
-                              press: _trySubmit,
+                            const SizedBox(
+                              height: 25,
                             ),
-                          if (!_isLogingIn)
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: SizedBox(
-                                  height: 100,
-                                  width: double.infinity,
-                                  child: Column(
-                                    children: [
-                                      FadeInAnimation(
-                                        delay: 2.2,
-                                        child: Text(
-                                          "Or Log with",
-                                          style: Common().semiboldblack,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      FadeInAnimation(
-                                        delay: 2.4,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10,
-                                              bottom: 10,
-                                              right: 30,
-                                              left: 30),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SvgPicture.asset(
-                                                  "assets/images/google_ic-1.svg"),
-                                              Image.asset(
-                                                  "assets/images/Vector.png")
-                                            ],
+                            if (!_isLogingIn)
+                              RoundedButton(
+                                text: 'Login',
+                                color: Theme.of(context).primaryColor,
+                                press: _trySubmit,
+                              ),
+                            if (!_isLogingIn)
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        FadeInAnimation(
+                                          delay: 2.2,
+                                          child: Text(
+                                            "Or Log with",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .hintColor),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (!_isLogingIn)
-                            Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 35),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text('Not a member? '),
-                                        TextButton(
-                                          child: const Text(
-                                            'Register now',
-                                            style: TextStyle(
-                                              color:
-                                                  Color.fromRGBO(0, 0, 139, 1),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        FadeInAnimation(
+                                          delay: 2.4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10,
+                                                bottom: 10,
+                                                right: 30,
+                                                left: 30),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SvgPicture.asset(
+                                                    "assets/images/google_ic-1.svg"),
+                                                Image.asset(
+                                                    "assets/images/Vector.png")
+                                              ],
                                             ),
                                           ),
-                                          onPressed: () => Navigator.of(context)
-                                              .pushReplacementNamed(
-                                                  RegistrationScreen.id),
                                         ),
                                       ],
                                     ),
-                                    Image.asset(
-                                        "assets/images/background.png"), // This places the image below the text and button
-                                  ],
-                                )),
-                        ],
+                                  ),
+                                ),
+                              ),
+                            if (!_isLogingIn)
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 35),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text('Not a member? '),
+                                          TextButton(
+                                            child: Text(
+                                              'Register now',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        RegistrationScreen.id),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                          "assets/images/background.png"),
+                                      // This places the image below the text and button
+                                    ],
+                                  )),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-                top: 30,
-                left: 5,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded),
-                  color: const Color.fromRGBO(0, 0, 139, 1),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.of(context).pop();
-                  },
-                )),
-          ],
+              Positioned(
+                  top: 30,
+                  left: 5,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_rounded),
+                    color: Theme.of(context).hintColor,
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Navigator.of(context).pop();
+                    },
+                  )),
+            ],
+          ),
         ),
       ),
     );

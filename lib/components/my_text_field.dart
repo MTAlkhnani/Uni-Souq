@@ -49,10 +49,11 @@ class MyTextField extends StatelessWidget {
             suffixIcon: suffixIcon,
             hintText: hintText,
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).secondaryHeaderColor,
             border: InputBorder.none,
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white),
+              borderSide:
+                  BorderSide(color: Theme.of(context).secondaryHeaderColor),
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(

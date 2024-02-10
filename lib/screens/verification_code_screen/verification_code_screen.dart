@@ -60,12 +60,19 @@ class VerificationCodeScreenState
                                 .headlineMedium!
                                 .copyWith(
                                   fontSize: 20,
-                                  color: const Color.fromRGBO(0, 0, 139, 1),
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
                         ),
-                        SizedBox(height: 60.v),
+                        SizedBox(
+                          height: 150.v,
+                          child: Image.asset(
+                            "assets/images/pin_code.gif",
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25.h,
+                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.h),
                           child: Consumer(
@@ -96,8 +103,6 @@ class VerificationCodeScreenState
                                     .headlineSmall!
                                     .copyWith(
                                       fontSize: 20,
-                                      color: const Color.fromARGB(
-                                          255, 174, 170, 170),
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -112,7 +117,7 @@ class VerificationCodeScreenState
                                     .headlineMedium!
                                     .copyWith(
                                       fontSize: 15,
-                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      color: Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -120,11 +125,11 @@ class VerificationCodeScreenState
                           ),
                           textAlign: TextAlign.left,
                         ),
-                        const Spacer(flex: 25),
+                        const Spacer(flex: 50),
                         Center(
                           child: RoundedButton(
                             text: 'Confirm',
-                            color: const Color.fromRGBO(0, 0, 139, 1),
+                            color: Theme.of(context).primaryColor,
                             press: () => onTapConfirm(context),
                           ),
                         ),
@@ -137,7 +142,7 @@ class VerificationCodeScreenState
                     left: 5,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back_rounded),
-                      color: const Color.fromRGBO(0, 0, 139, 1),
+                      color: Theme.of(context).hintColor,
                       onPressed: () {
                         onTapArrowDown(context);
                       },

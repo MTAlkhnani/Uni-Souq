@@ -45,122 +45,138 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         }
         return SizedBox(
           width: SizeUtils.width,
-          child: Background(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      width: double.maxFinite,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.h,
-                        vertical: 25.v,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 50.h),
-                            SizedBox(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Text(
-                                  "Enter a new password ",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineLarge!
-                                      .copyWith(
-                                        fontSize: 20,
-                                        color:
-                                            const Color.fromRGBO(0, 0, 139, 1),
-                                        fontWeight: FontWeight.bold,
-                                      ),
+          child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Background(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Container(
+                        width: double.maxFinite,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.h,
+                          vertical: 25.v,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 50.h),
+                              SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Text(
+                                    "Enter a new password ",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 47.v),
-                            Consumer(builder: (context, ref, _) {
-                              final notifier = ref.watch(resetPasswordNotifier);
-                              return Column(
-                                children: [
-                                  MyTextField(
-                                    controller: notifier.newpasswordController,
-                                    hintText: 'New Password',
-                                    keyboardType: TextInputType.visiblePassword,
-                                    prefixIcon: CupertinoIcons.lock_fill,
-                                    suffixIcon: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          notifier.togglePasswordVisibility();
-                                        });
+                              SizedBox(height: 47.v),
+                              Consumer(builder: (context, ref, _) {
+                                final notifier =
+                                    ref.watch(resetPasswordNotifier);
+                                return Column(
+                                  children: [
+                                    MyTextField(
+                                      controller:
+                                          notifier.newpasswordController,
+                                      hintText: 'New Password',
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      prefixIcon: CupertinoIcons.lock_fill,
+                                      suffixIcon: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            notifier.togglePasswordVisibility();
+                                          });
+                                        },
+                                        child: Icon(notifier.isShowPassword
+                                            ? CupertinoIcons.eye_slash_fill
+                                            : CupertinoIcons.eye_fill),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            (!isValidPassword(value,
+                                                isRequired: true))) {
+                                          return "please enter a valid password";
+                                        }
+                                        return null;
                                       },
-                                      child: Icon(notifier.isShowPassword
-                                          ? CupertinoIcons.eye_slash_fill
-                                          : CupertinoIcons.eye_fill),
+                                      obscureText: !notifier.isShowPassword,
                                     ),
-                                    validator: (value) {
-                                      if (value == null ||
-                                          (!isValidPassword(value,
-                                              isRequired: true))) {
-                                        return "please enter a valid password";
-                                      }
-                                      return null;
-                                    },
-                                    obscureText: !notifier.isShowPassword,
-                                  ),
-                                  SizedBox(height: 20.v),
-                                  MyTextField(
-                                    controller:
-                                        notifier.confirmpasswordController,
-                                    hintText: 'Confirm Password',
-                                    keyboardType: TextInputType.visiblePassword,
-                                    prefixIcon: CupertinoIcons.lock_fill,
-                                    suffixIcon: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          notifier.togglePasswordVisibility();
-                                        });
+                                    SizedBox(height: 20.v),
+                                    MyTextField(
+                                      controller:
+                                          notifier.confirmpasswordController,
+                                      hintText: 'Confirm Password',
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      prefixIcon: CupertinoIcons.lock_fill,
+                                      suffixIcon: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            notifier.togglePasswordVisibility();
+                                          });
+                                        },
+                                        child: Icon(notifier.isShowPassword
+                                            ? CupertinoIcons.eye_slash_fill
+                                            : CupertinoIcons.eye_fill),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value !=
+                                                notifier.newpasswordController
+                                                    ?.text) {
+                                          return "Passwords do not match";
+                                        }
+                                        return null;
                                       },
-                                      child: Icon(notifier.isShowPassword
-                                          ? CupertinoIcons.eye_slash_fill
-                                          : CupertinoIcons.eye_fill),
+                                      obscureText: !notifier.isShowPassword,
                                     ),
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value !=
-                                              notifier.newpasswordController
-                                                  ?.text) {
-                                        return "Passwords do not match";
-                                      }
-                                      return null;
-                                    },
-                                    obscureText: !notifier.isShowPassword,
-                                  ),
-                                ],
-                              );
-                            }),
-                            SizedBox(height: 40.v),
-                            Center(
-                              child: RoundedButton(
-                                text: 'Confirm',
-                                color: const Color.fromRGBO(0, 0, 139, 1),
-                                press: () => onTapConfirm(context),
+                                  ],
+                                );
+                              }),
+                              SizedBox(height: 40.v),
+                              Center(
+                                child: RoundedButton(
+                                  text: 'Confirm',
+                                  color: Theme.of(context).primaryColor,
+                                  press: () => onTapConfirm(context),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
+                  Positioned(
+                    top: 30,
+                    left: 5,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      color: Theme.of(context).hintColor,
+                      onPressed: () {
+                        onTapArrowDown(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

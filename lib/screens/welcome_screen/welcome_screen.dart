@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/utils/size_utils.dart';
 import '../sign_in_screen/login_screen.dart';
 import '../sign_up_screen/registeration_screen.dart';
 import '../../components/background.dart';
@@ -26,8 +27,46 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-class _WelcomeScreenContent extends StatelessWidget {
+class _WelcomeScreenContent extends StatefulWidget {
   const _WelcomeScreenContent({Key? key}) : super(key: key);
+
+  @override
+  _WelcomeScreenContentState createState() => _WelcomeScreenContentState();
+}
+
+class _WelcomeScreenContentState extends State<_WelcomeScreenContent>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late Animation<double> _rotationAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+    final curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(curvedAnimation);
+    _rotationAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(curvedAnimation);
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +74,21 @@ class _WelcomeScreenContent extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Center(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Image.asset('assets/images/img_uni_souq_1.png'),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 90),
+            child: Center(
+              child: Align(
+                child: SizeTransition(
+                  sizeFactor: _animation,
+                  axis: Axis.horizontal,
+                  child: RotationTransition(
+                    turns: _rotationAnimation,
+                    child: Image.asset(
+                      'assets/images/uni_souq.png',
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 80),
@@ -46,7 +96,6 @@ class _WelcomeScreenContent extends StatelessWidget {
             'Welcome to Uni_Souq📦',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Color.fromRGBO(0, 0, 139, 1), // Deep blue color
               fontWeight: FontWeight.bold,
               fontSize: 35,
               fontFamily: 'GreatVibes', // Add your fancy font family here
