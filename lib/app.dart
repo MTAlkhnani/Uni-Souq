@@ -35,7 +35,7 @@ class UniSouqApp extends ConsumerWidget {
 
         final ThemeData darkTheme = ThemeData(
           brightness: Brightness.dark,
-          primaryColor: const Color.fromRGBO(142, 108, 239, 1),
+          primaryColor: const Color.fromRGBO(113, 66, 169, 1),
           hintColor: Colors.white,
           scaffoldBackgroundColor: const Color.fromRGBO(29, 24, 42, 1),
           secondaryHeaderColor: const Color.fromRGBO(52, 47, 63, 1),

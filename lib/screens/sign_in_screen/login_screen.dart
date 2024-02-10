@@ -272,8 +272,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                          "assets/images/background.png"),
+                                      // Image.asset(
+                                      //     "assets/images/background.png"),
                                       // This places the image below the text and button
                                     ],
                                   )),
