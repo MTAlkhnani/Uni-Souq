@@ -9,6 +9,7 @@ import 'package:unisouq/components/fade_animationtest.dart';
 import '../../components/background.dart';
 import '../customer_screen.dart';
 import '../sign_in_screen/login_screen.dart';
+import '../verification_code_screen/verification_code_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = '/sign-up';
@@ -52,7 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       userCredential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('Customer')
           .doc(userCredential.user!.uid)
           .set({
@@ -63,8 +64,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'Phone': phone,
       });
 
+      // Dismiss any open dialogs or loading indicators
       Navigator.of(lastContext!).pop();
-      Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
+
+      // Check if two-factor authentication is enabled
+      if (twoFactorEnabled) {
+        // Navigate to the Two-Factor Authentication setup or verification screen
+        // Replace 'TwoFactorAuthScreen.id' with the actual route name of your 2FA screen
+        Navigator.of(lastContext!)
+            .pushReplacementNamed(VerificationCodeScreen.id);
+      } else {
+        // If two-factor authentication is not enabled, proceed to the CustomerScreen
+        Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
+      }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
@@ -72,9 +84,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ScaffoldMessenger.of(lastContext!)
             .showSnackBar(SnackBar(content: Text(message)));
       }
+      // Dismiss any open dialogs or loading indicators
+      Navigator.of(lastContext!).pop();
     } catch (error) {
-      // ignore: avoid_print
       print(error);
+      Navigator.of(lastContext!).pop();
     }
     setState(() {
       isSigningUp = false;
@@ -381,7 +395,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         Icon(Icons.security),
                                         SizedBox(
                                             width:
-                                                16), // Adjust space between the icon and text
+                                                2), // Adjust space between the icon and text
                                         Text(
                                             'Enable Two-Factor Authentication'),
                                       ],
@@ -408,7 +422,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   color: Color.fromRGBO(0, 0, 139, 1)),
                             if (!isSigningUp)
                               RoundedButton(
-                                text: 'Signup',
+                                text: 'Sign Up',
                                 color: Theme.of(context).primaryColor,
                                 press: _submit,
                               ),
