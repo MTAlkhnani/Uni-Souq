@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -76,7 +77,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                   child: SizedBox(
                                     width: 279.h,
                                     child: Text(
-                                      "We need your registration email to send you password reset code!",
+                                      "We need your registration email to send you password reset code!", // this text is too long
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
@@ -153,9 +154,36 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   /// Navigates to the verificationCodeScreen when the action is triggered.
-  onTapSendCode(BuildContext context) {
+  Future onTapSendCode(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacementNamed(VerificationCodeScreen.id);
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      try {
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: emailController.text.trim());
+
+        // Dismiss the loading dialog
+        Navigator.of(context).pop();
+
+        // Show a SnackBar after successful email sending
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Reset code has been sent to your email.')),
+        );
+      } on FirebaseAuthException catch (e) {
+        // Dismiss the loading dialog
+        Navigator.of(context).pop();
+
+        // Handle error, e.g., show error SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send reset code: ${e.message}')),
+        );
+      }
     }
   }
 
