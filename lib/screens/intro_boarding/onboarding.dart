@@ -292,7 +292,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             Positioned(
-              // height: h * 0.15,
               width: w,
               bottom: 0,
               child: Container(
@@ -304,7 +303,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: [
                     if (selectedIndex == 2)
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, bottom: 40),
+                        padding: const EdgeInsets.only(left: 10, bottom: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
