@@ -112,7 +112,7 @@ class VerificationCodeScreenState
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "Did’t receive a code?",
+                                text: "Didn’t receive a code?",
                                 style: Theme.of(context)
                                     .textTheme
                                     .displaySmall!
