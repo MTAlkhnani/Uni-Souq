@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/my_text_field.dart';
-import 'package:unisouq/routes/app_routes.dart';
+
 import 'package:unisouq/screens/forgot_password_screen/notifier/forgot_password_notifier.dart';
 import 'package:unisouq/screens/verification_code_screen/verification_code_screen.dart';
-import 'package:unisouq/utils/navigator_service.dart';
+
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:unisouq/utils/validation_functions.dart';
 
@@ -21,11 +21,13 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  late final TextEditingController emailController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    emailController = ref.read(forgotPasswordNotifier).emailController!;
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       final Size size = MediaQuery.of(context).size;
       SizeUtils.setScreenSize(
@@ -160,7 +162,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   void dispose() {
     // Dispose any controllers or resources here
-    ref.read(forgotPasswordNotifier).emailController?.dispose();
+    emailController.dispose();
     super.dispose();
   }
 }

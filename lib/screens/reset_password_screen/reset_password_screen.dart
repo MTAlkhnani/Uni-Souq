@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
-import 'package:unisouq/routes/app_routes.dart';
+
 import 'package:unisouq/screens/customer_screen.dart';
 import 'package:unisouq/screens/reset_password_screen/notifier/reset_password_notifier.dart';
-import 'package:unisouq/utils/navigator_service.dart';
+
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:unisouq/utils/validation_functions.dart';
 
@@ -20,12 +20,18 @@ class ResetPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
+  late final TextEditingController newPasswordController;
+  late final TextEditingController confirmPasswordController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    newPasswordController =
+        ref.read(resetPasswordNotifier).newpasswordController!;
+    confirmPasswordController =
+        ref.read(resetPasswordNotifier).confirmpasswordController!;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final Size size = MediaQuery.of(context).size;
       SizeUtils.setScreenSize(
           size.width, size.height, MediaQuery.of(context).orientation);
@@ -39,10 +45,6 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[100],
       body: Builder(builder: (BuildContext context) {
-        if (SizeUtils.width == null) {
-          return const SizedBox
-              .shrink(); // Return an empty widget if width is not initialized
-        }
         return SizedBox(
           width: SizeUtils.width,
           child: Container(
@@ -200,8 +202,8 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   @override
   void dispose() {
     // Dispose any controllers or resources here
-    ref.read(resetPasswordNotifier).newpasswordController?.dispose();
-    ref.read(resetPasswordNotifier).confirmpasswordController?.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 }

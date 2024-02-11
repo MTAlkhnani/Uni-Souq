@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/custom_pin_code_text_field.dart';
-import 'package:unisouq/routes/app_routes.dart';
+
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/verification_code_screen/notifier/verification_code_notifier.dart';
-import 'package:unisouq/utils/navigator_service.dart';
+
 import 'package:unisouq/utils/size_utils.dart';
 
 class VerificationCodeScreen extends ConsumerStatefulWidget {
@@ -36,10 +36,6 @@ class VerificationCodeScreenState
       resizeToAvoidBottomInset: false,
       body: Builder(
         builder: (BuildContext context) {
-          if (SizeUtils.width == null) {
-            return const SizedBox
-                .shrink(); // Return an empty widget if width is not initialized
-          }
           return SizedBox(
             width:
                 SizeUtils.width, // Access SizeUtils.width after initialization
@@ -50,43 +46,62 @@ class VerificationCodeScreenState
                     width: double.maxFinite,
                     child: Column(
                       children: [
-                        SizedBox(height: 80.h),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            'Enter the code we sent your registered email',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
+                        SizedBox(height: 50.h),
                         SizedBox(
-                          height: 150.v,
+                          height: 200.v,
+                          width: 300.v,
                           child: Image.asset(
                             "assets/images/pin_code.gif",
                           ),
                         ),
                         SizedBox(
-                          height: 25.h,
+                          height: 10.h,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.h),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Center(
+                            child: Text(
+                              'Enter your passcode',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Center(
+                            child: Text(
+                              'please enter your passcode that sent to',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 30.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.h),
                           child: Consumer(
                             builder: (context, ref, _) {
+                              final otpController = ref
+                                  .watch(verificationCodeNotifier)
+                                  .otpController;
                               return CustomPinCodeTextField(
                                 context: context,
-                                controller: ref
-                                    .watch(verificationCodeNotifier)
-                                    .otpController,
+                                controller: otpController,
                                 onChanged: (value) {
                                   ref
-                                      .watch(verificationCodeNotifier)
-                                      .otpController
-                                      ?.text = value;
+                                      .read(verificationCodeNotifier)
+                                      .updateOTP(value);
                                 },
                               );
                             },
@@ -100,9 +115,9 @@ class VerificationCodeScreenState
                                 text: "Did’t receive a code?",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headlineSmall!
+                                    .displaySmall!
                                     .copyWith(
-                                      fontSize: 20,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -166,12 +181,5 @@ class VerificationCodeScreenState
   /// Navigates to the resetPasswordScreen when the action is triggered.
   onTapConfirm(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(ResetPasswordScreen.id);
-  }
-
-  @override
-  void dispose() {
-    // Dispose any controllers or resources here
-    ref.read(verificationCodeNotifier).otpController?.dispose();
-    super.dispose();
   }
 }

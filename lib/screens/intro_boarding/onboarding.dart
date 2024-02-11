@@ -310,7 +310,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Already have an account? ",
+                              "Don't have an account? ",
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Theme.of(context).canvasColor,
@@ -326,7 +326,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(),
+                                      builder: (context) =>
+                                          const RegistrationScreen(),
                                     ),
                                   );
                                   setState(() {

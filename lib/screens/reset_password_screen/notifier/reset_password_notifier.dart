@@ -18,18 +18,18 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
   ResetPasswordNotifier(super.state);
 
   void changePasswordVisibility() {
-    state = state.copyWith(isShowPassword: !(state.isShowPassword ?? false));
+    state = state.copyWith(isShowPassword: !(state.isShowPassword));
   }
 
   void changePasswordVisibility1() {
-    state = state.copyWith(isShowPassword1: !(state.isShowPassword1 ?? false));
+    state = state.copyWith(isShowPassword1: !(state.isShowPassword1));
   }
 
   void togglePasswordVisibility() {
     // Toggle the visibility of the password fields
     state = state.copyWith(
-      isShowPassword: !state.isShowPassword!,
-      isShowPassword1: !state.isShowPassword1!,
+      isShowPassword: !state.isShowPassword,
+      isShowPassword1: !state.isShowPassword1,
     );
   }
 }

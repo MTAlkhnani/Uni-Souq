@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
-import 'package:unisouq/utils/size_utils.dart';
+
 import '../../components/background.dart';
 import '../customer_screen.dart';
 import '../sign_in_screen/login_screen.dart';
@@ -447,6 +447,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     // Dispose controllers to free up resources

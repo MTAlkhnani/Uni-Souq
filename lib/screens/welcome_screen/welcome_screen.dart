@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
-import 'package:unisouq/utils/size_utils.dart';
-import '../sign_in_screen/login_screen.dart';
-import '../sign_up_screen/registeration_screen.dart';
-import '../../components/background.dart';
-import '../../components/Rounded_Button.dart';
+import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String id = 'welcome_screen';
@@ -13,191 +9,67 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Background(
-        child: FadeInAnimation(
-          delay: 2.2,
-          child: Responsive(
-            mobile: _WelcomeScreenContent(),
-            desktop: _DesktopWelcomeScreenContent(),
+    // Delayed navigation after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, OnboardingScreen.id);
+    });
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          const BackgroundImage(),
+          Center(
+            child: FadeInAnimation(
+              delay: 2.2,
+              child: Image.asset(
+                'assets/images/uni_souq.png', // Your logo image
+                width: 200, // Adjust width as needed
+                height: 200, // Adjust height as needed
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WelcomeScreenContent extends StatefulWidget {
-  const _WelcomeScreenContent({Key? key}) : super(key: key);
-
-  @override
-  _WelcomeScreenContentState createState() => _WelcomeScreenContentState();
-}
-
-class _WelcomeScreenContentState extends State<_WelcomeScreenContent>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  late Animation<double> _rotationAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    );
-    final curvedAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-    _animation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(curvedAnimation);
-    _rotationAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(curvedAnimation);
-    _controller.repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 90),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
             child: Center(
-              child: Align(
-                child: SizeTransition(
-                  sizeFactor: _animation,
-                  axis: Axis.horizontal,
-                  child: RotationTransition(
-                    turns: _rotationAnimation,
-                    child: Image.asset(
-                      'assets/images/uni_souq.png',
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, OnboardingScreen.id);
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        20), // Customize border radius here
+                  ),
+                  child: Text(
+                    'Uni_Souq',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context)
+                          .primaryColor, // Customize text color here
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 80),
-          const Text(
-            'Welcome to Uni_Souq📦',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 35,
-              fontFamily: 'GreatVibes', // Add your fancy font family here
-            ),
-          ),
-
-          const SizedBox(height: 50),
-          RoundedButton(
-            text: 'LOGIN',
-            color: Theme.of(context).primaryColor,
-            press: () {
-              Navigator.of(context).pushNamed(LoginScreen.id);
-            },
-          ),
-          const SizedBox(height: 15),
-          RoundedButton(
-            text: 'SIGNUP',
-            color: Theme.of(context).primaryColor,
-            press: () => Navigator.of(context).pushNamed(RegistrationScreen.id),
-          ),
-          const SizedBox(height: 20), // Add additional space if needed
         ],
       ),
     );
   }
 }
 
-class _DesktopWelcomeScreenContent extends StatelessWidget {
-  const _DesktopWelcomeScreenContent({Key? key}) : super(key: key);
+class BackgroundImage extends StatelessWidget {
+  const BackgroundImage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          child: Image.asset('assets/images/img_uni_souq_1.png',
-              fit: BoxFit.cover),
-        ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Welcome to UNI_SOUQ📦',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 139, 1),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 35,
-                ),
-              ),
-              const SizedBox(height: 50),
-              RoundedButton(
-                text: 'LOGIN',
-                color: Theme.of(context).primaryColor,
-                press: () {
-                  Navigator.of(context).pushNamed(LoginScreen.id);
-                },
-              ),
-              const SizedBox(height: 15),
-              RoundedButton(
-                text: 'SIGNUP',
-                color: Theme.of(context).primaryColor,
-                press: () =>
-                    Navigator.of(context).pushNamed(RegistrationScreen.id),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Responsive extends StatelessWidget {
-  final Widget mobile;
-  final Widget desktop;
-
-  const Responsive({
-    Key? key,
-    required this.mobile,
-    required this.desktop,
-  }) : super(key: key);
-
-  static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 850;
-
-  static bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 850;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (isDesktop(context)) {
-          return desktop;
-        } else {
-          return mobile;
-        }
-      },
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 }

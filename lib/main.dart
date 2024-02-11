@@ -6,11 +6,9 @@ import 'package:unisouq/models/firebase_options.dart';
 import 'package:unisouq/theme/settings_controller.dart';
 import 'package:unisouq/theme/settings_service.dart';
 
-
 import 'package:unisouq/utils/pref_utils.dart';
 
 import 'app.dart';
-// Import your SettingsController
 
 void main() async {
   final settingsController = SettingsController(SettingsService());

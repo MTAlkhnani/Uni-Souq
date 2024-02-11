@@ -25,8 +25,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  final passwordController = TextEditingController();
-  final emailController = TextEditingController();
+  late final passwordController = TextEditingController();
+  late final emailController = TextEditingController();
   BuildContext? lastContext;
   IconData iconPassword = CupertinoIcons.eye_fill;
   bool obscurePassword = true;

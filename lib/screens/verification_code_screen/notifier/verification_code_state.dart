@@ -29,4 +29,6 @@ class VerificationCodeState extends Equatable {
           verificationCodeModelObj ?? this.verificationCodeModelObj,
     );
   }
+
+  void updateOTP(String value) {}
 }

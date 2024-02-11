@@ -57,7 +57,7 @@ class UniSouqApp extends ConsumerWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: settingsController.themeMode,
-            initialRoute: AppRoutes.onboardingScreen,
+            initialRoute: AppRoutes.initialRoute,
             routes: AppRoutes.routes,
           );
         });
