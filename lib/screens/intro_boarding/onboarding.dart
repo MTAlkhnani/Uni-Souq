@@ -5,6 +5,7 @@ import 'package:unisouq/components/custom_bg.dart';
 import 'package:unisouq/components/item_card.dart';
 import 'package:unisouq/components/loading_button.dart';
 import 'package:unisouq/components/widgets.dart';
+import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/intro_boarding/data/data.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
@@ -310,7 +311,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              "Just browsing? ",
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Theme.of(context).canvasColor,
@@ -326,8 +327,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegistrationScreen(),
+                                      builder: (context) => HomeScreen(), // Create an instance of HomeScreen here
                                     ),
                                   );
                                   setState(() {
@@ -336,7 +336,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 });
                               },
                               isLoading: _isLoading,
-                              text: 'Register Now',
+                              text: 'Continue as a Guest',
                             )
                           ],
                         ),

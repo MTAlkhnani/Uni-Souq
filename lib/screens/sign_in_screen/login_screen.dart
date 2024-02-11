@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +23,26 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberMe();
+  }
+
+  void _loadRememberMe() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool rememberMe = prefs.getBool('rememberMe') ?? false;
+    if (rememberMe) {
+      final String savedEmail = prefs.getString('savedEmail') ?? '';
+      final String savedPassword = prefs.getString('savedPassword') ?? '';
+      emailController.text = savedEmail;
+      passwordController.text = savedPassword;
+    }
+    setState(() {
+      _rememberMe = rememberMe;
+    });
+  }
+
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   late final passwordController = TextEditingController();
@@ -30,38 +50,61 @@ class _LoginScreenState extends State<LoginScreen> {
   BuildContext? lastContext;
   IconData iconPassword = CupertinoIcons.eye_fill;
   bool obscurePassword = true;
+  bool _rememberMe = false;
+
+  void _onRememberMeChanged(bool? newValue) async {
+    setState(() {
+      _rememberMe = newValue!;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rememberMe', _rememberMe);
+    if (_rememberMe) {
+      await prefs.setString('savedEmail', emailController.text);
+      await prefs.setString('savedPassword', passwordController.text);
+    } else {
+      await prefs.remove('savedEmail');
+      await prefs.remove('savedPassword');
+    }
+  }
+
 
   bool _isLogingIn = false;
 
-  void _submiteForm(String email, String password) async {
+  void _submitForm(String email, String password) async {
     setState(() {
       _isLogingIn = true;
     });
+
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (_rememberMe) {
+        // Save the "Remember me" state and/or user credentials as needed
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+      }
       Navigator.of(lastContext!).pop();
       Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
     } on FirebaseAuthException catch (error) {
-      var message = 'An error occurd, please check your credentials!';
+      var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
-        ScaffoldMessenger.of(lastContext!)
-            .showSnackBar(SnackBar(content: Text(message)));
       }
+      ScaffoldMessenger.of(lastContext!).showSnackBar(SnackBar(content: Text(message)));
     } catch (error) {
-      // ignore: avoid_print
-      print(error);
+      print(error); // Consider handling this error in user-friendly way
     }
+
     setState(() {
       _isLogingIn = false;
     });
   }
 
+
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      _submiteForm(emailController.text.trim(), passwordController.text.trim());
+      _submitForm(emailController.text.trim(), passwordController.text.trim());
     }
   }
 
@@ -171,21 +214,33 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 5,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 35),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    onTapTxtForgotPassword(context);
-                                  },
-                                  child: Text(
-                                    "Forgot password",
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor),
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min, // Ensures the checkbox takes up minimal space
+                                    children: [
+                                      Checkbox(
+                                        value: _rememberMe,
+                                        onChanged: _onRememberMeChanged, // Use your method here
+                                      ),
+                                      const Text('Remember me'),
+                                    ],
                                   ),
-                                ),
+                                  TextButton(
+                                    onPressed: () {
+                                      onTapTxtForgotPassword(context);
+                                    },
+                                    child: Text(
+                                      "Forgot password?",
+                                      style: TextStyle(color: Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
+
                             const SizedBox(
                               height: 25,
                             ),
