@@ -284,17 +284,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              Positioned(
-                  top: 30,
-                  left: 5,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    color: Theme.of(context).hintColor,
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.of(context).pop();
-                    },
-                  )),
             ],
           ),
         ),
@@ -305,5 +294,13 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Navigates to the forgotPasswordScreen when the action is triggered.
   onTapTxtForgotPassword(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(ForgotPasswordScreen.id);
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to free up resources
+    passwordController.dispose();
+    emailController.dispose();
+    super.dispose();
   }
 }

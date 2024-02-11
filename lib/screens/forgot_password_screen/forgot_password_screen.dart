@@ -156,4 +156,11 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       Navigator.of(context).pushReplacementNamed(VerificationCodeScreen.id);
     }
   }
+
+  @override
+  void dispose() {
+    // Dispose any controllers or resources here
+    ref.read(forgotPasswordNotifier).emailController?.dispose();
+    super.dispose();
+  }
 }

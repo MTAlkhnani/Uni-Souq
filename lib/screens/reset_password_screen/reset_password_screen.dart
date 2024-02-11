@@ -186,7 +186,8 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
   /// Navigates back to the previous screen.
   onTapArrowDown(BuildContext context) {
-    NavigatorService.goBack();
+    FocusScope.of(context).unfocus();
+    Navigator.of(context).pop();
   }
 
   /// Navigates to the exploreShopScreen when the action is triggered.
@@ -194,5 +195,13 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushReplacementNamed(CustomerScreen.id);
     }
+  }
+
+  @override
+  void dispose() {
+    // Dispose any controllers or resources here
+    ref.read(resetPasswordNotifier).newpasswordController?.dispose();
+    ref.read(resetPasswordNotifier).confirmpasswordController?.dispose();
+    super.dispose();
   }
 }

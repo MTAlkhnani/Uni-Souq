@@ -167,4 +167,11 @@ class VerificationCodeScreenState
   onTapConfirm(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(ResetPasswordScreen.id);
   }
+
+  @override
+  void dispose() {
+    // Dispose any controllers or resources here
+    ref.read(verificationCodeNotifier).otpController?.dispose();
+    super.dispose();
+  }
 }

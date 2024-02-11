@@ -441,22 +441,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ],
                 ),
               ),
-              Positioned(
-                top: 30,
-                left: 5,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded),
-                  color: Theme.of(context).hintColor,
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    // Dispose controllers to free up resources
+    passwordController.dispose();
+    emailController.dispose();
+    firstnameController.dispose();
+    lastnameController.dispose();
+    phoneController.dispose();
+    super.dispose();
   }
 }

@@ -23,6 +23,8 @@ class UniSouqApp extends ConsumerWidget {
           brightness: Brightness.light,
           primaryColor: const Color.fromRGBO(142, 108, 239, 1),
           hintColor: const Color.fromRGBO(39, 39, 39, 0.498),
+          canvasColor: Colors.black87,
+          cardColor: Colors.black,
           hoverColor: const Color.fromRGBO(142, 108, 239, 1),
           scaffoldBackgroundColor: Colors.white,
           secondaryHeaderColor: const Color.fromRGBO(244, 244, 244, 1),
@@ -37,9 +39,11 @@ class UniSouqApp extends ConsumerWidget {
           brightness: Brightness.dark,
           primaryColor: const Color.fromRGBO(113, 66, 169, 1),
           hintColor: Colors.white,
+          canvasColor: Colors.black87,
+          cardColor: Colors.white,
           scaffoldBackgroundColor: const Color.fromRGBO(29, 24, 42, 1),
           secondaryHeaderColor: const Color.fromRGBO(52, 47, 63, 1),
-          hoverColor: Colors.white24,
+          hoverColor: Colors.white38,
           iconTheme: IconThemeData(color: Colors.deepPurple[300]),
           textTheme: TextTheme(
             bodyText1: TextStyle(color: Colors.white),
@@ -53,7 +57,7 @@ class UniSouqApp extends ConsumerWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: settingsController.themeMode,
-            initialRoute: AppRoutes.initialRoute,
+            initialRoute: AppRoutes.onboardingScreen,
             routes: AppRoutes.routes,
           );
         });
