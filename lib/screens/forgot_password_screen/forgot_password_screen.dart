@@ -22,7 +22,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
-  late final TextEditingController emailController;
+  late final TextEditingController emailController; // Not nullable
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -93,9 +93,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                 SizedBox(height: 60.v),
                                 Consumer(builder: (context, ref, _) {
                                   return MyTextField(
-                                    controller: ref
-                                        .watch(forgotPasswordNotifier)
-                                        .emailController,
+                                    controller: emailController,
                                     hintText: 'Email',
                                     keyboardType: TextInputType.emailAddress,
                                     prefixIcon: CupertinoIcons.mail_solid,
@@ -151,6 +149,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   onTapArrowDown(BuildContext context) {
     FocusScope.of(context).unfocus();
     Navigator.of(context).pop();
+    emailController.clear();
   }
 
   /// Navigates to the verificationCodeScreen when the action is triggered.
@@ -190,7 +189,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   void dispose() {
     // Dispose any controllers or resources here
-    emailController.dispose();
+
     super.dispose();
   }
 }

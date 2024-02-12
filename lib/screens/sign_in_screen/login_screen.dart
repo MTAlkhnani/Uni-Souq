@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 
@@ -67,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
   bool _isLogingIn = false;
 
   void _submitForm(String email, String password) async {
@@ -89,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (error.message != null) {
         message = error.message.toString();
       }
-      ScaffoldMessenger.of(lastContext!).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(lastContext!)
+          .showSnackBar(SnackBar(content: Text(message)));
     } catch (error) {
       print(error); // Consider handling this error in user-friendly way
     }
@@ -98,7 +99,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLogingIn = false;
     });
   }
-
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
@@ -214,16 +214,20 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 5,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
-                                    mainAxisSize: MainAxisSize.min, // Ensures the checkbox takes up minimal space
+                                    mainAxisSize: MainAxisSize
+                                        .min, // Ensures the checkbox takes up minimal space
                                     children: [
                                       Checkbox(
                                         value: _rememberMe,
-                                        onChanged: _onRememberMeChanged, // Use your method here
+                                        onChanged:
+                                            _onRememberMeChanged, // Use your method here
                                       ),
                                       const Text('Remember me'),
                                     ],
@@ -234,13 +238,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                     child: Text(
                                       "Forgot password?",
-                                      style: TextStyle(color: Theme.of(context).primaryColor),
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-
                             const SizedBox(
                               height: 25,
                             ),
@@ -348,7 +353,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Navigates to the forgotPasswordScreen when the action is triggered.
   onTapTxtForgotPassword(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(ForgotPasswordScreen.id);
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => const ForgotPasswordScreen()),
+    );
   }
 
   @override
