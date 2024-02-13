@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
@@ -10,18 +11,19 @@ import 'package:unisouq/screens/information_screen/information_screen.dart';
 import '../../components/background.dart';
 // import '../customer_screen.dart';
 import '../sign_in_screen/login_screen.dart';
+import '../verification_code_screen/notifier/verification_code_notifier.dart';
 import '../verification_code_screen/verification_code_screen.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class RegistrationScreen extends ConsumerStatefulWidget {
   static String id = '/sign-up';
 
   const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  ConsumerState<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   BuildContext? lastContext;
   final passwordController = TextEditingController();
@@ -63,6 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'LastName': lastName,
         'Email': userCredential.user!.email,
         'Phone': phone,
+        'TwoFactorAuth': twoFactorEnabled,
       });
 
       // Dismiss any open dialogs or loading indicators
@@ -70,6 +73,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       // Check if two-factor authentication is enabled
       if (twoFactorEnabled) {
+        ref
+            .read(verificationCodeNotifier.notifier)
+            .setPhoneNumber(phone); // Update the notifier with the phone number
+
         Navigator.of(lastContext!)
             .pushReplacementNamed(VerificationCodeScreen.id);
       } else {

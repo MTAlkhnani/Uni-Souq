@@ -15,9 +15,22 @@ final verificationCodeNotifier =
 class VerificationCodeNotifier extends StateNotifier<VerificationCodeState>
     with CodeAutoFill {
   VerificationCodeNotifier(VerificationCodeState state) : super(state);
+  void setPhoneNumber(String phoneNumber) {
+    state = state.copyWith(
+      verificationCodeModelObj:
+          state.verificationCodeModelObj?.copyWith(phoneNumber: phoneNumber),
+    );
+  }
 
   @override
   void codeUpdated() {
     state.otpController?.text = code ?? '';
+  }
+
+  void updateOTP(String value) {
+    state = state.copyWith(
+      otpController: (state.otpController ?? TextEditingController())
+        ..text = value,
+    );
   }
 }

@@ -30,5 +30,10 @@ class VerificationCodeState extends Equatable {
     );
   }
 
-  void updateOTP(String value) {}
+  void updateOTP(String value) {
+    if (otpController == null) {
+      otpController = TextEditingController();
+    }
+    otpController!.text = value;
+  }
 }
