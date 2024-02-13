@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:unisouq/routes/app_routes.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String id = 'customer_screen';
@@ -7,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     // Navigate to LoginScreen after signing out
-    Navigator.of(context).pushReplacementNamed('/LoginScreen');
+    Navigator.of(context).pushReplacementNamed(AppRoutes.signInScreen); // Use the route from AppRoutes
   }
 
   @override

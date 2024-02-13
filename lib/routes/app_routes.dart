@@ -8,6 +8,7 @@ import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:unisouq/screens/verification_code_screen/verification_code_screen.dart';
 import 'package:unisouq/screens/welcome_screen/welcome_screen.dart';
+import 'package:unisouq/screens/home_screen/home_screen.dart';
 
 class AppRoutes {
   static const String signInScreen = '/sign_in_screen';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String customerScreen = '/customer_screen';
   static const String onboardingScreen = '/onboarding_screen';
   static const String informationScreen = '/information_screen';
+  static const String homeScreen = '/home_screen';
 
   static Map<String, WidgetBuilder> routes = {
     WelcomeScreen.id: (context) => WelcomeScreen(),
@@ -30,6 +32,7 @@ class AppRoutes {
     ResetPasswordScreen.id: (context) => ResetPasswordScreen(),
     OnboardingScreen.id: (context) => OnboardingScreen(),
     InformationScreen.id: (context) => InformationScreen(),
+    HomeScreen.id: (context) => HomeScreen(),
 
     //.................
     informationScreen: (context) => InformationScreen(),
@@ -42,5 +45,6 @@ class AppRoutes {
     signUpScreen: (context) => RegistrationScreen(),
     forgotPasswordScreen: (context) => ForgotPasswordScreen(),
     initialRoute: (context) => WelcomeScreen(),
+    homeScreen: (context) => HomeScreen(),
   };
 }
