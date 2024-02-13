@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/screens/customer_screen.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
+import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
@@ -17,25 +18,29 @@ class AppRoutes {
   static const String initialRoute = '/welcome_screen';
   static const String customerScreen = '/customer_screen';
   static const String onboardingScreen = '/onboarding_screen';
+  static const String informationScreen = '/information_screen';
 
   static Map<String, WidgetBuilder> routes = {
-    WelcomeScreen.id: (context) => const WelcomeScreen(),
-    LoginScreen.id: (context) => const LoginScreen(),
-    RegistrationScreen.id: (context) => const RegistrationScreen(),
-    CustomerScreen.id: (context) => const CustomerScreen(),
-    ForgotPasswordScreen.id: (context) => const ForgotPasswordScreen(),
-    VerificationCodeScreen.id: (context) => const VerificationCodeScreen(),
-    ResetPasswordScreen.id: (context) => const ResetPasswordScreen(),
-    OnboardingScreen.id: (context) => const OnboardingScreen(),
+    WelcomeScreen.id: (context) => WelcomeScreen(),
+    LoginScreen.id: (context) => LoginScreen(),
+    RegistrationScreen.id: (context) => RegistrationScreen(),
+    CustomerScreen.id: (context) => CustomerScreen(),
+    ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+    VerificationCodeScreen.id: (context) => VerificationCodeScreen(),
+    ResetPasswordScreen.id: (context) => ResetPasswordScreen(),
+    OnboardingScreen.id: (context) => OnboardingScreen(),
+    InformationScreen.id: (context) => InformationScreen(),
 
     //.................
+    informationScreen: (context) => InformationScreen(),
+    // ignore: equal_keys_in_map
     onboardingScreen: (context) => const OnboardingScreen(),
-    resetPasswordScreen: (context) => const ResetPasswordScreen(),
-    verificationCodeScreen: (context) => const VerificationCodeScreen(),
-    customerScreen: (context) => const WelcomeScreen(),
-    signInScreen: (context) => const LoginScreen(),
-    signUpScreen: (context) => const RegistrationScreen(),
-    forgotPasswordScreen: (context) => const ForgotPasswordScreen(),
-    initialRoute: (context) => const WelcomeScreen(),
+    resetPasswordScreen: (context) => ResetPasswordScreen(),
+    verificationCodeScreen: (context) => VerificationCodeScreen(),
+    customerScreen: (context) => WelcomeScreen(),
+    signInScreen: (context) => LoginScreen(),
+    signUpScreen: (context) => RegistrationScreen(),
+    forgotPasswordScreen: (context) => ForgotPasswordScreen(),
+    initialRoute: (context) => WelcomeScreen(),
   };
 }

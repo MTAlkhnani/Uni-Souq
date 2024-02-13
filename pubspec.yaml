@@ -48,6 +48,9 @@ dependencies:
   provider: ^6.1.1
   mockito: ^5.4.4
   lottie: ^2.7.0
+  cached_network_image: ^3.3.1
+  permission_handler: ^11.3.0
+  images_picker: ^1.2.11
 
 dev_dependencies:
   flutter_test:
@@ -113,3 +116,4 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/lotties/
+    

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 import '../../components/background.dart';
 import '../customer_screen.dart';
@@ -75,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             .pushReplacementNamed(VerificationCodeScreen.id);
       } else {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
-        Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
+        Navigator.of(lastContext!).pushReplacementNamed(InformationScreen.id);
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
