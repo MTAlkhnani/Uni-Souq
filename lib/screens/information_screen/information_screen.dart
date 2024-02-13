@@ -6,6 +6,7 @@ import 'package:unisouq/components/custom_image_view.dart';
 import 'package:unisouq/components/my_text_field.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/customer_screen.dart';
+import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/utils/file_upload_helper.dart';
 
 import 'package:unisouq/utils/navigator_service.dart';
@@ -207,6 +208,6 @@ class InformationScreenState extends ConsumerState<InformationScreen> {
 
   /// Navigates to the homeContainerScreen when the action is triggered.
   onTapCompleteButton(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(CustomerScreen.id);
+    Navigator.of(context).pushReplacementNamed(HomeScreen.id);
   }
 }

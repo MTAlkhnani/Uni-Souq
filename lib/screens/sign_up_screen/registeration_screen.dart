@@ -195,13 +195,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             MyTextField(
                               autovalidate: true,
                               controller: phoneController,
-                              hintText: 'Phone Number',
+                              hintText: '05xxxxxxxx',
                               keyboardType: TextInputType.phone,
                               prefixIcon: Icons.phone,
                               validator: (value) {
-                                if (value!.isEmpty || value.length != 10) {
+                                if (value!.isEmpty || value.length != 10 || !value.startsWith('05')) {
                                   return 'Please enter a valid phone number.';
                                 }
+
                                 return null;
                               },
                               onSaved: (phone) {
@@ -418,7 +419,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     10), // Added consistent spacing before signup button
                             if (isSigningUp)
                               const CircularProgressIndicator(
-                                  color: Color.fromRGBO(0, 0, 139, 1)),
+                                  color: Color.fromRGBO(142, 108, 239, 1)),
                             if (!isSigningUp)
                               RoundedButton(
                                 text: 'Sign Up',

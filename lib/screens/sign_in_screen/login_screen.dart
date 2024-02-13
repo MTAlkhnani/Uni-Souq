@@ -9,6 +9,7 @@ import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
+import 'package:unisouq/screens/home_screen/home_screen.dart';
 
 import '../../components/background.dart';
 import '../customer_screen.dart';
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setBool('isLoggedIn', true);
       }
       Navigator.of(lastContext!).pop();
-      Navigator.of(lastContext!).pushReplacementNamed(CustomerScreen.id);
+      Navigator.of(lastContext!).pushReplacementNamed(HomeScreen.id);
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {

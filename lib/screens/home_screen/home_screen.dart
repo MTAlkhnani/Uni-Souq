@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String id = 'customer_screen';
+  // Function to handle user sign-out
+  void _signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    // Navigate to LoginScreen after signing out
+    Navigator.of(context).pushReplacementNamed('/LoginScreen');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,6 +18,11 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(icon: Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: Icon(Icons.category), onPressed: () {}),
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () => _signOut(context),
+            tooltip: 'Sign Out',
+          ),
         ],
       ),
       body: GridView.builder(
@@ -21,7 +35,7 @@ class HomeScreen extends StatelessWidget {
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
-          // Replace these with your actual data model
+          // Example item data
           final item = {
             'name': ['Shirt', 'Pant', 'Watch', 'Shoes'][index],
             'price': ['40.5', '35.5', '120', '80'][index],
