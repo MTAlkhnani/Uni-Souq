@@ -5,7 +5,7 @@ import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/custom_pin_code_text_field.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 
-import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
+// import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/verification_code_screen/notifier/verification_code_notifier.dart';
 
 import 'package:unisouq/utils/size_utils.dart';
@@ -58,57 +58,57 @@ class VerificationCodeScreenState
                         SizedBox(
                           height: 10.h,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Center(
-                            child: Text(
-                              'Enter your passcode',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Center(
-                            child: Text(
-                              'please enter your passcode that sent to',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50.h),
-                          child: Consumer(
-                            builder: (context, ref, _) {
-                              final otpController = ref
-                                  .watch(verificationCodeNotifier)
-                                  .otpController;
-                              return CustomPinCodeTextField(
-                                context: context,
-                                controller: otpController,
-                                onChanged: (value) {
-                                  ref
-                                      .read(verificationCodeNotifier)
-                                      .updateOTP(value);
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 15.v),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(vertical: 10),
+                        //   child: Center(
+                        //     child: Text(
+                        //       'Enter your passcode',
+                        //       style: Theme.of(context)
+                        //           .textTheme
+                        //           .headlineMedium!
+                        //           .copyWith(
+                        //             fontSize: 20,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(vertical: 10),
+                        //   child: Center(
+                        //     child: Text(
+                        //       'please enter your passcode that sent to',
+                        //       style: Theme.of(context)
+                        //           .textTheme
+                        //           .bodySmall!
+                        //           .copyWith(
+                        //             fontSize: 13,
+                        //             fontWeight: FontWeight.normal,
+                        //           ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(height: 30.h),
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 50.h),
+                        //   child: Consumer(
+                        //     builder: (context, ref, _) {
+                        //       final otpController = ref
+                        //           .watch(verificationCodeNotifier)
+                        //           .otpController;
+                        //       return CustomPinCodeTextField(
+                        //         context: context,
+                        //         controller: otpController,
+                        //         onChanged: (value) {
+                        //           ref
+                        //               .read(verificationCodeNotifier)
+                        //               .updateOTP(value);
+                        //         },
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
+                        // SizedBox(height: 15.v),
                         RichText(
                           text: TextSpan(
                             children: [
@@ -126,7 +126,7 @@ class VerificationCodeScreenState
                                 child: SizedBox(width: 20),
                               ),
                               TextSpan(
-                                text: "Resent Code",
+                                text: "Resend Code",
                                 // use here onEnter method to make it clickable
                                 style: Theme.of(context)
                                     .textTheme

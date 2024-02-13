@@ -8,7 +8,7 @@ import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 import '../../components/background.dart';
-import '../customer_screen.dart';
+// import '../customer_screen.dart';
 import '../sign_in_screen/login_screen.dart';
 import '../verification_code_screen/verification_code_screen.dart';
 
@@ -44,8 +44,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool containsSpecialChar = false;
   bool contains8Length = false;
 
-  void _submiteForm(String email, String password, String username,
-      String phone, String address) async {
+  void _submiteForm(String email, String password, String firstName,
+      String lastName, String phone) async {
     setState(() {
       isSigningUp = true;
     });
@@ -55,13 +55,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           email: email, password: password);
 
       await FirebaseFirestore.instance
-          .collection('Customer')
+          .collection('User')
           .doc(userCredential.user!.uid)
           .set({
-        'CustomerId': userCredential.user!.uid,
-        'CustomerName': username,
+        'UserId': userCredential.user!.uid,
+        'FirstName': firstName,
+        'LastName': lastName,
         'Email': userCredential.user!.email,
-        'Address': address,
         'Phone': phone,
       });
 
@@ -70,8 +70,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       // Check if two-factor authentication is enabled
       if (twoFactorEnabled) {
-        // Navigate to the Two-Factor Authentication setup or verification screen
-        // Replace 'TwoFactorAuthScreen.id' with the actual route name of your 2FA screen
         Navigator.of(lastContext!)
             .pushReplacementNamed(VerificationCodeScreen.id);
       } else {

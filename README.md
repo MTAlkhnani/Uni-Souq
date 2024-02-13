@@ -1,20 +1,8 @@
-<<<<<<< HEAD
-# unisouq
+## Tasks:
 
-A new Flutter project.
+# BACKEND: @MTAlkhnani, @ridafaisel
+1) 2FA (Custom, UI Auth Provider), Priority --> Low
+2) Forgot Password (Custom, UI Auth Provider), Priority --> Low
+3) Google and Apple Auth, Priority --> Low
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# Uni-Souq
->>>>>>> 9c8292866e25f7c4da27db8e5a4d4ed41a9fef22
+# FRONTEND: @EYAD-ALHAMADAH, @professorkataa, @mostafaSWE, @mohdosare
