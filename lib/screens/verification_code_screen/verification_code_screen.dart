@@ -45,7 +45,7 @@ class VerificationCodeScreenState
     }
   }
 
-  final TextEditingController otpController = TextEditingController();
+  late final TextEditingController otpController = TextEditingController();
 
   @override
   void dispose() {
@@ -136,10 +136,12 @@ class VerificationCodeScreenState
                                       "", // Hide the counter text underneath the TextField
                                 ),
                                 maxLength: 6, // Set the max length for the OTP
-                                onChanged: (value) {
-                                  ref
-                                      .read(verificationCodeNotifier)
-                                      .updateOTP(value); // Update the OTP value
+                                onSubmitted: (value) {
+                                  // ref
+                                  //     .read(verificationCodeNotifier)
+                                  //     .updateOTP(value); // Update the OTP value
+                                  // print(value);
+                                  _submit(_verificationCode!, value);
                                 },
                                 // Style the text field to look like a PIN input if desired
                                 textAlign: TextAlign.center,
@@ -155,9 +157,9 @@ class VerificationCodeScreenState
                               //   context: context,
                               //   controller: otpController,
                               //   onChanged: (value) {
-                              // ref
-                              //     .read(verificationCodeNotifier)
-                              //     .updateOTP(value);
+                              //     ref
+                              //         .read(verificationCodeNotifier)
+                              //         .updateOTP(value);
                               //   },
                               // );
                             },
@@ -201,16 +203,17 @@ class VerificationCodeScreenState
                           child: RoundedButton(
                             text: 'Confirm',
                             color: Theme.of(context).primaryColor,
-                            press: () async {
-                              final pin =
-                                  otpController.text; // Access the OTP value
+                            press: () {
+                              final pin = otpController.text
+                                  .trim(); // Ensure we get the text directly here, trimmed for any leading/trailing spaces
 
-                              if (_verificationCode != null) {
+                              if (_verificationCode != null && pin.isNotEmpty) {
                                 _submit(_verificationCode!,
                                     pin); // Call _submit with the verification code and pin
                               } else {
-                                // Handle case where verification code is not available
-                                print('Verification code not available.');
+                                // Handle case where verification code or pin is not available
+                                print(
+                                    'Verification code or PIN is not available.');
                               }
                             },
                           ),
@@ -279,6 +282,7 @@ class VerificationCodeScreenState
   }
 
   void _submit(String verificationId, String pin) async {
+    print(pin);
     try {
       await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(

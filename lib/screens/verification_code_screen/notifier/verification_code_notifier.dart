@@ -30,7 +30,7 @@ class VerificationCodeNotifier extends StateNotifier<VerificationCodeState>
   void updateOTP(String value) {
     state = state.copyWith(
       otpController: (state.otpController ?? TextEditingController())
-        ..text = value,
+        ..text = value.trim(), // Trim the value before updating the text
     );
   }
 }

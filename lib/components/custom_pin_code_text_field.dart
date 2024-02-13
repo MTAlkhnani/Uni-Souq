@@ -49,7 +49,7 @@ class CustomPinCodeTextField extends StatelessWidget {
     return PinCodeTextField(
       appContext: context,
       controller: controller,
-      length: 4,
+      length: 5,
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
