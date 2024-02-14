@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 import '../../components/background.dart';
@@ -69,7 +70,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       });
 
       // Dismiss any open dialogs or loading indicators
-      Navigator.of(lastContext!).pop();
+      Navigator.of(context).pop();
 
       // Check if two-factor authentication is enabled
       if (twoFactorEnabled) {
@@ -77,24 +78,26 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             .read(verificationCodeNotifier.notifier)
             .setPhoneNumber(phone); // Update the notifier with the phone number
 
-        Navigator.of(lastContext!)
-            .pushReplacementNamed(VerificationCodeScreen.id);
+        Navigator.pushReplacementNamed(
+            context, AppRoutes.verificationCodeScreen);
       } else {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
-        Navigator.of(lastContext!).pushReplacementNamed(InformationScreen.id);
+
+        Navigator.pushNamed(context, AppRoutes.informationScreen);
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
-        ScaffoldMessenger.of(lastContext!)
+        ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(message)));
       }
       // Dismiss any open dialogs or loading indicators
-      Navigator.of(lastContext!).pop();
+      if (Navigator.canPop(context)) {
+        Navigator.of(context).pop();
+      }
     } catch (error) {
       print(error);
-      Navigator.of(lastContext!).pop();
     }
     setState(() {
       isSigningUp = false;
@@ -206,7 +209,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                               keyboardType: TextInputType.phone,
                               prefixIcon: Icons.phone,
                               validator: (value) {
-                                if (value!.isEmpty || value.length != 10 || !value.startsWith('05')) {
+                                if (value!.isEmpty ||
+                                    value.length != 10 ||
+                                    !value.startsWith('05')) {
                                   return 'Please enter a valid phone number.';
                                 }
 
@@ -449,7 +454,8 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                               Theme.of(context).primaryColor),
                                     ),
                                     onPressed: () => Navigator.of(context)
-                                        .pushReplacementNamed(LoginScreen.id),
+                                        .pushReplacementNamed(
+                                            AppRoutes.signInScreen),
                                   ),
                                 ],
                               ),

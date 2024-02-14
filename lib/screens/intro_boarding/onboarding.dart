@@ -5,8 +5,10 @@ import 'package:unisouq/components/custom_bg.dart';
 import 'package:unisouq/components/item_card.dart';
 import 'package:unisouq/components/loading_button.dart';
 import 'package:unisouq/components/widgets.dart';
+import 'package:unisouq/constants/constants.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/intro_boarding/data/data.dart';
+import 'package:unisouq/global.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -326,7 +328,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => HomeScreen(), // Create an instance of HomeScreen here
+                                      builder: (context) =>
+                                          HomeScreen(), // Create an instance of HomeScreen here
                                     ),
                                   );
                                   setState(() {
@@ -372,7 +375,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               pageController.nextPage(
                                   duration: const Duration(seconds: 1),
                                   curve: Curves.ease);
-                            } else {}
+                            } else {
+                              Global.storageService.setBool(
+                                  AppConstrants.STORAGE_DEVICE_OPEN_FIRST_KEY,
+                                  true);
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -400,6 +407,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               secondChild: Center(
                                 child: GestureDetector(
                                   onTap: () {
+                                    Global.storageService.setBool(
+                                        AppConstrants
+                                            .STORAGE_DEVICE_OPEN_FIRST_KEY,
+                                        true);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

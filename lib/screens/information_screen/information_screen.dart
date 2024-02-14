@@ -208,6 +208,6 @@ class InformationScreenState extends ConsumerState<InformationScreen> {
 
   /// Navigates to the homeContainerScreen when the action is triggered.
   onTapCompleteButton(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(HomeScreen.id);
+    Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
   }
 }

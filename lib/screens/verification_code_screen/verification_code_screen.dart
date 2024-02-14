@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/custom_pin_code_text_field.dart';
+import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 // import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
@@ -250,7 +251,7 @@ class VerificationCodeScreenState
 
   /// Navigates to the resetPasswordScreen when the action is triggered.
   onTapConfirm(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(InformationScreen.id);
+    Navigator.of(context).pushReplacementNamed(AppRoutes.informationScreen);
   }
 
   Future<dynamic> _verifyPhone() async {

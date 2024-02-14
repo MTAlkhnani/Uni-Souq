@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/my_text_field.dart';
+import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/notifier/forgot_password_notifier.dart';
 import 'package:unisouq/screens/verification_code_screen/verification_code_screen.dart';
@@ -174,6 +175,8 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           const SnackBar(
               content: Text('Reset code has been sent to your email.')),
         );
+        // await Future.delayed(const Duration(seconds: 6));
+        // Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
       } on FirebaseAuthException catch (e) {
         // Dismiss the loading dialog
         Navigator.of(context).pop();

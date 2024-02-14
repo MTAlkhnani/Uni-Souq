@@ -16,35 +16,41 @@ class AppRoutes {
   static const String verificationCodeScreen = '/verification_code_screen';
   static const String resetPasswordScreen = '/reset_password_screen';
   static const String forgotPasswordScreen = '/forgot_password_screen';
-  static const String initialRoute = '/welcome_screen';
+  static const String initialRoute = 'welcome_screen';
   static const String customerScreen = '/customer_screen';
   static const String onboardingScreen = '/onboarding_screen';
   static const String informationScreen = '/information_screen';
   static const String homeScreen = '/home_screen';
 
-  static Map<String, WidgetBuilder> routes = {
-    WelcomeScreen.id: (context) => WelcomeScreen(),
-    LoginScreen.id: (context) => LoginScreen(),
-    RegistrationScreen.id: (context) => RegistrationScreen(),
-    CustomerScreen.id: (context) => CustomerScreen(),
-    ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
-    VerificationCodeScreen.id: (context) => VerificationCodeScreen(),
-    ResetPasswordScreen.id: (context) => ResetPasswordScreen(),
-    OnboardingScreen.id: (context) => OnboardingScreen(),
-    InformationScreen.id: (context) => InformationScreen(),
-    HomeScreen.id: (context) => HomeScreen(),
-
-    //.................
-    informationScreen: (context) => InformationScreen(),
-    // ignore: equal_keys_in_map
-    onboardingScreen: (context) => const OnboardingScreen(),
-    resetPasswordScreen: (context) => ResetPasswordScreen(),
-    verificationCodeScreen: (context) => VerificationCodeScreen(),
-    customerScreen: (context) => WelcomeScreen(),
-    signInScreen: (context) => LoginScreen(),
-    signUpScreen: (context) => RegistrationScreen(),
-    forgotPasswordScreen: (context) => ForgotPasswordScreen(),
-    initialRoute: (context) => WelcomeScreen(),
-    homeScreen: (context) => HomeScreen(),
-  };
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case signInScreen:
+        return MaterialPageRoute(builder: (_) => LoginScreen());
+      case signUpScreen:
+        return MaterialPageRoute(builder: (_) => RegistrationScreen());
+      case verificationCodeScreen:
+        return MaterialPageRoute(builder: (_) => VerificationCodeScreen());
+      case resetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
+      case forgotPasswordScreen:
+        return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
+      case initialRoute:
+        return MaterialPageRoute(builder: (_) => WelcomeScreen());
+      case customerScreen:
+        return MaterialPageRoute(builder: (_) => CustomerScreen());
+      case onboardingScreen:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+      case informationScreen:
+        return MaterialPageRoute(builder: (_) => InformationScreen());
+      case homeScreen:
+        return MaterialPageRoute(builder: (_) => HomeScreen());
+      default:
+        return MaterialPageRoute(
+            builder: (_) => Scaffold(
+                  appBar: AppBar(title: Text('Error')),
+                  body: Center(
+                      child: Text('No route defined for ${settings.name}')),
+                ));
+    }
+  }
 }

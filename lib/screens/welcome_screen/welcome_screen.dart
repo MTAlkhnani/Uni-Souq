@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/global.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -11,7 +13,12 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Delayed navigation after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, OnboardingScreen.id);
+      bool deviceFirstTime = Global.storageService.getDeviceFirstOpen();
+      if (deviceFirstTime) {
+        Navigator.pushReplacementNamed(context, AppRoutes.signInScreen);
+      } else {
+        Navigator.pushReplacementNamed(context, AppRoutes.onboardingScreen);
+      }
     });
 
     return Scaffold(
@@ -35,7 +42,8 @@ class WelcomeScreen extends StatelessWidget {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, OnboardingScreen.id);
+                  Navigator.pushReplacementNamed(
+                      context, AppRoutes.onboardingScreen);
                 },
                 child: Container(
                   padding:

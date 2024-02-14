@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String id = 'customer_screen';
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    // Navigate to LoginScreen after signing out
-    Navigator.of(context).pushReplacementNamed(AppRoutes.signInScreen); // Use the route from AppRoutes
+    // Navigate to SignInScreen after signing out
+    Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
+
+    ;
+    // Clear the navigation stack so that the user can't navigate back to HomeScreen
   }
 
   @override
@@ -40,7 +44,12 @@ class HomeScreen extends StatelessWidget {
           final item = {
             'name': ['Shirt', 'Pant', 'Watch', 'Shoes'][index],
             'price': ['40.5', '35.5', '120', '80'][index],
-            'location': ['Medina Market', 'Pathanville', 'Downtown', 'City Center'][index],
+            'location': [
+              'Medina Market',
+              'Pathanville',
+              'Downtown',
+              'City Center'
+            ][index],
             'isNew': [true, false, false, true][index],
             'discount': [null, null, '35% OFF', null][index],
           };
@@ -62,12 +71,18 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (item['isNew'] as bool)
-                        Text('New', style: TextStyle(color: Theme.of(context).primaryColor)),
-                      Text(item['name'] as String, style: Theme.of(context).textTheme.bodyText1),
-                      Text('\$ ${item['price']}', style: Theme.of(context).textTheme.bodyText2),
-                      Text(item['location'] as String, style: Theme.of(context).textTheme.bodyText2),
+                        Text('New',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor)),
+                      Text(item['name'] as String,
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Text('\$ ${item['price']}',
+                          style: Theme.of(context).textTheme.bodyText2),
+                      Text(item['location'] as String,
+                          style: Theme.of(context).textTheme.bodyText2),
                       if (item['discount'] != null)
-                        Text(item['discount'] as String, style: TextStyle(color: Colors.red)),
+                        Text(item['discount'] as String,
+                            style: TextStyle(color: Colors.red)),
                     ],
                   ),
                 ),

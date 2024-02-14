@@ -9,11 +9,8 @@ import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
-import 'package:unisouq/screens/home_screen/home_screen.dart';
 
 import '../../components/background.dart';
-import '../customer_screen.dart';
-import '../sign_up_screen/registeration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -70,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool _isLogingIn = false;
-
   void _submitForm(String email, String password) async {
     setState(() {
       _isLogingIn = true;
@@ -82,15 +78,17 @@ class _LoginScreenState extends State<LoginScreen> {
         // Save the "Remember me" state and/or user credentials as needed
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('savedEmail', emailController.text);
+        await prefs.setString('savedPassword', passwordController.text);
       }
-      Navigator.of(lastContext!).pop();
-      Navigator.of(lastContext!).pushReplacementNamed(HomeScreen.id);
+      // Use Navigator to pushReplacementNamed
+      Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
       }
-      ScaffoldMessenger.of(lastContext!)
+      ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(message)));
     } catch (error) {
       print(error); // Consider handling this error in user-friendly way
@@ -329,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             onPressed: () =>
                                                 Navigator.of(context)
                                                     .pushReplacementNamed(
-                                                        RegistrationScreen.id),
+                                                        AppRoutes.signUpScreen),
                                           ),
                                         ],
                                       ),
