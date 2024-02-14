@@ -395,38 +395,38 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             const SizedBox(
                                 height:
                                     10), // Added consistent spacing for the password rules
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal:
-                                      35), // Match the padding of other fields
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Flexible(
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.security),
-                                        SizedBox(
-                                            width:
-                                                2), // Adjust space between the icon and text
-                                        Text(
-                                            'Enable Two-Factor Authentication'),
-                                      ],
-                                    ),
-                                  ),
-                                  Switch(
-                                    value: twoFactorEnabled,
-                                    activeColor: Theme.of(context).primaryColor,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        twoFactorEnabled = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       horizontal:
+                            //           35), // Match the padding of other fields
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       const Flexible(
+                            //         child: Row(
+                            //           children: [
+                            //             Icon(Icons.security),
+                            //             SizedBox(
+                            //                 width:
+                            //                     2), // Adjust space between the icon and text
+                            //             Text(
+                            //                 'Enable Two-Factor Authentication'),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       Switch(
+                            //         value: twoFactorEnabled,
+                            //         activeColor: Theme.of(context).primaryColor,
+                            //         onChanged: (bool value) {
+                            //           setState(() {
+                            //             twoFactorEnabled = value;
+                            //           });
+                            //         },
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
 
                             const SizedBox(
                                 height:

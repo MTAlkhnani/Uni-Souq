@@ -258,56 +258,56 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Theme.of(context).primaryColor,
                                 press: _trySubmit,
                               ),
-                            if (!_isLogingIn)
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: SizedBox(
-                                    height: 100,
-                                    width: double.infinity,
-                                    child: Column(
-                                      children: [
-                                        FadeInAnimation(
-                                          delay: 2.2,
-                                          child: Text(
-                                            "Or Log with",
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .hintColor),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        FadeInAnimation(
-                                          delay: 2.4,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10,
-                                                bottom: 10,
-                                                right: 30,
-                                                left: 30),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                SvgPicture.asset(
-                                                    "assets/images/google_ic-1.svg"),
-                                                Image.asset(
-                                                    "assets/images/Vector.png")
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            // if (!_isLogingIn)
+                            //   SizedBox(
+                            //     width: MediaQuery.of(context).size.width * 0.5,
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.all(12.0),
+                            //       child: SizedBox(
+                            //         height: 100,
+                            //         width: double.infinity,
+                            //         child: Column(
+                            //           children: [
+                            //             FadeInAnimation(
+                            //               delay: 2.2,
+                            //               child: Text(
+                            //                 "Or Log with",
+                            //                 style: TextStyle(
+                            //                     color: Theme.of(context)
+                            //                         .hintColor),
+                            //               ),
+                            //             ),
+                            //             const SizedBox(
+                            //               height: 20,
+                            //             ),
+                            //             FadeInAnimation(
+                            //               delay: 2.4,
+                            //               child: Padding(
+                            //                 padding: const EdgeInsets.only(
+                            //                     top: 10,
+                            //                     bottom: 10,
+                            //                     right: 30,
+                            //                     left: 30),
+                            //                 child: Row(
+                            //                   crossAxisAlignment:
+                            //                       CrossAxisAlignment.start,
+                            //                   mainAxisAlignment:
+                            //                       MainAxisAlignment
+                            //                           .spaceBetween,
+                            //                   children: [
+                            //                     SvgPicture.asset(
+                            //                         "assets/images/google_ic-1.svg"),
+                            //                     Image.asset(
+                            //                         "assets/images/Vector.png")
+                            //                   ],
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                             if (!_isLogingIn)
                               Padding(
                                   padding: const EdgeInsets.symmetric(
