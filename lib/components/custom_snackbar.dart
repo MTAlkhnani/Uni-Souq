@@ -2,89 +2,113 @@ import 'package:flutter/material.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 void showSuccessMessage(BuildContext context, String message) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Container(
-        padding: const EdgeInsets.all(8),
-        height: 80.h,
+        padding: EdgeInsets.all(screenWidth * 0.05),
+        height: screenHeight * 0.12,
         decoration: BoxDecoration(
           color: Theme.of(context).hoverColor,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
         ),
         child: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 40),
-            SizedBox(width: 20.v),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Success",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+            Icon(Icons.check_circle,
+                color: Colors.white, size: screenWidth * 0.1),
+            SizedBox(width: screenWidth * 0.04),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Success",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  //const Spacer(),
-                  Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: screenHeight * 0.005),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          message,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.03,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
       ),
       behavior: SnackBarBehavior.fixed,
       backgroundColor: Colors.transparent,
-      elevation: 1,
+      elevation: 3,
     ),
   );
 }
 
 void showErrorMessage(BuildContext context, String message) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Container(
-        padding: const EdgeInsets.all(8),
-        height: 80.h,
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(screenWidth * 0.02),
+        height: screenHeight * 0.12,
+        decoration: BoxDecoration(
           color: Color.fromARGB(255, 180, 49, 40),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
         ),
         child: Row(
           children: [
-            const Icon(Icons.error_outline, color: Colors.white, size: 40),
-            SizedBox(width: 20.v),
+            Icon(Icons.error_outline,
+                color: Colors.white, size: screenWidth * 0.1),
+            SizedBox(width: screenWidth * 0.04),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Oops",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: screenWidth * 0.04,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Spacer(),
-                  Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
+                  SizedBox(height: screenHeight * 0.005),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            message,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth * 0.03,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
