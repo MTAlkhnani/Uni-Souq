@@ -10,8 +10,9 @@ class HomeScreen extends StatelessWidget {
     await FirebaseAuth.instance.signOut();
     // Navigate to SignInScreen after signing out
     Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
+    Navigator.pushNamedAndRemoveUntil(
+        context, AppRoutes.signInScreen, (route) => false);
 
-    ;
     // Clear the navigation stack so that the user can't navigate back to HomeScreen
   }
 

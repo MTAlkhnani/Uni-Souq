@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
+import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
@@ -82,15 +83,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             context, AppRoutes.verificationCodeScreen);
       } else {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
-
+        showSuccessMessage(context, "Account Created Succussfully");
         Navigator.pushNamed(context, AppRoutes.informationScreen);
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(SnackBar(content: Text(message)));
+        showErrorMessage(context, message);
       }
       // Dismiss any open dialogs or loading indicators
       if (Navigator.canPop(context)) {

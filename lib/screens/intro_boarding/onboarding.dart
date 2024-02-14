@@ -6,6 +6,7 @@ import 'package:unisouq/components/item_card.dart';
 import 'package:unisouq/components/loading_button.dart';
 import 'package:unisouq/components/widgets.dart';
 import 'package:unisouq/constants/constants.dart';
+import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/intro_boarding/data/data.dart';
 import 'package:unisouq/global.dart';
@@ -411,13 +412,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                         AppConstrants
                                             .STORAGE_DEVICE_OPEN_FIRST_KEY,
                                         true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen(),
-                                      ),
-                                    );
+                                    Navigator.popAndPushNamed(
+                                        context, AppRoutes.signInScreen);
                                   },
                                   child: Text(
                                     "Get Started",

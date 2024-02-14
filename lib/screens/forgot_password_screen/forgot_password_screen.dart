@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
+import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/my_text_field.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
@@ -171,10 +172,11 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         Navigator.of(context).pop();
 
         // Show a SnackBar after successful email sending
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Reset code has been sent to your email.')),
-        );
+        showSuccessMessage(context, "Reset code has been sent to your email");
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //       content: Text('Reset code has been sent to your email.')),
+        // );
         // await Future.delayed(const Duration(seconds: 6));
         // Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
       } on FirebaseAuthException catch (e) {
@@ -182,9 +184,11 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         Navigator.of(context).pop();
 
         // Handle error, e.g., show error SnackBar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send reset code: ${e.message}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('')),
+
+        // );
+        showErrorMessage(context, "AFailed to send reset code: ${e.message}.");
       }
     }
   }

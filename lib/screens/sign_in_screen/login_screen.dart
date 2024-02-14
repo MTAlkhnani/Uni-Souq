@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
+import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
@@ -82,14 +83,17 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('savedPassword', passwordController.text);
       }
       // Use Navigator to pushReplacementNamed
-      Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+      showSuccessMessage(context, "Login Succussfully");
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+      });
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
       if (error.message != null) {
         message = error.message.toString();
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+
+      showErrorMessage(context, message);
     } catch (error) {
       print(error); // Consider handling this error in user-friendly way
     }
