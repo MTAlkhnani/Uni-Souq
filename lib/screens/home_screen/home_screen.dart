@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
+import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String id = 'customer_screen';
@@ -108,7 +111,21 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          final User? user = FirebaseAuth.instance.currentUser;
+          if (user == null) {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => const RegistrationScreen()),
+            );
+            return;
+          }
+          Navigator.push(
+            context,
+            CupertinoPageRoute(builder: (context) => AddProductScreen()),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
