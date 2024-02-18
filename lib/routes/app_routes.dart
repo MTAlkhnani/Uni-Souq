@@ -9,6 +9,7 @@ import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:unisouq/screens/verification_code_screen/verification_code_screen.dart';
 import 'package:unisouq/screens/welcome_screen/welcome_screen.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
+import 'package:unisouq/screens/add_product/add_product.dart';
 
 class AppRoutes {
   static const String signInScreen = '/sign_in_screen';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
   static const String informationScreen = '/information_screen';
   static const String homeScreen = '/home_screen';
+  static const String addProduct = '/add_product';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -44,6 +46,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => InformationScreen());
       case homeScreen:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case addProduct:
+        return MaterialPageRoute(builder: (_) => AddProductScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
