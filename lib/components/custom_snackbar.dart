@@ -76,19 +76,21 @@ void showErrorMessage(BuildContext context, String message) {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Spacer(),
-                  Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
+                  Flexible( // Use Flexible here for the message Text
+                    child: Text(
+                      message,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
+
           ],
         ),
       ),
