@@ -20,9 +20,9 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Explanation why the app needs access to the camera...</string> <!-- This is for access camera -->
+	<string>This app requires access to your camera</string> <!-- This is for access camera -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Explanation why the app needs access to the photo library...</string> <!-- This is for access picture libaray -->
+	<string>This app requires access to photo libray</string> <!-- This is for access picture libaray -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
