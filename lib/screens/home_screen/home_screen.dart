@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
@@ -23,13 +24,30 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Uni-Souq'),
+        title: const Text('Uni-Souq'),
         actions: [
           IconButton(icon: Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: Icon(Icons.category), onPressed: () {}),
           IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () => _signOut(context),
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () => {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return MyDialog(
+                    title: "Sign Out",
+                    content: "Are you sure you want to sign out?",
+                    cancelText: "Cancel",
+                    signOutText: " Sign Out",
+                    titleTextStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                    contentTextStyle: const TextStyle(fontSize: 16),
+                    buttonTextStyle: const TextStyle(
+                        fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
+                  );
+                },
+              )
+            },
             tooltip: 'Sign Out',
           ),
         ],

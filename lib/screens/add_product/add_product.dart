@@ -103,92 +103,98 @@ class _AddProductState extends State<AddProductScreen> {
         title: Text('Add Product'),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Product Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the product name';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                DropdownButtonFormField<String>(
-                  value: _selectedCategory,
-                  hint: Text('Select Category'),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategory = value;
-                    });
-                  },
-                  items:
-                      _categories.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  validator: (value) =>
-                      value == null ? 'Please select a category' : null,
-                ),
-                SizedBox(height: 20),
-                DropdownButtonFormField<String>(
-                  value: _selectedCondition,
-                  hint: Text('Select Condition'),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCondition = value;
-                    });
-                  },
-                  items:
-                      _conditions.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  validator: (value) =>
-                      value == null ? 'Please select a condition' : null,
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                  maxLines: 3,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a description';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the price';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _isLoading
-                      ? null
-                      : _submitProduct, // Disable button when loading
-                  child: Text('Submit Product'),
-                ),
-              ],
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: 'Product Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the product name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    hint: Text('Select Category'),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
+                    items: _categories
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    validator: (value) =>
+                        value == null ? 'Please select a category' : null,
+                    dropdownColor: Theme.of(context).secondaryHeaderColor,
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedCondition,
+                    hint: Text('Select Condition'),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCondition = value;
+                      });
+                    },
+                    items: _conditions
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    validator: (value) =>
+                        value == null ? 'Please select a condition' : null,
+                    dropdownColor: Theme.of(context).secondaryHeaderColor,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(labelText: 'Description'),
+                    maxLines: 3,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a description';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _priceController,
+                    decoration: InputDecoration(labelText: 'Price'),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the price';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _isLoading
+                        ? null
+                        : _submitProduct, // Disable button when loading
+                    child: Text('Submit Product'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

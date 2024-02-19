@@ -8,11 +8,11 @@ void showSuccessMessage(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Container(
-        padding: EdgeInsets.all(screenWidth * 0.05),
-        height: screenHeight * 0.12,
+        padding: EdgeInsets.all(screenWidth * 0.02),
+        height: screenHeight * 0.09,
         decoration: BoxDecoration(
           color: Theme.of(context).hoverColor,
-          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.03)),
         ),
         child: Row(
           children: [
@@ -69,10 +69,10 @@ void showErrorMessage(BuildContext context, String message) {
     SnackBar(
       content: Container(
         padding: EdgeInsets.all(screenWidth * 0.02),
-        height: screenHeight * 0.12,
+        height: screenHeight * 0.1,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 180, 49, 40),
-          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.03)),
         ),
         child: Row(
           children: [
