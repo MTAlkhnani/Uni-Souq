@@ -9,23 +9,31 @@ class ChatService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Send message
-  Future<void> sendMessage(String receiverid, String message) async {
+  Future<void> sendMessage(String receiverID, String message) async {
     try {
       final String currentUserID = _firebaseAuth.currentUser!.uid;
       final String currentUserEmail =
           _firebaseAuth.currentUser!.email.toString();
       final Timestamp timestamp = Timestamp.now();
 
-      //CREATE NEW MASSAGE
+      // Retrieve first name and last name
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection('User').doc(currentUserID).get();
+      String firstName = userSnapshot.get('FirstName');
+      String lastName = userSnapshot.get('LastName');
 
+      //CREATE NEW MESSAGE
       Message newMessage = Message(
-          senderID: currentUserID,
-          senderEmail: currentUserEmail,
-          receiverid: receiverid,
-          message: message,
-          timestamp: timestamp);
+        senderID: currentUserID,
+        senderEmail: currentUserEmail,
+        senderFirstName: firstName, // Add sender's first name
+        senderLastName: lastName, // Add sender's last name
+        receiverid: receiverID,
+        message: message,
+        timestamp: timestamp,
+      );
 
-      List<String> ids = [currentUserID, receiverid];
+      List<String> ids = [currentUserID, receiverID];
       ids.sort();
 
       String chatRoomID = ids.join("_");

@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Calculate the discounted price if available
                           double price = double.parse(item['price'] ?? '0');
                           double discountedPrice =
-                              double.parse(item['discountedPrice'] ?? '0');
+                              double.parse(item['discountedPrice'] ?? "0");
                           double displayPrice =
                               discountedPrice > 0 ? discountedPrice : price;
 
@@ -232,7 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: item['imageURLs'] != null &&
                                                 item['imageURLs'].isNotEmpty
                                             ? CachedNetworkImage(
-                                                imageUrl: item['imageURLs'][0],
+                                                imageUrl: item['imageURLs'][
+                                                    0], // Use the first image URL
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) =>
                                                     CircularProgressIndicator(),

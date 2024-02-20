@@ -77,6 +77,9 @@ class _MessagingPageState extends State<MessagingPage> {
     var alignment = (data['senderID'] == _firebaseAuth.currentUser!.uid)
         ? Alignment.centerLeft
         : Alignment.centerRight;
+
+    String senderName = '${data['senderFirstName']} ${data['senderLastName']}';
+
     return Container(
       alignment: alignment,
       child: Padding(
@@ -91,7 +94,7 @@ class _MessagingPageState extends State<MessagingPage> {
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start),
           children: [
-            Text(data['senderEmail']),
+            Text(senderName),
             const SizedBox(height: 6),
             ChatBubble(
               massage: data['message'],

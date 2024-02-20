@@ -228,7 +228,8 @@ class _AddProductState extends State<AddProductScreen> {
         downloadUrls.add(downloadUrl);
       } catch (e) {
         print(e);
-        downloadUrls.add(null);
+        downloadUrls.add(
+            'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png');
       }
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/screens/customer_screen.dart';
+import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
@@ -27,6 +28,7 @@ class AppRoutes {
   static const String addProduct = '/add_product';
   static const String productDetail = '/product_Detail';
   static const String massagingPage = '/massaging_page';
+  static const String editProduct = '/edit_product';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -61,6 +63,12 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => MessagingPage(
                   reciverUserID: '',
+                ));
+
+      case editProduct:
+        return MaterialPageRoute(
+            builder: (_) => EditProductScreen(
+                  productData: {},
                 ));
       default:
         return MaterialPageRoute(

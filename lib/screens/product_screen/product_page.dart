@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/product_screen/comment.dart';
@@ -271,26 +272,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        // Button to contact the seller
+                        // Button to contact the seller or client
                         Padding(
                           padding: const EdgeInsets.all(9.0),
                           child: Row(
                             children: [
                               Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // Implement logic to contact the seller
-                                    _chatService.contactSeller(context, productData['sellerID']); 
+                                child: Builder(
+                                  builder: (context) {
+                                    final currentUserUid = getCurrentUserUid();
+                                    final sellerId = productData['sellerID'];
+                                    final productId = productData['sellerID'];
+
+                                    if (currentUserUid == sellerId) {
+                                      // Render the edit button if the current user is the seller
+                                      return IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          // Implement logic to edit the product
+                                          // Navigate to the edit product screen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProductScreen(
+                                                productData: productData,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      // Render the contact button if the current user is not the seller
+                                      return ElevatedButton.icon(
+                                        onPressed: () {
+                                          // Implement logic to contact the client
+                                          _chatService.contactSeller(
+                                              context, sellerId);
+                                        },
+                                        icon: Icon(Icons.message),
+                                        label: Text('Contact the Seller'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: const Color.fromARGB(
+                                              255, 77, 139, 79),
+                                        ),
+                                      );
+                                    }
                                   },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color.fromARGB(255, 77, 139,
-                                        79), // Change the background color here
-                                  ),
-                                  child: Text('Contact the seller',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor)),
                                 ),
                               ),
                             ],
