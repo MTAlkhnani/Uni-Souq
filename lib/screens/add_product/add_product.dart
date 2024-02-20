@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:image/image.dart' as img;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:unisouq/components/custom_snackbar.dart';
 
 class AddProductScreen extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _AddProductState extends State<AddProductScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _discountPriceController =
+      TextEditingController(); // Added for discounted price
   String? _selectedCategory;
   String? _selectedCondition;
   final List<String> _categories = [
@@ -33,126 +36,16 @@ class _AddProductState extends State<AddProductScreen> {
     'Used - Good',
     'Used - Acceptable'
   ];
-  List<File> _images = []; // Variable to store the selected images
-  bool _isLoading = false; // Add a loading state
-  // Future<File?> handleImageConversion(File imageFile) async {
-  //   final String imagePathLowerCase = imageFile.path.toLowerCase();
-
-  //   // Check if the image is in HEIC/HEIF format
-  //   if (imagePathLowerCase.endsWith('.heic') ||
-  //       imagePathLowerCase.endsWith('.heif')) {
-  //     final tmpDir = (await getTemporaryDirectory()).path;
-  //     final targetPath = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-  //     // Convert to JPG
-  //     final result = await FlutterImageCompress.compressAndGetFile(
-  //       imageFile.path,
-  //       targetPath,
-  //       format: CompressFormat.jpeg,
-  //       quality: 90,
-  //     );
-
-  //     if (result == null) {
-  //       // Handle conversion error
-  //       print("Error converting HEIC/HEIF image to JPEG");
-  //       return null;
-  //     }
-  //     return result;
-  //   }
-
-  // // Return the original image if no conversion is needed
-  // return imageFile;
-  // }
-
-  Future<void> _pickImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? pickedImages = await _picker.pickMultiImage();
-
-    if (pickedImages != null && pickedImages.isNotEmpty) {
-      setState(() {
-        _images = pickedImages.map((xFile) => File(xFile.path)).toList();
-      });
-    }
-  }
-
-  Future<List<String?>> _uploadImages(List<File> images) async {
-    List<String?> downloadUrls = [];
-
-    for (File image in images) {
-      String fileName =
-          'products/${DateTime.now().millisecondsSinceEpoch}_${images.indexOf(image)}.png';
-      try {
-        final ref = FirebaseStorage.instance.ref().child(fileName);
-        await ref.putFile(image);
-        String downloadUrl = await ref.getDownloadURL();
-        downloadUrls.add(downloadUrl);
-      } catch (e) {
-        print(e);
-        downloadUrls.add(null);
-      }
-    }
-
-    return downloadUrls;
-  }
-
-  void _showLoadingDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // User must not close the dialog manually
-      builder: (context) => Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  String getCurrentUserUid() {
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String uid = user?.uid ?? "Not Signed In";
-    return uid;
-  }
-
-  Future<void> _submitProduct() async {
-    if (_formKey.currentState!.validate() && _images.isNotEmpty) {
-      setState(() => _isLoading = true);
-      _showLoadingDialog();
-      try {
-        final List<String?> imageUrls = await _uploadImages(_images);
-        final List<String> validImageUrls =
-            imageUrls.where((url) => url != null).map((url) => url!).toList();
-        DocumentReference docRef =
-            FirebaseFirestore.instance.collection('Item').doc();
-        String itemId = docRef.id;
-
-        await FirebaseFirestore.instance.collection('Item').add({
-          'title': _nameController.text,
-          'price': _priceController.text,
-          'description': _descriptionController.text,
-          'sellerID': getCurrentUserUid(),
-          'category': _selectedCategory,
-          'condition': _selectedCondition,
-          'user': "N/A", // Assuming this is additional info, adjust as needed
-          'itemID': itemId,
-          'imageURLs':
-              validImageUrls, // Changed to 'imageURLs' to reflect it's a list
-        });
-
-        Navigator.of(context).pop(); // Dismiss the loading dialog
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Product added successfully')));
-      } catch (e) {
-        Navigator.of(context).pop(); // Dismiss the loading dialog on error
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Some error happened: ${e.toString()}')));
-      }
-      setState(() => _isLoading = false);
-    }
-  }
+  List<File> _images = [];
+  bool _isLoading = false;
 
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
+    _discountPriceController
+        .dispose(); // Dispose the discounted price controller
     super.dispose();
   }
 
@@ -177,32 +70,25 @@ class _AddProductState extends State<AddProductScreen> {
                   ),
                   _images.isNotEmpty
                       ? SizedBox(
-                          height: 200, // Adjust the height as necessary
+                          height: 200,
                           child: GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount:
-                                  3, // Adjust based on your design needs
-                              childAspectRatio:
-                                  1, // Adjust aspect ratio based on your design needs
+                              crossAxisCount: 3,
+                              childAspectRatio: 1,
                             ),
                             itemCount: _images.length,
                             itemBuilder: (context, index) {
                               File image = _images[index];
                               return Stack(
-                                alignment: Alignment
-                                    .topRight, // Position the remove button at the top right
+                                alignment: Alignment.topRight,
                                 children: [
-                                  Image.file(image,
-                                      fit: BoxFit.cover), // The image
-                                  // The remove button
+                                  Image.file(image, fit: BoxFit.cover),
                                   IconButton(
-                                    icon: Icon(Icons.close,
-                                        color: Colors.red), // 'X' icon
+                                    icon: Icon(Icons.close, color: Colors.red),
                                     onPressed: () {
                                       setState(() {
-                                        _images.removeAt(
-                                            index); // Remove the image from the list
+                                        _images.removeAt(index);
                                       });
                                     },
                                   ),
@@ -211,7 +97,7 @@ class _AddProductState extends State<AddProductScreen> {
                             },
                           ),
                         )
-                      : Container(), // Show an empty container if no images are selected
+                      : Container(),
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(labelText: 'Product Name'),
@@ -280,18 +166,33 @@ class _AddProductState extends State<AddProductScreen> {
                     decoration: InputDecoration(labelText: 'Price'),
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.isEmpty && value == 0) {
                         return 'Please enter the price';
                       }
                       return null;
                     },
                   ),
                   SizedBox(height: 20),
+                  TextFormField(
+                    controller: _discountPriceController,
+                    decoration: InputDecoration(
+                        labelText:
+                            'Discounted Price'), // Added discounted price field
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                  ),
+                  SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : _submitProduct, // Disable button when loading
+                    onPressed: _isLoading ? null : _submitProduct,
                     child: Text('Submit Product'),
                   ),
                 ],
@@ -301,5 +202,89 @@ class _AddProductState extends State<AddProductScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickImages() async {
+    final ImagePicker _picker = ImagePicker();
+    final List<XFile>? pickedImages = await _picker.pickMultiImage();
+
+    if (pickedImages != null && pickedImages.isNotEmpty) {
+      setState(() {
+        _images = pickedImages.map((xFile) => File(xFile.path)).toList();
+      });
+    }
+  }
+
+  Future<List<String?>> _uploadImages(List<File> images) async {
+    List<String?> downloadUrls = [];
+
+    for (File image in images) {
+      String fileName =
+          'products/${DateTime.now().millisecondsSinceEpoch}_${images.indexOf(image)}.png';
+      try {
+        final ref = FirebaseStorage.instance.ref().child(fileName);
+        await ref.putFile(image);
+        String downloadUrl = await ref.getDownloadURL();
+        downloadUrls.add(downloadUrl);
+      } catch (e) {
+        print(e);
+        downloadUrls.add(null);
+      }
+    }
+
+    return downloadUrls;
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  String getCurrentUserUid() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String uid = user?.uid ?? "Not Signed In";
+    return uid;
+  }
+
+  Future<void> _submitProduct() async {
+    if (_formKey.currentState!.validate() && _images.isNotEmpty) {
+      setState(() => _isLoading = true);
+      _showLoadingDialog();
+      try {
+        final List<String?> imageUrls = await _uploadImages(_images);
+        final List<String> validImageUrls =
+            imageUrls.where((url) => url != null).map((url) => url!).toList();
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('Item').doc();
+        String itemId = docRef.id;
+
+        await FirebaseFirestore.instance.collection('Item').add({
+          'title': _nameController.text,
+          'price': _priceController.text,
+          'discountedPrice':
+              _discountPriceController.text, // Added discounted price field
+          'description': _descriptionController.text,
+          'sellerID': getCurrentUserUid(),
+          'category': _selectedCategory,
+          'condition': _selectedCondition,
+          'user': "N/A",
+          'itemID': itemId,
+          'imageURLs': validImageUrls,
+        });
+
+        Navigator.of(context).pop();
+        showSuccessMessage(context, "Product added successfully");
+        Navigator.of(context).pop();
+      } catch (e) {
+        Navigator.of(context).pop();
+        showErrorMessage(context, 'Some error happened: ${e.toString()}');
+      }
+      setState(() => _isLoading = false);
+    }
   }
 }

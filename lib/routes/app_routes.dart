@@ -3,6 +3,8 @@ import 'package:unisouq/screens/customer_screen.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
+import 'package:unisouq/screens/massaging_screan/massage_page.dart';
+import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
@@ -23,6 +25,8 @@ class AppRoutes {
   static const String informationScreen = '/information_screen';
   static const String homeScreen = '/home_screen';
   static const String addProduct = '/add_product';
+  static const String productDetail = '/product_Detail';
+  static const String massagingPage = '/massaging_page';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -48,6 +52,16 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case addProduct:
         return MaterialPageRoute(builder: (_) => AddProductScreen());
+      case productDetail:
+        return MaterialPageRoute(
+            builder: (_) => ProductDetailPage(
+                  productId: '',
+                ));
+      case massagingPage:
+        return MaterialPageRoute(
+            builder: (_) => MessagingPage(
+                  reciverUserID: '',
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

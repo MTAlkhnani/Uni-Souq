@@ -1,14 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
+import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const String id = 'customer_screen';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? selectedCategory;
+  int currentIconIndex = 0;
+
+  // Define a list of icons for popular categories
+  final List<IconData> popularCategoryIcons = [
+    Icons.all_inclusive, // All Items
+    Icons.phone, // Electronics
+    Icons.shopping_bag, // Clothing
+    Icons.menu_book, // Books
+    Icons.weekend, // Furniture
+    // Add more icons for additional categories as needed
+  ];
+
+  // Define a list of category names
+  final List<String> popularCategories = [
+    'All Items',
+    'Electronics',
+    'Clothing',
+    'Books',
+    'Furniture',
+    // Add more categories as needed
+  ];
+
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
@@ -16,7 +48,6 @@ class HomeScreen extends StatelessWidget {
     Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
     Navigator.pushNamedAndRemoveUntil(
         context, AppRoutes.signInScreen, (route) => false);
-
     // Clear the navigation stack so that the user can't navigate back to HomeScreen
   }
 
@@ -26,8 +57,8 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Uni-Souq'),
         actions: [
-          IconButton(icon: Icon(Icons.location_on), onPressed: () {}),
-          IconButton(icon: Icon(Icons.category), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.category), onPressed: () {}),
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => {
@@ -52,90 +83,321 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(8),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 0.8,
-        ),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          // Example item data
-          final item = {
-            'name': ['Shirt', 'Pant', 'Watch', 'Shoes'][index],
-            'price': ['40.5', '35.5', '120', '80'][index],
-            'location': [
-              'Medina Market',
-              'Pathanville',
-              'Downtown',
-              'City Center'
-            ][index],
-            'isNew': [true, false, false, true][index],
-            'discount': [null, null, '35% OFF', null][index],
-          };
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('Item').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-          return Card(
-            color: Theme.of(context).cardColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    // Placeholder for images
-                    color: Theme.of(context).hoverColor,
-                  ),
+          // Group items by category
+          Map<String, List<DocumentSnapshot>> categoryMap = {};
+          snapshot.data!.docs.forEach((doc) {
+            final item = doc.data() as Map<String, dynamic>;
+            String category = item['category'] ?? 'Other';
+
+            // Ensure category is not null or empty before adding to the map
+            if (category.isNotEmpty) {
+              categoryMap.putIfAbsent(category, () => []);
+              categoryMap[category]!.add(doc);
+            }
+          });
+
+          // Filter items based on selected category
+          List<DocumentSnapshot>? filteredItems;
+          if (selectedCategory != null && selectedCategory != 'All Items') {
+            filteredItems = categoryMap[selectedCategory!] ?? [];
+          } else {
+            // If selectedCategory is null or 'All Items', show all items
+            filteredItems = snapshot.data!.docs;
+          }
+
+          // Return a ListView to display categories and their items
+          return Column(
+            children: [
+              // Popular categories section
+              const Padding(
+                padding: EdgeInsets.only(left: 0, top: 5),
+                child: Text(
+                  'Popular Categories',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (item['isNew'] as bool)
-                        Text('New',
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: popularCategories.map((category) {
+                    // Get the index of the current category
+                    int index = popularCategories.indexOf(category);
+                    // Get the corresponding icon
+                    IconData icon = popularCategoryIcons[index];
+                    // Check if the category is selected
+                    bool isSelected = selectedCategory == category;
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = category;
+                          });
+                        },
+                        child: Chip(
+                          avatar: Icon(icon,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Theme.of(context)
+                                      .hintColor
+                                      .withOpacity(.7)),
+                          label: Text(
+                            category,
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor)),
-                      Text(item['name'] as String,
-                          style: Theme.of(context).textTheme.bodyText1),
-                      Text('\$ ${item['price']}',
-                          style: Theme.of(context).textTheme.bodyText2),
-                      Text(item['location'] as String,
-                          style: Theme.of(context).textTheme.bodyText2),
-                      if (item['discount'] != null)
-                        Text(item['discount'] as String,
-                            style: TextStyle(color: Colors.red)),
-                    ],
-                  ),
+                                color: isSelected
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .hintColor
+                                        .withOpacity(.7)),
+                          ),
+                          backgroundColor: isSelected
+                              ? Theme.of(context).primaryColor.withOpacity(.7)
+                              : Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              ],
-            ),
+              ),
+              // Items section
+              Expanded(
+                child: filteredItems != null && filteredItems.isNotEmpty
+                    ? GridView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.fromLTRB(
+                          8,
+                          8,
+                          8,
+                          MediaQuery.of(context).size.height *
+                              0.05, // Adjust the bottom padding using MediaQuery
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: filteredItems.length,
+                        // Inside the GridView.builder itemBuilder method, update the UI of each item card
+                        itemBuilder: (context, index) {
+                          final item = filteredItems![index].data()
+                              as Map<String, dynamic>;
+
+                          // Calculate the discounted price if available
+                          double price = double.parse(item['price'] ?? '0');
+                          double discountedPrice =
+                              double.parse(item['discountedPrice'] ?? '0');
+                          double displayPrice =
+                              discountedPrice > 0 ? discountedPrice : price;
+
+                          return GestureDetector(
+                            onTap: () {
+                              // Navigate to the product detail screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailPage(
+                                    productId: filteredItems![index].id,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: 16 / 14,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Container(
+                                        color: Theme.of(context).hoverColor,
+                                        child: item['imageURLs'] != null &&
+                                                item['imageURLs'].isNotEmpty
+                                            ? CachedNetworkImage(
+                                                imageUrl: item['imageURLs'][0],
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              )
+                                            : Container(),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item['title'] ?? '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${displayPrice.toStringAsFixed(0)} SAR',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: discountedPrice > 0
+                                                    ? Theme.of(context)
+                                                        .hintColor
+                                                        .withOpacity(
+                                                            0.7) // If discounted price is available, display it in red
+                                                    : null, // Otherwise, use the default text color
+                                              ),
+                                            ),
+                                            if (discountedPrice >
+                                                0) // Display the original price if discounted price is available
+                                              SizedBox(width: 8),
+                                            if (discountedPrice > 0)
+                                              Text(
+                                                '${price.toStringAsFixed(2)} SAR',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('No items found.'),
+                      ),
+              ),
+            ],
           );
         },
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            IconButton(icon: Icon(Icons.home), onPressed: () {}),
-            IconButton(icon: Icon(Icons.search), onPressed: () {}),
-            SizedBox(width: 48), // The middle part is for the floating button
-            IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
-            IconButton(icon: Icon(Icons.person), onPressed: () {}),
+            Expanded(
+              child: Column(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.home),
+                    color: currentIconIndex == 0
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).cardColor.withOpacity(0.5),
+                    onPressed: () {
+                      setState(() {
+                        currentIconIndex = 0;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    color: currentIconIndex == 1
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).cardColor.withOpacity(0.5),
+                    onPressed: () {
+                      setState(() {
+                        currentIconIndex = 1;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 48),
+            Expanded(
+              child: Column(
+                children: [
+                  Tooltip(
+                    message: 'Notifications',
+                    child: IconButton(
+                      icon: const Icon(Icons.notifications),
+                      color: currentIconIndex == 2
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).cardColor.withOpacity(0.5),
+                      onPressed: () {
+                        setState(() {
+                          currentIconIndex = 2;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.person),
+                    color: currentIconIndex == 3
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).cardColor.withOpacity(0.5),
+                    onPressed: () {
+                      setState(() {
+                        currentIconIndex = 3;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           final User? user = FirebaseAuth.instance.currentUser;
           if (user == null) {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                  builder: (context) => const RegistrationScreen()),
+                builder: (context) => const RegistrationScreen(),
+              ),
             );
             return;
           }
