@@ -206,11 +206,23 @@ class _AddProductState extends State<AddProductScreen> {
 
   Future<void> _pickImages() async {
     final ImagePicker _picker = ImagePicker();
-    final List<XFile>? pickedImages = await _picker.pickMultiImage();
+    final List<XFile> pickedImages = await _picker.pickMultiImage(
+      imageQuality: 50,
+    );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
+      // Compress images and wait for all to complete
+      final List<File> compressedFiles =
+          await Future.wait(pickedImages.map((xFile) async {
+        // Compress each image
+        final XFile? compressedXFile = await compressFile(xFile);
+        // Convert XFile to File
+        return File(compressedXFile!
+            .path); // Assuming compressFile always returns a non-null XFile
+      }));
+
       setState(() {
-        _images = pickedImages.map((xFile) => File(xFile.path)).toList();
+        _images = compressedFiles;
       });
     }
   }
@@ -219,6 +231,7 @@ class _AddProductState extends State<AddProductScreen> {
     List<String?> downloadUrls = [];
 
     for (File image in images) {
+      // final img = await compressFile(image);
       String fileName =
           'products/${DateTime.now().millisecondsSinceEpoch}_${images.indexOf(image)}.png';
       try {
@@ -234,6 +247,34 @@ class _AddProductState extends State<AddProductScreen> {
     }
 
     return downloadUrls;
+  }
+
+  Future<XFile?> compressFile(XFile file) async {
+    final imagePath = file.path;
+    // eg:- "Volume/VM/abcd_out.jpeg"
+    if (imagePath.contains('heic') || imagePath.contains('heif')) {
+      // print("trwsindgsonodsn");
+      final tmpDir = (await getTemporaryDirectory()).path;
+      final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpeg';
+      final result = await FlutterImageCompress.compressAndGetFile(
+        imagePath,
+        target,
+        format: CompressFormat.jpeg,
+        quality: 90,
+      );
+      return result;
+    }
+    // print("hellooooo");
+    final lastIndex = imagePath.lastIndexOf(RegExp(r'.jp'));
+    final splitted = imagePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${imagePath.substring(lastIndex)}";
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.path,
+      outPath,
+      quality: 5,
+    );
+
+    return result;
   }
 
   void _showLoadingDialog() {

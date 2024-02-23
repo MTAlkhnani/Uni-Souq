@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Icons.shopping_bag, // Clothing
     Icons.menu_book, // Books
     Icons.weekend, // Furniture
+    Icons.home,
     // Add more icons for additional categories as needed
   ];
 
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Clothing',
     'Books',
     'Furniture',
+    'Home'
     // Add more categories as needed
   ];
 
@@ -280,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               SizedBox(width: 8),
                                             if (discountedPrice > 0)
                                               Text(
-                                                '${price.toStringAsFixed(2)} SAR',
+                                                '${price.toStringAsFixed(0)} SAR',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   decoration: TextDecoration
