@@ -9,7 +9,8 @@ class ChatService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Send message
-  Future<void> sendMessage(String receiverID, String message) async {
+  Future<void> sendMessage(String receiverID, String message,
+      {String? imageUrl}) async {
     try {
       final String currentUserID = _firebaseAuth.currentUser!.uid;
       final String currentUserEmail =
@@ -22,14 +23,15 @@ class ChatService extends ChangeNotifier {
       String firstName = userSnapshot.get('FirstName');
       String lastName = userSnapshot.get('LastName');
 
-      //CREATE NEW MESSAGE
+      // Create new Message
       Message newMessage = Message(
         senderID: currentUserID,
         senderEmail: currentUserEmail,
-        senderFirstName: firstName, // Add sender's first name
-        senderLastName: lastName, // Add sender's last name
-        receiverid: receiverID,
+        senderFirstName: firstName,
+        senderLastName: lastName,
+        receiverId: receiverID,
         message: message,
+        imageUrl: imageUrl, // Pass imageUrl if it's an image message
         timestamp: timestamp,
       );
 
@@ -66,7 +68,7 @@ class ChatService extends ChangeNotifier {
       context,
       MaterialPageRoute(
         builder: (context) => MessagingPage(
-          reciverUserID: reciverUserID,
+          receiverUserID: reciverUserID,
         ),
       ),
     );

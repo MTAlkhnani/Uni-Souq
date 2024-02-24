@@ -62,7 +62,7 @@ class AppRoutes {
       case massagingPage:
         return MaterialPageRoute(
             builder: (_) => MessagingPage(
-                  reciverUserID: '',
+                  receiverUserID: '',
                 ));
 
       case editProduct:
