@@ -45,6 +45,54 @@ class _HomeScreenState extends State<HomeScreen> {
     // Add more categories as needed
   ];
 
+
+  // Method to create a ListTile for the Drawer
+  ListTile _buildDrawerListTile(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: const Icon(Icons.keyboard_arrow_right),
+      onTap: onTap,
+    );
+  }
+
+  // Method to build the Drawer
+  Drawer _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          // The user's header or another widget for the drawer header can be placed here
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Text(
+              'Settings',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24.0,
+              ),
+            ),
+          ),
+          _buildDrawerListTile(Icons.lock, 'Reset Password', () {
+            // Implement navigation to reset password
+          }),
+          _buildDrawerListTile(Icons.language, 'Language', () {
+            // Implement navigation to language settings
+          }),
+          _buildDrawerListTile(Icons.help, 'Help Center', () {
+            // Implement navigation to help center
+          }),
+          _buildDrawerListTile(Icons.security, 'Security', () {
+            // Implement navigation to security settings
+          }),
+        ],
+      ),
+    );
+  }
+
+
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
@@ -98,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      drawer: _buildDrawer(context),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Item').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
