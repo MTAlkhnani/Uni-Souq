@@ -10,6 +10,7 @@ class MyTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final String? errorMsg;
   final bool autovalidate;
+  final String? initialValue;
   final void Function(String)? onChanged;
   final void Function(String)? onSaved;
   final String? Function(String?)? validator;
@@ -28,6 +29,7 @@ class MyTextField extends StatelessWidget {
     this.onChanged,
     this.onSaved,
     this.validator,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -57,7 +59,8 @@ class MyTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Color.fromRGBO(142, 108, 239, 1)),
+              borderSide:
+                  const BorderSide(color: Color.fromRGBO(142, 108, 239, 1)),
               borderRadius: BorderRadius.circular(15),
             ),
             errorBorder: OutlineInputBorder(

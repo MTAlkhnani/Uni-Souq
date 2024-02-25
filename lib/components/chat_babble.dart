@@ -2,34 +2,61 @@ import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   final String message;
-  final String? imageUrl; // Add imageUrl field
+  final String? imageUrl;
+  final bool isSender; // Add isSender field
+  final String messageSentTime; // Add messageSentTime field
 
-  const ChatBubble({Key? key, required this.message, this.imageUrl})
-      : super(key: key);
+  const ChatBubble({
+    Key? key,
+    required this.message,
+    this.imageUrl,
+    required this.isSender,
+    required this.messageSentTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Color bubbleColor = isSender
+        ? Theme.of(context).primaryColor // Sender's bubble color
+        : Colors.grey[300]!; // Receiver's bubble color
+
+    final Color textColor = isSender
+        ? Theme.of(context).scaffoldBackgroundColor // Sender's text color
+        : Colors.black; // Receiver's text color
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).primaryColor,
+        color: bubbleColor,
       ),
-      child: imageUrl !=
-              null // Conditionally render image or text based on imageUrl
-          ? Image.network(
-              imageUrl!,
-              width: 200, // Adjust width as needed
-              height: 200, // Adjust height as needed
-              fit: BoxFit.cover, // Adjust fit as needed
-            )
-          : Text(
-              message,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          imageUrl != null
+              ? Image.network(
+                  imageUrl!,
+                  width: 200, // Adjust width as needed
+                  height: 200, // Adjust height as needed
+                  fit: BoxFit.cover, // Adjust fit as needed
+                )
+              : Text(
+                  message,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: textColor,
+                  ),
+                ),
+          const SizedBox(height: 4), // Add spacing between message and time
+          Text(
+            messageSentTime,
+            style: TextStyle(
+              fontSize: 12,
+              color: textColor.withOpacity(0.6), // Adjust opacity as needed
             ),
+          ),
+        ],
+      ),
     );
   }
 }

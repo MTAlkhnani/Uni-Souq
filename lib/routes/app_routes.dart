@@ -37,23 +37,27 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case signInScreen:
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
       case signUpScreen:
-        return MaterialPageRoute(builder: (_) => RegistrationScreen());
+        return MaterialPageRoute(builder: (_) => const RegistrationScreen());
       case verificationCodeScreen:
-        return MaterialPageRoute(builder: (_) => VerificationCodeScreen());
+        return MaterialPageRoute(
+            builder: (_) => const VerificationCodeScreen());
       case resetPasswordScreen:
-        return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
+        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
       case forgotPasswordScreen:
-        return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
+        return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
       case initialRoute:
-        return MaterialPageRoute(builder: (_) => WelcomeScreen());
+        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
       case customerScreen:
-        return MaterialPageRoute(builder: (_) => CustomerScreen());
+        return MaterialPageRoute(builder: (_) => const CustomerScreen());
       case onboardingScreen:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case informationScreen:
-        return MaterialPageRoute(builder: (_) => InformationScreen());
+        return MaterialPageRoute(
+            builder: (_) =>  InformationScreen(
+                  userId: '',
+                ));
       case homeScreen:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case addProduct:
@@ -85,7 +89,7 @@ class AppRoutes {
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
-                  appBar: AppBar(title: Text('Error')),
+                  appBar: AppBar(title: const Text('Error')),
                   body: Center(
                       child: Text('No route defined for ${settings.name}')),
                 ));

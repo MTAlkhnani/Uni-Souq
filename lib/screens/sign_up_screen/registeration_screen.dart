@@ -84,7 +84,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       } else {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
         showSuccessMessage(context, "Account Created Succussfully");
-        Navigator.pushNamed(context, AppRoutes.informationScreen);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                InformationScreen(userId: userCredential.user!.uid),
+          ),
+        );
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';

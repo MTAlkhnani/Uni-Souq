@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unisouq/components/chat_babble.dart';
 import 'package:unisouq/components/my_text_field.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:unisouq/utils/size_utils.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class MessagingPage extends StatefulWidget {
   static const String id = 'massaging_page';
@@ -31,6 +35,7 @@ class _MessagingPageState extends State<MessagingPage> {
   bool _isImageUploading = false;
   String _uploadedImageUrl = '';
   String receiverName = ''; // Variable to store receiver's name
+  bool _showEmoji = false;
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -59,7 +64,7 @@ class _MessagingPageState extends State<MessagingPage> {
 
   void _initializeNotifications() async {
     final InitializationSettings initializationSettings =
-        InitializationSettings(
+        const InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     );
 
@@ -81,16 +86,107 @@ class _MessagingPageState extends State<MessagingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(receiverName), // Set the app bar title to receiver's name
+    return WillPopScope(
+      onWillPop: () async {
+        if (_showEmoji) {
+          setState(() => _showEmoji = !_showEmoji);
+          return Future.value(false);
+        } else {
+          return Future.value(true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: _appBar(), // Set the app bar title to receiver's name
+        ),
+        body: Column(
+          children: [
+            Expanded(child: _buildMessageList()),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: _buildMessageInput(),
+            ),
+            if (_isImageUploading)
+              const Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                      child: CircularProgressIndicator(strokeWidth: 2))),
+            if (_showEmoji)
+              SizedBox(
+                height: .35.h,
+                child: EmojiPicker(
+                  textEditingController: _controller,
+                  config: Config(
+                    bgColor: const Color.fromARGB(255, 234, 248, 255),
+                    columns: 8,
+                    emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                  ),
+                ),
+              )
+          ],
+        ),
       ),
-      body: Column(
+    );
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Row(
         children: [
-          Expanded(child: _buildMessageList()),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: _buildMessageInput(),
+          FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance
+                .collection('Profile')
+                .doc(widget.receiverUserID)
+                .get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircleAvatar(
+                  radius: 20,
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              if (!snapshot.hasData || !snapshot.data!.exists) {
+                return const CircleAvatar(
+                  radius: 20,
+                  child: Icon(Icons.person),
+                );
+              }
+              var profileData = snapshot.data!.data() as Map<String, dynamic>;
+              String profileImageUrl = profileData['userImage'] ?? '';
+              return CircleAvatar(
+                radius: 20,
+                backgroundImage: profileImageUrl.isNotEmpty
+                    ? CachedNetworkImageProvider(profileImageUrl)
+                        as ImageProvider
+                    : const AssetImage('path_to_placeholder_image'),
+              );
+            },
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                receiverName,
+                style: const TextStyle(fontSize: 18),
+              ),
+              const Text(
+                'Last seen: LAST_SEEN_TIME',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
           ),
         ],
       ),
@@ -216,9 +312,10 @@ class _MessagingPageState extends State<MessagingPage> {
   Widget _buildMessageItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    var alignment = (data['senderID'] == _firebaseAuth.currentUser!.uid)
-        ? CrossAxisAlignment.start
-        : CrossAxisAlignment.end;
+    final bool isSender = data['senderID'] == _firebaseAuth.currentUser!.uid;
+
+    var alignment =
+        isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start;
 
     String senderName = '${data['senderFirstName']} ${data['senderLastName']}';
     String messageSentTime = _formatTimestamp(data['timestamp']);
@@ -240,26 +337,18 @@ class _MessagingPageState extends State<MessagingPage> {
             children: [
               Flexible(
                 child: Container(
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                       maxWidth: 250), // Adjust maximum width as needed
                   padding: const EdgeInsets.all(8),
-
-                  child: data['imageUrl'] != null
-                      ? Image.network(
-                          data['imageUrl'],
-                          width: 200, // Adjust width as needed
-                          height: 200, // Adjust height as needed
-                        )
-                      : ChatBubble(
-                          message: data['message'],
-                        ),
+                  child: ChatBubble(
+                    message: data['message'],
+                    imageUrl: data['imageUrl'],
+                    isSender: isSender,
+                    messageSentTime: messageSentTime, // Pass messageSentTime
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                messageSentTime,
-                style: const TextStyle(color: Colors.grey),
-              ),
             ],
           ),
         ],
@@ -282,31 +371,48 @@ class _MessagingPageState extends State<MessagingPage> {
   }
 
   Widget _buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: MyTextField(
-            controller: _controller,
-            hintText: 'Enter message',
-            keyboardType: TextInputType.text,
-            obscureText: false,
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              setState(() => _showEmoji = !_showEmoji);
+            },
+            child: const Icon(Icons.emoji_emotions), // Add emoji icon
           ),
-        ),
-        CircleAvatar(
-          radius: 20,
-          child: IconButton(
-            icon: const Icon(Icons.camera_alt, color: Colors.white),
-            onPressed: _getImageFromGallery,
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              keyboardType: TextInputType.multiline,
+              obscureText: false,
+              onTap: () {
+                if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
+              },
+              decoration: InputDecoration(
+                  hintText: 'Type Something...',
+                  hintStyle: TextStyle(color: Theme.of(context).hintColor),
+                  border: InputBorder.none),
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: sendMessage,
-          icon: const Icon(
-            Icons.arrow_forward,
-            size: 40,
+          CircleAvatar(
+            radius: 20,
+            child: IconButton(
+              icon: const Icon(Icons.camera_alt, color: Colors.white),
+              onPressed: _getImageFromGallery,
+            ),
           ),
-        ),
-      ],
+          IconButton(
+            onPressed: sendMessage,
+            icon: const Icon(
+              Icons.arrow_forward,
+              size: 40,
+            ),
+          ),
+          SizedBox(width: .5.v),
+        ],
+      ),
     );
   }
 
@@ -348,7 +454,7 @@ class _MessagingPageState extends State<MessagingPage> {
         _scrollController.position.maxScrollExtent > 0) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
     } else {

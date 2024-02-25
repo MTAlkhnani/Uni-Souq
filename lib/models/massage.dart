@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
-  final String senderID;
-  final String senderEmail;
-
-  final String receiverId;
-
-  final String message;
-  final Timestamp timestamp;
-  final String senderFirstName;
-  final String senderLastName;
-  final String receiverFirstName;
-  final String receiverLastName;
-  final String? imageUrl;
+  late String senderID;
+  late String senderEmail;
+  late String receiverId;
+  late String message;
+  late Timestamp timestamp;
+  late String senderFirstName;
+  late String senderLastName;
+  late String receiverFirstName;
+  late String receiverLastName;
+  late String? imageUrl;
 
   Message({
     required this.senderID,

@@ -281,7 +281,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   icon: const Icon(Icons.message),
                                   label: const Text('Contact the Seller'),
                                   style: ElevatedButton.styleFrom(
-                                    primary:
+                                    backgroundColor:
                                         const Color.fromARGB(255, 77, 139, 79),
                                   ),
                                 );
@@ -305,7 +305,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               // Implement logic to buy the product
             },
             style: ElevatedButton.styleFrom(
-              primary: Theme.of(context)
+              backgroundColor: Theme.of(context)
                   .primaryColor, // Change the background color here
             ),
             child: Text(

@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 apply plugin: "com.android.application"
 android {
     namespace "com.example.unisouq"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
