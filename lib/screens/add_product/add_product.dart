@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 class AddProductScreen extends StatefulWidget {
   @override
@@ -65,7 +66,7 @@ class _AddProductState extends State<AddProductScreen> {
               child: Column(
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: _pickImages,
+                    onPressed: _showBottomSheet,
                     child: Text('Add Pictures'),
                   ),
                   _images.isNotEmpty
@@ -207,7 +208,7 @@ class _AddProductState extends State<AddProductScreen> {
   Future<void> _pickImages() async {
     final ImagePicker _picker = ImagePicker();
     final List<XFile> pickedImages = await _picker.pickMultiImage(
-      imageQuality: 50,
+      imageQuality: 5,
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
@@ -222,9 +223,25 @@ class _AddProductState extends State<AddProductScreen> {
       }));
 
       setState(() {
-        _images = compressedFiles;
+        _images = _images + compressedFiles;
       });
     }
+    Navigator.pop(context);
+  }
+
+  Future<void> _takePictureFromCamera() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 5,
+    );
+    if (image != null) {
+      final File compressedImage = File((await compressFile(image))!.path);
+      setState(() {
+        _images.add(compressedImage);
+      });
+    }
+    Navigator.pop(context);
   }
 
   Future<List<String?>> _uploadImages(List<File> images) async {
@@ -328,5 +345,54 @@ class _AddProductState extends State<AddProductScreen> {
       }
       setState(() => _isLoading = false);
     }
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 30.v, bottom: 15.v),
+          children: [
+            const Text(
+              'Pick Profile Picture',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(height: .02.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    fixedSize: Size(30.v, 15.h),
+                  ),
+                  onPressed: _pickImages,
+                  child: Image.asset('assets/images/add_image.png'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    fixedSize: Size(30.v, 15.h),
+                  ),
+                  onPressed: _takePictureFromCamera,
+                  child: Image.asset('assets/images/camera.png'),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
   }
 }
