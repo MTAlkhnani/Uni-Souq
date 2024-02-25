@@ -347,6 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         currentIconIndex = 1;
                       });
+                      // Add the navigation call here
+                      Navigator.pushNamed(context, AppRoutes.searchScreen);
                     },
                   ),
                 ],

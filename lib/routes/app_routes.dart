@@ -16,6 +16,8 @@ import 'package:unisouq/screens/verification_code_screen/verification_code_scree
 import 'package:unisouq/screens/welcome_screen/welcome_screen.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
+import 'package:unisouq/screens/searchScreen.dart';
+
 
 class AppRoutes {
   static const String signInScreen = '/sign_in_screen';
@@ -35,6 +37,7 @@ class AppRoutes {
   static const String contactclientspage = '/contact_clients_page';
   static const String notificationpage = '/notifications_page';
   static const String profilepage = '/profile_page';
+  static const String searchScreen = '/search_screen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -55,6 +58,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
       case customerScreen:
         return MaterialPageRoute(builder: (_) => const CustomerScreen());
+      case searchScreen:
+        return MaterialPageRoute(builder: (_) => const SearchScreen());
       case onboardingScreen:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case informationScreen:
