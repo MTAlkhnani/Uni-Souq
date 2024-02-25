@@ -7,6 +7,7 @@ import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/notification_page/notification_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
+import 'package:unisouq/screens/profile_page/profile_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -366,7 +367,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         final newIndex = await Navigator.push<int>(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => NotificationPage(senderName: '', message: '',),
+                            builder: (context) => NotificationPage(
+                              senderName: '',
+                              message: '',
+                            ),
                           ),
                         );
                         if (newIndex != null) {
@@ -383,16 +387,27 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.person),
-                    color: currentIconIndex == 3
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).cardColor.withOpacity(0.5),
-                    onPressed: () {
-                      setState(() {
-                        currentIconIndex = 3;
-                      });
-                    },
+                  Tooltip(
+                    message: 'Profile',
+                    child: IconButton(
+                      icon: const Icon(Icons.person),
+                      color: currentIconIndex == 2
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).cardColor.withOpacity(0.5),
+                      onPressed: () async {
+                        final newIndex = await Navigator.push<int>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        );
+                        if (newIndex != null) {
+                          setState(() {
+                            currentIconIndex = newIndex;
+                          });
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
