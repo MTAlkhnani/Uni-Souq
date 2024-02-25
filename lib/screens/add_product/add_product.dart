@@ -260,7 +260,7 @@ class _AddProductState extends State<AddProductScreen> {
         imagePath,
         target,
         format: CompressFormat.jpeg,
-        quality: 90,
+        quality: 5,
       );
       return result;
     }

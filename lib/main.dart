@@ -51,13 +51,31 @@ void main() async {
     final settingsController = SettingsController(SettingsService());
     await settingsController.loadSettings();
 
-    // Initialize FlutterLocalNotificationsPlugin
+// Initialize FlutterLocalNotificationsPlugin
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
+
+// Android initialization settings
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
+
+// iOS initialization settings
+    const DarwinInitializationSettings iosInitializationSettings =
+        DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      // You can add more iOS-specific settings here if needed
+    );
+
+// Combined initialization settings
     final InitializationSettings initializationSettings =
-        InitializationSettings(android: androidInitializationSettings);
+        InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: iosInitializationSettings, // Include the iOS settings here
+    );
+
+// Initialize the plugin with the combined settings
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     // Run the app
