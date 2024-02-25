@@ -1,7 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String id = 'profile_page';
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String? getCurrentUserId() {
+    final User? user = _auth.currentUser;
+    return user?.uid; // This will be null if no user is logged in
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +63,13 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.person,
               title: 'Personal Information',
               onTap: () {
-                // Navigate to personal information screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        InformationScreen(userId: getCurrentUserId()!),
+                  ),
+                );
               },
             ),
             buildListTile(
