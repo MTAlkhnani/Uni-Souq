@@ -266,6 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -283,6 +284,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 Navigator.of(context)
                                                     .pushReplacementNamed(
                                                         AppRoutes.signUpScreen),
+                                          ),
+                                        ],
+                                      ),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          const Text('Just browsing? '),
+                                          TextButton(
+                                            child: Text(
+                                              'Continue as a Guest',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pushReplacementNamed(context, AppRoutes.homeScreen),
                                           ),
                                         ],
                                       ),

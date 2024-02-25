@@ -451,23 +451,53 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                 height:
                                     10), // Added before "I am a member" row for consistency
                             if (!isSigningUp)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('I am a member!'),
-                                  TextButton(
-                                    child: Text(
-                                      'Login now',
-                                      style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                    onPressed: () => Navigator.of(context)
-                                        .pushReplacementNamed(
-                                            AppRoutes.signInScreen),
-                                  ),
-                                ],
-                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 35),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Text('I am a member!'),
+                                          TextButton(
+                                            child: Text(
+                                              'Login now',
+                                              style: TextStyle(
+                                                  color:
+                                                  Theme.of(context).primaryColor),
+                                            ),
+                                            onPressed: () => Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                AppRoutes.signInScreen),
+                                          ),
+                                        ],
+                                      ),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          const Text('Just browsing? '),
+                                          TextButton(
+                                            child: Text(
+                                              'Continue as a Guest',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pushReplacementNamed(context, AppRoutes.homeScreen),
+                                          ),
+                                        ],
+                                      ),
+
+                                    ],
+                                  )),
+
                             const SizedBox(
                                 height: 80), // Consistent bottom spacing
                           ],
