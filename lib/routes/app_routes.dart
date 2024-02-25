@@ -16,7 +16,7 @@ import 'package:unisouq/screens/verification_code_screen/verification_code_scree
 import 'package:unisouq/screens/welcome_screen/welcome_screen.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
-import 'package:unisouq/screens/searchScreen.dart';
+import 'package:unisouq/screens/Search_Screen/searchScreen.dart';
 
 
 class AppRoutes {

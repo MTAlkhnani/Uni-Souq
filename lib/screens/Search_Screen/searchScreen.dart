@@ -14,14 +14,37 @@ class SearchScreen extends StatelessWidget {
         backgroundColor: theme.primaryColor,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(),
-          ),
-          // The rest of your screen content goes here
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SearchBar(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                'Discover More',
+                style: theme.textTheme.headline6,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                spacing: 8.0, // gap between adjacent chips
+                runSpacing: 4.0, // gap between lines
+                children: <Widget>[
+                  Chip(label: Text('Michael Jackson'), backgroundColor: theme.canvasColor,),
+                  Chip(label: Text('Alan Walker'), backgroundColor: theme.canvasColor,),
+                  Chip(label: Text('Best'), backgroundColor: theme.canvasColor,),
+                  // Add more chips here
+                ],
+              ),
+            ),
+            // The rest of your screen content goes here
+          ],
+        ),
       ),
     );
   }

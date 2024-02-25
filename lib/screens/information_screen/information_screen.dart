@@ -29,6 +29,35 @@ class _InformationScreenState extends State<InformationScreen> {
   String? _image;
   bool _isLoading = false;
 
+  String? _selectedUniversity;
+  List<String> _universities = [
+    'King Saud University',
+    'King Fahd University of Petroleum and Minerals',
+    'King Abdulaziz University',
+    'King Khalid University',
+    'King Faisal University',
+    'Princess Nourah bint Abdulrahman University',
+    'Islamic University of Madinah',
+    'Imam Abdulrahman Bin Faisal University',
+    'Qassim University',
+    'Taibah University',
+    'Taif University',
+    'Umm Al-Qura University',
+    'Al-Imam Muhammad Ibn Saud Islamic University',
+    'Al-Baha University',
+    'Hail University',
+    'Jazan University',
+    'Majmaah University',
+    'Najran University',
+    'Northern Borders University',
+    'Prince Sattam bin Abdulaziz University',
+    'Shaqra University',
+    'University of Tabuk',
+    'Al Jouf University',
+    'Al Yamamah University',
+    // Add more university names as needed
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +118,7 @@ class _InformationScreenState extends State<InformationScreen> {
             SizedBox(height: 19.v),
             _buildInputFieldWithMobileNumber(),
             SizedBox(height: 19.v),
-            _buildInputFieldWithUniversity(),
+            _buildUniversityDropdown(),
             SizedBox(height: 19.v),
             _buildInputFieldWithAddress(),
             SizedBox(height: 50.v),
@@ -179,26 +208,43 @@ class _InformationScreenState extends State<InformationScreen> {
     );
   }
 
-  Widget _buildInputFieldWithUniversity() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.h),
-          child: const Text(
+  Widget _buildUniversityDropdown() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
             "University",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-        ),
-        SizedBox(height: 8.v),
-        MyTextField(
-          hintText: "University Name",
-          keyboardType: TextInputType.text,
-          controller: _universityController,
-        ),
-      ],
+          SizedBox(height: 8.v),
+          DropdownButtonFormField<String>(
+            value: _selectedUniversity,
+            hint: Text("Select University"),
+            isExpanded: true,
+            icon: const Icon(Icons.arrow_downward),
+            iconSize: 24,
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedUniversity = newValue!;
+              });
+            },
+            items: _universities.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
     );
   }
+
+
 
   Widget _buildInputFieldWithAddress() {
     return Column(
