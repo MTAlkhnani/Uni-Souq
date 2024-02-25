@@ -60,12 +60,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Uni-Souq'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu), // This is the burger icon
+              onPressed: () {
+                Scaffold.of(context)
+                    .openDrawer(); // This will now work correctly.
+              },
+            );
+          },
+        ),
         actions: [
           IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: const Icon(Icons.category), onPressed: () {}),
           IconButton(
             icon: const Icon(Icons.exit_to_app),
-            onPressed: () => {
+            onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -81,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
                   );
                 },
-              )
+              );
             },
             tooltip: 'Sign Out',
           ),

@@ -226,7 +226,7 @@ class _AddProductState extends State<AddProductScreen> {
         _images = _images + compressedFiles;
       });
     }
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   Future<void> _takePictureFromCamera() async {
@@ -241,7 +241,7 @@ class _AddProductState extends State<AddProductScreen> {
         _images.add(compressedImage);
       });
     }
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   Future<List<String?>> _uploadImages(List<File> images) async {

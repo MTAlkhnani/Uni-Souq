@@ -210,7 +210,7 @@ class _InformationScreenState extends State<InformationScreen> {
 
   Widget _buildUniversityDropdown() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.h),
+      padding: EdgeInsets.symmetric(horizontal: 30.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -243,8 +243,6 @@ class _InformationScreenState extends State<InformationScreen> {
       ),
     );
   }
-
-
 
   Widget _buildInputFieldWithAddress() {
     return Column(

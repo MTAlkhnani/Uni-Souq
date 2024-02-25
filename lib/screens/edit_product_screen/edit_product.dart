@@ -1,11 +1,15 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:path/path.dart' as Path;
+import 'package:unisouq/utils/size_utils.dart';
 
 class EditProductScreen extends StatefulWidget {
   late final Map<String, dynamic> productData;
@@ -72,10 +76,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                ElevatedButton(
-                  onPressed: _pickImages,
-                  child: const Text('Select Images'),
-                ),
                 _imageUrls.isNotEmpty
                     ? SizedBox(
                         height: 200,
@@ -102,6 +102,40 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                       });
                                     },
                                   ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    : Container(),
+                ElevatedButton(
+                  onPressed: _showBottomSheet,
+                  child: const Text('add new pictures'),
+                ),
+                _images.isNotEmpty
+                    ? SizedBox(
+                        height: 200,
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: _images.length,
+                          itemBuilder: (context, index) {
+                            File image = _images[index];
+                            return Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Image.file(image, fit: BoxFit.cover),
+                                IconButton(
+                                  icon: Icon(Icons.close, color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _images.removeAt(index);
+                                    });
+                                  },
                                 ),
                               ],
                             );
@@ -213,17 +247,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     );
   }
 
-  Future<void> _pickImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? pickedImages = await _picker.pickMultiImage();
-
-    if (pickedImages != null && pickedImages.isNotEmpty) {
-      setState(() {
-        _images = pickedImages.map((xFile) => File(xFile.path)).toList();
-      });
-    }
-  }
-
   _updateProduct() async {
     if (_formKey.currentState!.validate() && _imageUrls.isNotEmpty) {
       setState(() => _isLoading = true);
@@ -231,7 +254,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
       try {
         // Upload images
-        final List<String?> downloadUrls = await _uploadImages(_imageUrls);
+        final List<String?> downloadUrls =
+            await _uploadImagesUpdate(_imageUrls);
 
         final List<String> validImageUrls = downloadUrls
             .where((url) => url != null)
@@ -282,7 +306,40 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  Future<List<String?>> _uploadImages(List<dynamic> images) async {
+  Future<void> _pickImages() async {
+    final ImagePicker _picker = ImagePicker();
+    final List<XFile> pickedImages = await _picker.pickMultiImage(
+      imageQuality: 5,
+    );
+
+    if (pickedImages != null && pickedImages.isNotEmpty) {
+      final List<File> compressedFiles =
+          await Future.wait(pickedImages.map((xFile) async {
+        final XFile? compressedXFile = await compressFile(xFile);
+        return File(compressedXFile!.path);
+      }));
+
+      setState(() {
+        _images = _images + compressedFiles;
+      });
+    }
+  }
+
+  Future<void> _takePictureFromCamera() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 5,
+    );
+    if (image != null) {
+      final File compressedImage = File((await compressFile(image))!.path);
+      setState(() {
+        _images.add(compressedImage);
+      });
+    }
+  }
+
+  Future<List<String?>> _uploadImagesUpdate(List<dynamic> images) async {
     List<String?> downloadUrls = [];
 
     try {
@@ -314,6 +371,56 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return downloadUrls;
   }
 
+  Future<List<String?>> _uploadImages(List<File> images) async {
+    List<String?> downloadUrls = [];
+
+    for (File image in images) {
+      // final img = await compressFile(image);
+      String fileName =
+          'products/${DateTime.now().millisecondsSinceEpoch}_${images.indexOf(image)}.png';
+      try {
+        final ref = FirebaseStorage.instance.ref().child(fileName);
+        await ref.putFile(image);
+        String downloadUrl = await ref.getDownloadURL();
+        downloadUrls.add(downloadUrl);
+      } catch (e) {
+        print(e);
+        downloadUrls.add(
+            'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png');
+      }
+    }
+
+    return downloadUrls;
+  }
+
+  Future<XFile?> compressFile(XFile file) async {
+    final imagePath = file.path;
+    // eg:- "Volume/VM/abcd_out.jpeg"
+    if (imagePath.contains('heic') || imagePath.contains('heif')) {
+      // print("trwsindgsonodsn");
+      final tmpDir = (await getTemporaryDirectory()).path;
+      final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpeg';
+      final result = await FlutterImageCompress.compressAndGetFile(
+        imagePath,
+        target,
+        format: CompressFormat.jpeg,
+        quality: 5,
+      );
+      return result;
+    }
+    // print("hellooooo");
+    final lastIndex = imagePath.lastIndexOf(RegExp(r'.jp'));
+    final splitted = imagePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${imagePath.substring(lastIndex)}";
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.path,
+      outPath,
+      quality: 5,
+    );
+
+    return result;
+  }
+
   void _showLoadingDialog() {
     showDialog(
       context: context,
@@ -321,6 +428,98 @@ class _EditProductScreenState extends State<EditProductScreen> {
       builder: (context) => Center(
         child: CircularProgressIndicator(),
       ),
+    );
+  }
+
+  String getCurrentUserUid() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String uid = user?.uid ?? "Not Signed In";
+    return uid;
+  }
+
+  Future<void> _submitProduct() async {
+    if (_formKey.currentState!.validate() && _images.isNotEmpty) {
+      setState(() => _isLoading = true);
+      _showLoadingDialog();
+      try {
+        final List<String?> imageUrls = await _uploadImages(_images);
+        final List<String> validImageUrls =
+            imageUrls.where((url) => url != null).map((url) => url!).toList();
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('Item').doc();
+        String itemId = docRef.id;
+
+        await FirebaseFirestore.instance.collection('Item').add({
+          'title': _nameController.text,
+          'price': _priceController.text,
+          'discountedPrice':
+              _discountPriceController.text, // Added discounted price field
+          'description': _descriptionController.text,
+          'sellerID': getCurrentUserUid(),
+          'category': _selectedCategory,
+          'condition': _selectedCondition,
+          'user': "N/A",
+          'itemID': itemId,
+          'imageURLs': validImageUrls,
+        });
+
+        Navigator.of(context).pop();
+        showSuccessMessage(context, "Product added successfully");
+        Navigator.of(context).pop();
+      } catch (e) {
+        Navigator.of(context).pop();
+        showErrorMessage(context, 'Some error happened: ${e.toString()}');
+      }
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 30.v, bottom: 15.v),
+          children: [
+            const Text(
+              'Pick Profile Picture',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(height: .02.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    fixedSize: Size(30.v, 15.h),
+                  ),
+                  onPressed: _pickImages,
+                  child: Image.asset('assets/images/add_image.png'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    fixedSize: Size(30.v, 15.h),
+                  ),
+                  onPressed: _takePictureFromCamera,
+                  child: Image.asset('assets/images/camera.png'),
+                ),
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }
