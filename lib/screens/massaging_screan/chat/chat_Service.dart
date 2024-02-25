@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/models/massage.dart';
+import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 
 class ChatService extends ChangeNotifier {
@@ -17,29 +18,56 @@ class ChatService extends ChangeNotifier {
           _firebaseAuth.currentUser!.email.toString();
       final Timestamp timestamp = Timestamp.now();
 
-      // Retrieve first name and last name
+      // Retrieve first name and last name of sender
       DocumentSnapshot userSnapshot =
           await _firestore.collection('User').doc(currentUserID).get();
-      String firstName = userSnapshot.get('FirstName');
-      String lastName = userSnapshot.get('LastName');
+      String senderFirstName = userSnapshot.get('FirstName');
+      String senderLastName = userSnapshot.get('LastName');
+
+      // Retrieve first name and last name of receiver
+      DocumentSnapshot receiverSnapshot =
+          await _firestore.collection('User').doc(receiverID).get();
+      String receiverFirstName = receiverSnapshot.get('FirstName');
+      String receiverLastName = receiverSnapshot.get('LastName');
 
       // Create new Message
       Message newMessage = Message(
         senderID: currentUserID,
         senderEmail: currentUserEmail,
-        senderFirstName: firstName,
-        senderLastName: lastName,
+        senderFirstName: senderFirstName,
+        senderLastName: senderLastName,
         receiverId: receiverID,
+        receiverFirstName: receiverFirstName,
+        receiverLastName: receiverLastName,
         message: message,
         imageUrl: imageUrl, // Pass imageUrl if it's an image message
         timestamp: timestamp,
       );
 
-      List<String> ids = [currentUserID, receiverID];
-      ids.sort();
+      // Sort participant IDs and create chat room ID
+      List<String> participantIds = [currentUserID, receiverID];
+      participantIds.sort();
+      String chatRoomID = participantIds.join("_");
 
-      String chatRoomID = ids.join("_");
+      // Check if the chat room already exists
+      bool chatRoomExists = await _firestore
+          .collection('chat_rooms')
+          .doc(chatRoomID)
+          .get()
+          .then((doc) => doc.exists);
 
+      // If chat room doesn't exist, create it with participant information
+      if (!chatRoomExists) {
+        await _firestore.collection('chat_rooms').doc(chatRoomID).set({
+          'participants': participantIds,
+          'senderFirstName': senderFirstName,
+          'senderLastName': senderLastName,
+          'receiverFirstName': receiverFirstName,
+          'receiverLastName': receiverLastName,
+        });
+      }
+
+      // Add message to the messages subcollection of the chat room
       await _firestore
           .collection('chat_rooms')
           .doc(chatRoomID)
@@ -63,13 +91,33 @@ class ChatService extends ChangeNotifier {
         .snapshots();
   }
 
-  void contactSeller(BuildContext context, String reciverUserID) {
+  void contactSeller(BuildContext context, String receiverUserID) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MessagingPage(
-          receiverUserID: reciverUserID,
+          receiverUserID: receiverUserID,
         ),
+      ),
+    );
+  }
+
+  // void contactWithClients(BuildContext context, String sellerID) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => MessagingPage(
+  //         receiverUserID: sellerID,
+  //       ),
+  //     ),
+  //   );
+  // }
+  void contactWithClients(BuildContext context, String sellerID) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ContactClientsPage(), // Navigate to the ContactClientsPage
       ),
     );
   }

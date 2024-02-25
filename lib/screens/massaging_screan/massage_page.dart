@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:unisouq/components/chat_babble.dart';
 import 'package:unisouq/components/my_text_field.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MessagingPage extends StatefulWidget {
   static const String id = 'massaging_page';
@@ -28,6 +30,41 @@ class _MessagingPageState extends State<MessagingPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isImageUploading = false;
   String _uploadedImageUrl = '';
+  String receiverName = ''; // Variable to store receiver's name
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotifications();
+    _fetchReceiverName(); // Fetch receiver's name when the page initializes
+  }
+
+  void _fetchReceiverName() async {
+    try {
+      DocumentSnapshot receiverSnapshot = await FirebaseFirestore.instance
+          .collection('User')
+          .doc(widget.receiverUserID)
+          .get();
+      setState(() {
+        receiverName =
+            '${receiverSnapshot['FirstName']} ${receiverSnapshot['LastName']}';
+      });
+    } catch (e) {
+      print('Error fetching receiver name: $e');
+    }
+  }
+
+  void _initializeNotifications() async {
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
 
   @override
   void dispose() {
@@ -46,7 +83,7 @@ class _MessagingPageState extends State<MessagingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Chat Page"),
+        title: Text(receiverName), // Set the app bar title to receiver's name
       ),
       body: Column(
         children: [
@@ -319,5 +356,24 @@ class _MessagingPageState extends State<MessagingPage> {
         _scrollToBottom();
       });
     }
+  }
+
+  void _showNotification(String senderName, String message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your channel id',
+      'your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'New Message from $senderName',
+      message,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
   }
 }

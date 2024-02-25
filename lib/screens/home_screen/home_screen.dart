@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
+import 'package:unisouq/screens/notification_page/notification_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
@@ -361,10 +362,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: currentIconIndex == 2
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor.withOpacity(0.5),
-                      onPressed: () {
-                        setState(() {
-                          currentIconIndex = 2;
-                        });
+                      onPressed: () async {
+                        final newIndex = await Navigator.push<int>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotificationPage(senderName: '', message: '',),
+                          ),
+                        );
+                        if (newIndex != null) {
+                          setState(() {
+                            currentIconIndex = newIndex;
+                          });
+                        }
                       },
                     ),
                   ),

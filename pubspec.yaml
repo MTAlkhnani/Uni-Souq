@@ -56,6 +56,8 @@ dependencies:
   firebase_storage: ^11.6.6
   flutter_image_compress: ^2.1.0-nullsafety
   path_provider: ^2.1.2 
+  flutter_local_notifications: ^16.3.2
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -121,4 +123,5 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/lotties/
+    - assets/images/uni_souq.png
     

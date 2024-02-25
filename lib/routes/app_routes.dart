@@ -4,7 +4,9 @@ import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
+import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
+import 'package:unisouq/screens/notification_page/notification_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
@@ -29,6 +31,8 @@ class AppRoutes {
   static const String productDetail = '/product_Detail';
   static const String massagingPage = '/massaging_page';
   static const String editProduct = '/edit_product';
+  static const String contactclientspage = '/contact_clients_page';
+  static const String notificationpage = '/notifications_page';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -69,6 +73,14 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => EditProductScreen(
                   productData: {},
+                ));
+      case contactclientspage:
+        return MaterialPageRoute(builder: (_) => ContactClientsPage());
+      case notificationpage:
+        return MaterialPageRoute(
+            builder: (_) => NotificationPage(
+                  senderName: '',
+                  message: '',
                 ));
       default:
         return MaterialPageRoute(
