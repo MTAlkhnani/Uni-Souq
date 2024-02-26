@@ -309,7 +309,76 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                       ]),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Text(
+                    'Comments',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+
+                // Comments list view
+                // Expanded(
+                //   child: StreamBuilder<QuerySnapshot>(
+                //     stream: FirebaseFirestore.instance
+                //         .collection('comments') // Assuming 'comments' is your collection name
+                //         .where('productId', isEqualTo: widget.productId)
+                //         .snapshots(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.connectionState == ConnectionState.waiting) {
+                //         return Center(child: CircularProgressIndicator());
+                //       }
+                //       if (snapshot.hasError) {
+                //         return Center(child: Text('Error: ${snapshot.error}'));
+                //       }
+                //       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                //         return Center(child: Text('No comments yet'));
+                //       }
+                //
+                //       return ListView(
+                //         children: snapshot.data!.docs.map((doc) {
+                //           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+                //           return ListTile(
+                //             title: Text(data['userName']),
+                //             subtitle: Text(data['comment']),
+                //           );
+                //         }).toList(),
+                //       );
+                //     },
+                //   ),
+                // ),
+
+                // Comment input field
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _commentController,
+                          decoration: InputDecoration(
+                            hintText: 'Write a comment...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () {
+                          if (isUserSignedIn()) {
+                            //_postComment();
+                          } else {
+                            _showSignInRequiredPopup(context);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              
               ],
             ),
           );
@@ -387,6 +456,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         );
       },
     );
+  }
+
+  void _postComment() {
+    if (_commentController.text.trim().isNotEmpty) {
+      // Post the comment to Firestore
+      FirebaseFirestore.instance.collection('comments').add({
+        'productId': widget.productId,
+        'userName': _userName,
+        'comment': _commentController.text.trim(),
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      // Clear the text field
+      _commentController.clear();
+    }
   }
 
 
