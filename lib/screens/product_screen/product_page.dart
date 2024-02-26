@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 
@@ -243,9 +244,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     // Add spacing between buttons
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        // Implement logic to contact the clients
-                                        _chatService.contactWithClients(
-                                            context, sellerId);
+                                        if(isUserSignedIn()){
+                                          // Implement logic to contact the clients
+                                          _chatService.contactWithClients(
+                                              context, sellerId);
+                                        }
+                                        else{
+                                          _showSignInRequiredPopup(context);
+                                        }
+
                                       },
                                       icon: const Icon(Icons.message),
                                       label: const Text('Contact the Clients'),
@@ -255,17 +262,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     IconButton(
                                       icon: const Icon(Icons.edit),
                                       onPressed: () {
-                                        // Implement logic to edit the product
-                                        // Navigate to the edit product screen
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditProductScreen(
-                                              productData: productData,
+                                        if(isUserSignedIn()){
+                                          // Implement logic to edit the product
+                                          // Navigate to the edit product screen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProductScreen(
+                                                    productData: productData,
+                                                  ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
+                                        else{
+                                          _showSignInRequiredPopup(context);
+                                        }
+
                                       },
                                     ),
                                   ],
@@ -274,9 +287,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 // Render the contact button if the current user is not the seller
                                 return ElevatedButton.icon(
                                   onPressed: () {
-                                    // Implement logic to contact the seller
-                                    _chatService.contactSeller(
-                                        context, sellerId);
+                                    if(isUserSignedIn()){
+                                      // Implement logic to contact the seller
+                                      _chatService.contactSeller(
+                                          context, sellerId);
+                                    }
+                                    else{
+                                      _showSignInRequiredPopup(context);
+                                    }
+
                                   },
                                   icon: const Icon(Icons.message),
                                   label: const Text('Contact the Seller'),
@@ -302,6 +321,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
             onPressed: () {
+              if (!isUserSignedIn()) {
+              // If user is not signed in, show the sign-in required pop-up
+              _showSignInRequiredPopup(context);
+              } else {
+
+              }
               // Implement logic to buy the product
             },
             style: ElevatedButton.styleFrom(
@@ -325,4 +350,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final String uid = user?.uid ?? "Not Signed In";
     return uid;
   }
+  bool isUserSignedIn() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
+  void _showSignInRequiredPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sign In Required"),
+          content: Text("Please sign in or sign up to access this feature."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Sign In"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog first
+                Navigator.pushNamed(context, AppRoutes.signInScreen); // Navigate to Sign In Screen
+              },
+            ),
+            TextButton(
+              child: Text("Sign Up"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog first
+                Navigator.pushNamed(context, AppRoutes.signUpScreen); // Navigate to Registration Screen
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }

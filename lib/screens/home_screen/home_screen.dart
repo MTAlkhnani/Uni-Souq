@@ -432,21 +432,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor.withOpacity(0.5),
                       onPressed: () async {
-                        final newIndex = await Navigator.push<int>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotificationPage(
-                              senderName: '',
-                              message: '',
+                        if (isUserSignedIn()) {
+                          // Proceed with the original logic if the user is signed in
+                          final newIndex = await Navigator.push<int>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationPage(
+                                senderName: '',
+                                message: '',
+                              ),
                             ),
-                          ),
-                        );
-                        if (newIndex != null) {
-                          setState(() {
-                            currentIconIndex = newIndex;
-                          });
+                          );
+                          if (newIndex != null) {
+                            setState(() {
+                              currentIconIndex = newIndex;
+                            });
+                          }
+                        } else {
+                          // Show sign-in required pop-up if the user is not signed in
+                          _showSignInRequiredPopup(context);
                         }
                       },
+
                     ),
                   ),
                 ],
@@ -463,18 +470,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor.withOpacity(0.5),
                       onPressed: () async {
-                        final newIndex = await Navigator.push<int>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InformationScreen(userId: ''),
-                          ),
-                        );
-                        if (newIndex != null) {
-                          setState(() {
-                            currentIconIndex = newIndex;
-                          });
+                        if (isUserSignedIn()) {
+                          // Proceed with the original logic if the user is signed in
+                          final newIndex = await Navigator.push<int>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InformationScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+                            ),
+                          );
+                          if (newIndex != null) {
+                            setState(() {
+                              currentIconIndex = newIndex;
+                            });
+                          }
+                        } else {
+                          // Show sign-in required pop-up if the user is not signed in
+                          _showSignInRequiredPopup(context);
                         }
                       },
+
                     ),
                   ),
                 ],
@@ -486,23 +500,60 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          final User? user = FirebaseAuth.instance.currentUser;
-          if (user == null) {
+          if (!isUserSignedIn()) {
+            // If user is not signed in, show the sign-in required pop-up
+            _showSignInRequiredPopup(context);
+          } else {
+            // If user is signed in, proceed to the AddProductScreen
             Navigator.push(
               context,
-              CupertinoPageRoute(
-                builder: (context) => const RegistrationScreen(),
-              ),
+              CupertinoPageRoute(builder: (context) => AddProductScreen()),
             );
-            return;
           }
-          Navigator.push(
-            context,
-            CupertinoPageRoute(builder: (context) => AddProductScreen()),
-          );
         },
+
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+  bool isUserSignedIn() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
+  void _showSignInRequiredPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sign In Required"),
+          content: Text("Please sign in or sign up to access this feature."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Sign In"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog first
+                Navigator.pushNamed(context, AppRoutes.signInScreen); // Navigate to Sign In Screen
+              },
+            ),
+            TextButton(
+              child: Text("Sign Up"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog first
+                Navigator.pushNamed(context, AppRoutes.signUpScreen); // Navigate to Registration Screen
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }
