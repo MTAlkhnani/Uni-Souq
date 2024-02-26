@@ -301,37 +301,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
 
-                // Comments list view
-                // Expanded(
-                //   child: StreamBuilder<QuerySnapshot>(
-                //     stream: FirebaseFirestore.instance
-                //         .collection('comments') // Assuming 'comments' is your collection name
-                //         .where('productId', isEqualTo: widget.productId)
-                //         .snapshots(),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.connectionState == ConnectionState.waiting) {
-                //         return Center(child: CircularProgressIndicator());
-                //       }
-                //       if (snapshot.hasError) {
-                //         return Center(child: Text('Error: ${snapshot.error}'));
-                //       }
-                //       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                //         return Center(child: Text('No comments yet'));
-                //       }
-                //
-                //       return ListView(
-                //         children: snapshot.data!.docs.map((doc) {
-                //           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-                //           return ListTile(
-                //             title: Text(data['userName']),
-                //             subtitle: Text(data['comment']),
-                //           );
-                //         }).toList(),
-                //       );
-                //     },
-                //   ),
-                // ),
-
                 // Comment input field
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -350,7 +319,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                         onPressed: () {
                           if (isUserSignedIn()) {
                             //_postComment();
@@ -378,25 +347,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   onPressed: _sendingInProgress
                       ? null
                       : () {
-                          final sellerID = productData['sellerID'];
-                          final productName = productData['title'];
-                          double listingPrice;
-
-                          double price =
-                              double.parse(productData['price'] ?? '0');
-                          double discountedPrice = double.parse(
-                              productData['discountedPrice'] ?? '0');
-                          if (discountedPrice > 0) {
-                            listingPrice = discountedPrice;
-                          } else {
-                            listingPrice = price;
-                          }
-
-                          _sendRequestToSeller(
-                            sellerID,
-                            productName,
-                            listingPrice,
-                          );
+                          _showPriceInputDialog(); // Show the price input dialog
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
@@ -417,6 +368,69 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+  // Method to show the price input dialog
+  void _showPriceInputDialog() {
+    double currentPrice = double.parse(productData['price'] ?? '0');
+    double currentDiscountedPrice =
+        double.parse(productData['discountedPrice'] ?? '0');
+    double price;
+
+    if (currentDiscountedPrice > 0) {
+      price = currentDiscountedPrice;
+    } else {
+      price = currentPrice;
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        double enteredPrice = price; // Default to the current price
+
+        return AlertDialog(
+          title: const Text('Enter the Price'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Current Listing Price: ${price.toStringAsFixed(2)} SAR'),
+              const SizedBox(height: 10),
+              const SizedBox(height: 10),
+              const Text(
+                  'Enter a new listing price (leave blank to keep current)'),
+              TextFormField(
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    enteredPrice = double.parse(value);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                _sendRequestToSeller(
+                  productData['sellerID'],
+                  productData['title'],
+                  enteredPrice,
+                );
+              },
+              child: const Text('Send Request'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _sendRequestToSeller(
       String sellerID, String productName, double listingPrice) {
     setState(() {
@@ -429,14 +443,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Success'),
-            content: Text('Your request has been sent successfully.'),
+            title: const Text('Success'),
+            content: const Text('Your request has been sent successfully.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -448,14 +462,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to send request. Please try again later.'),
+            title: const Text('Error'),
+            content:
+                const Text('Failed to send request. Please try again later.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -485,17 +500,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Sign In Required"),
-          content: Text("Please sign in or sign up to access this feature."),
+          title: const Text("Sign In Required"),
+          content:
+              const Text("Please sign in or sign up to access this feature."),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Sign In"),
+              child: const Text("Sign In"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,
@@ -503,7 +519,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               },
             ),
             TextButton(
-              child: Text("Sign Up"),
+              child: const Text("Sign Up"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,
