@@ -68,7 +68,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
                 return Column(
                   children: [
                     // Items section

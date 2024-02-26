@@ -67,6 +67,17 @@ class _InformationScreenState extends State<InformationScreen> {
     _fetchUserData();
   }
 
+  @override
+  void dispose() {
+    // Dispose of the TextEditingController objects
+    _nameController.dispose();
+    _mobileNumberController.dispose();
+    _universityController.dispose();
+    _addressController.dispose();
+
+    super.dispose();
+  }
+
   void _fetchUserData() async {
     setState(() {
       _isLoading = true;

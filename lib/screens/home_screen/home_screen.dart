@@ -25,6 +25,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
   int currentIconIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    // Default itemsStream to fetch all items initially
+    itemsStream = FirebaseFirestore.instance.collection('Item').snapshots();
+  }
 
   // Define a list of icons for popular categories
   final List<IconData> popularCategoryIcons = [
@@ -47,7 +53,34 @@ class _HomeScreenState extends State<HomeScreen> {
     'Home'
     // Add more categories as needed
   ];
-
+  String? _selectedUniversity;
+  final List<String> _universities = [
+    'All Items',
+    'King Saud University',
+    'King Fahd University of Petroleum and Minerals',
+    'King Abdulaziz University',
+    'King Khalid University',
+    'King Faisal University',
+    'Princess Nourah bint Abdulrahman University',
+    'Islamic University of Madinah',
+    'Imam Abdulrahman Bin Faisal University',
+    'Qassim University',
+    'Taibah University',
+    'Taif University',
+    'Umm Al-Qura University',
+    'Al-Imam Muhammad Ibn Saud Islamic University',
+    'Al-Baha University',
+    'Hail University',
+    'Jazan University',
+    'Majmaah University',
+    'Najran University',
+    'Northern Borders University',
+    'Prince Sattam bin Abdulaziz University',
+    'Shaqra University',
+    'University of Tabuk',
+    'Al Jouf University',
+    'Al Yamamah University',
+  ];
   // Method to create a ListTile for the Drawer
   ListTile _buildDrawerListTile(
       IconData icon, String title, VoidCallback onTap) {
@@ -119,6 +152,77 @@ class _HomeScreenState extends State<HomeScreen> {
         context, AppRoutes.signInScreen, (route) => false);
   }
 
+  void _showUniversitySelectionSheet(BuildContext context) async {
+    final selectedUniversity = await showModalBottomSheet<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView.builder(
+          itemCount: _universities.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(_universities[index]),
+              onTap: () => Navigator.of(context).pop(_universities[index]),
+            );
+          },
+        );
+      },
+    );
+
+    if (selectedUniversity != null) {
+      _selectedUniversity = selectedUniversity; // Do not redeclare
+
+      final userIds = await fetchUserIdsByUniversity(selectedUniversity);
+      // print(userIds);
+      updateItemsStream(userIds);
+    }
+    // print(_selectedUniversity);
+    // print((_selectedUniversity == null || _selectedUniversity == 'All Items'));
+  }
+
+  Stream<QuerySnapshot>? itemsStream;
+
+  void updateItemsStream(List<String> userIds) {
+    if (_selectedUniversity == 'All Items') {
+      // This ensures that when "All Items" is selected, the stream is set to fetch all items.
+      // print("Helooooooo");
+      // print(_selectedUniversity);
+      // print(
+      //     (_selectedUniversity == null || _selectedUniversity == 'All Items'));
+      setState(() {
+        itemsStream = FirebaseFirestore.instance.collection('Item').snapshots();
+      });
+    } else if (userIds.isNotEmpty) {
+      setState(() {
+        itemsStream = FirebaseFirestore.instance
+            .collection('Item')
+            .where('sellerID', whereIn: userIds)
+            .snapshots();
+      });
+    } else {
+      // Handle the case where a university is selected but no user IDs are found
+      // print("hellooooo");
+      setState(() {
+        itemsStream = FirebaseFirestore.instance
+            .collection('Item')
+            .where('sellerID', isEqualTo: "0")
+            .snapshots();
+      });
+    }
+  }
+
+  Future<List<String>> fetchUserIdsByUniversity(String university) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Profile')
+        .where('university', isEqualTo: university)
+        .get();
+
+    List<String> userIds = [];
+    for (var doc in querySnapshot.docs) {
+      userIds.add(doc.id); // Assuming the document ID is the user ID
+    }
+    return userIds;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +253,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               }),
-
+          IconButton(
+            icon: const Icon(Icons.location_on),
+            onPressed: () => _showUniversitySelectionSheet(context),
+          ),
+          IconButton(icon: const Icon(Icons.category), onPressed: () {}),
           // Remove this IconButton to eliminate the sign-out button from the top right corner
           // IconButton(
           //   icon: const Icon(Icons.exit_to_app),
@@ -162,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: _buildDrawer(context),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Item').snapshots(),
+        stream: itemsStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
