@@ -31,7 +31,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clients Request'),
+        title: const Text('Request'),
       ),
       body: FutureBuilder<String?>(
         future: clientId,

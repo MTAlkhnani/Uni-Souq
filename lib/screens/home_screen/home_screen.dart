@@ -136,6 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
+          IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
           IconButton(
               icon: const Icon(Icons.shopping_bag),
               onPressed: () {
@@ -147,8 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               }),
-          IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.category), onPressed: () {}),
+
           // Remove this IconButton to eliminate the sign-out button from the top right corner
           // IconButton(
           //   icon: const Icon(Icons.exit_to_app),
@@ -432,9 +433,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Tooltip(
-                    message: 'Notifications',
+                    message: 'chat',
                     child: IconButton(
-                        icon: const Icon(Icons.notifications),
+                        icon: const Icon(Icons.local_shipping),
                         color: currentIconIndex == 2
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).cardColor.withOpacity(0.5),
