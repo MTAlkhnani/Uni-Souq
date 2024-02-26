@@ -7,6 +7,7 @@ import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/size_utils.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailPage extends StatefulWidget {
   static const String id = 'product_Detail';
@@ -212,6 +213,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               icon: const Icon(Icons.share),
                               onPressed: () {
                                 // Implement share functionality
+                                final String productTitle = productData['title'] ?? 'No Title';
+                                final String productPrice = productData['price'].toString();
+                                final String shareContent =
+                                    "Check out this product: $productTitle for $productPrice SAR on Uni-Souq!";
+
+                                // Using the share package to share the content
+                                Share.share(shareContent);
+
                               },
                             ),
                           ],
