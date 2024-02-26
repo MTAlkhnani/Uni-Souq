@@ -107,11 +107,14 @@ class _InformationScreenState extends State<InformationScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 15.h,
+              height: 35.h,
             ),
             const Text(
               "Edit profile",
               style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 45.h,
             ),
             _buildProfileImage(),
             _buildInputFieldWithName(),

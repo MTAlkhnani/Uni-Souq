@@ -9,6 +9,7 @@ import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/notification_page/notification_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/profile_page/profile_screen.dart';
+import 'package:unisouq/screens/request_page/request_page.dart';
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
@@ -37,7 +38,7 @@ class AppRoutes {
   static const String notificationpage = '/notifications_page';
   static const String profilepage = '/profile_page';
   static const String searchScreen = '/search_screen';
-
+  static const String requestpage = '/request_page';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -92,9 +93,11 @@ class AppRoutes {
       case notificationpage:
         return MaterialPageRoute(
             builder: (_) => NotificationPage(
-                  senderName: '',
+                  receiverUserId: '',
                   message: '',
                 ));
+      case requestpage:
+        return MaterialPageRoute(builder: (_) => RequestPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

@@ -8,6 +8,7 @@ import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/notification_page/notification_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/profile_page/profile_screen.dart';
+import 'package:unisouq/screens/request_page/request_page.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -47,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // Add more categories as needed
   ];
 
-
   // Method to create a ListTile for the Drawer
-  ListTile _buildDrawerListTile(IconData icon, String title, VoidCallback onTap) {
+  ListTile _buildDrawerListTile(
+      IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
@@ -89,8 +90,22 @@ class _HomeScreenState extends State<HomeScreen> {
             // Implement navigation to security settings
           }),
           _buildDrawerListTile(Icons.exit_to_app, 'Sign Out', () {
-            // Call the _signOut method here
-            _signOut(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return MyDialog(
+                  title: "Sign Out",
+                  content: "Are you sure you want to sign out?",
+                  cancelText: "Cancel",
+                  signOutText: " Sign Out",
+                  titleTextStyle: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                  contentTextStyle: const TextStyle(fontSize: 16),
+                  buttonTextStyle: const TextStyle(
+                      fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
+                );
+              },
+            );
           }),
         ],
       ),
@@ -98,36 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Function to handle user sign-out
-  void _signOut(BuildContext context) {
-    // Show confirmation dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Log Out'),
-          content: const Text('Are you sure you want to log out?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                // Just close the dialog
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () async {
-                // If confirmed, sign out and navigate to sign-in screen
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.signInScreen, (route) => false);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushNamedAndRemoveUntil(
+        context, AppRoutes.signInScreen, (route) => false);
   }
 
   @override
@@ -147,9 +136,27 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
+          IconButton(
+              icon: const Icon(Icons.shopping_bag),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        RequestPage(), // Navigate to the ContactClientsPage
+                  ),
+                );
+              }),
           IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: const Icon(Icons.category), onPressed: () {}),
-
+          // Remove this IconButton to eliminate the sign-out button from the top right corner
+          // IconButton(
+          //   icon: const Icon(Icons.exit_to_app),
+          //   onPressed: () {
+          //     // Sign out logic
+          //   },
+          //   tooltip: 'Sign Out',
+          // ),
         ],
       ),
       drawer: _buildDrawer(context),
@@ -427,34 +434,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Tooltip(
                     message: 'Notifications',
                     child: IconButton(
-                      icon: const Icon(Icons.notifications),
-                      color: currentIconIndex == 2
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).cardColor.withOpacity(0.5),
-                      onPressed: () async {
-                        if (isUserSignedIn()) {
-                          // Proceed with the original logic if the user is signed in
-                          final newIndex = await Navigator.push<int>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NotificationPage(
-                                senderName: '',
-                                message: '',
-                              ),
-                            ),
-                          );
-                          if (newIndex != null) {
-                            setState(() {
-                              currentIconIndex = newIndex;
-                            });
-                          }
-                        } else {
-                          // Show sign-in required pop-up if the user is not signed in
-                          _showSignInRequiredPopup(context);
-                        }
-                      },
-
-                    ),
+                        icon: const Icon(Icons.notifications),
+                        color: currentIconIndex == 2
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor.withOpacity(0.5),
+                        onPressed: () {}),
                   ),
                 ],
               ),
@@ -475,7 +459,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           final newIndex = await Navigator.push<int>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => InformationScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+                              builder: (context) => InformationScreen(
+                                  userId:
+                                      FirebaseAuth.instance.currentUser!.uid),
                             ),
                           );
                           if (newIndex != null) {
@@ -488,7 +474,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           _showSignInRequiredPopup(context);
                         }
                       },
-
                     ),
                   ),
                 ],
@@ -511,11 +496,11 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         },
-
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
   bool isUserSignedIn() {
     final User? user = FirebaseAuth.instance.currentUser;
     return user != null;
@@ -539,14 +524,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text("Sign In"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context, AppRoutes.signInScreen); // Navigate to Sign In Screen
+                Navigator.pushNamed(context,
+                    AppRoutes.signInScreen); // Navigate to Sign In Screen
               },
             ),
             TextButton(
               child: Text("Sign Up"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context, AppRoutes.signUpScreen); // Navigate to Registration Screen
+                Navigator.pushNamed(context,
+                    AppRoutes.signUpScreen); // Navigate to Registration Screen
               },
             ),
           ],
@@ -554,6 +541,4 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-
 }

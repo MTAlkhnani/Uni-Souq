@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
-
 import 'package:unisouq/utils/size_utils.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -28,6 +28,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _isLoading = false;
 
   final ChatService _chatService = ChatService();
+  late Map<String, dynamic> productData = {};
+
+  bool _sendingInProgress = false; // State variable to track sending progress
 
   @override
   void initState() {
@@ -37,54 +40,40 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Future<void> _fetchProductAndUser() async {
     try {
-      // Initialize _productFuture with the result of the Firestore query
       _productFuture = FirebaseFirestore.instance
           .collection('Item')
           .doc(widget.productId)
           .get();
 
-      // Fetch the product document
       DocumentSnapshot productSnapshot = await _productFuture;
 
-      // Check if the document exists
       if (!productSnapshot.exists) {
-        // Handle the case where the product document does not exist
         setState(() {
-          // Set _userName to a default value or an empty string
-          _userName = ''; // or any other default value
+          _userName = '';
         });
-        return; // Exit the method early
+        return;
       }
 
-      // Get the data as a map
-      Map<String, dynamic> productData =
-          productSnapshot.data() as Map<String, dynamic>;
+      productData = productSnapshot.data()
+          as Map<String, dynamic>; // Assign to class-level variable
 
-      // Check if the data is null or if the map does not contain the key "userId"
       if (productData == null || !productData.containsKey('userId')) {
-        // Handle the case where the "userId" field does not exist
         setState(() {
-          // Set _userName to a default value or an empty string
-          _userName = ''; // or any other default value
+          _userName = '';
         });
-        return; // Exit the method early
+        return;
       }
 
-      // Retrieve the user ID
       String userId = productData['userId'];
 
-      // Query Firestore to get the user's information based on the user ID
       DocumentSnapshot userSnapshot =
           await FirebaseFirestore.instance.collection('User').doc(userId).get();
 
-      // Extract the user's name from the user snapshot
       setState(() {
         _userName = userSnapshot['FirstName'] + ' ' + userSnapshot['LastName'];
       });
     } catch (e) {
-      // Handle errors
       print('Error fetching product and user data: $e');
-      // Optionally, show an error message to the user
     }
   }
 
@@ -229,7 +218,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         const SizedBox(height: 16),
                         // Button to contact the seller or client
-                        // Button to contact the seller or client
                         Padding(
                           padding: const EdgeInsets.all(9.0),
                           child: Builder(
@@ -244,15 +232,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     // Add spacing between buttons
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        if(isUserSignedIn()){
+                                        if (isUserSignedIn()) {
                                           // Implement logic to contact the clients
                                           _chatService.contactWithClients(
                                               context, sellerId);
-                                        }
-                                        else{
+                                        } else {
                                           _showSignInRequiredPopup(context);
                                         }
-
                                       },
                                       icon: const Icon(Icons.message),
                                       label: const Text('Contact the Clients'),
@@ -262,7 +248,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     IconButton(
                                       icon: const Icon(Icons.edit),
                                       onPressed: () {
-                                        if(isUserSignedIn()){
+                                        if (isUserSignedIn()) {
                                           // Implement logic to edit the product
                                           // Navigate to the edit product screen
                                           Navigator.push(
@@ -270,15 +256,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   EditProductScreen(
-                                                    productData: productData,
-                                                  ),
+                                                productData: productData,
+                                              ),
                                             ),
                                           );
-                                        }
-                                        else{
+                                        } else {
                                           _showSignInRequiredPopup(context);
                                         }
-
                                       },
                                     ),
                                   ],
@@ -287,15 +271,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 // Render the contact button if the current user is not the seller
                                 return ElevatedButton.icon(
                                   onPressed: () {
-                                    if(isUserSignedIn()){
+                                    if (isUserSignedIn()) {
                                       // Implement logic to contact the seller
                                       _chatService.contactSeller(
                                           context, sellerId);
-                                    }
-                                    else{
+                                    } else {
                                       _showSignInRequiredPopup(context);
                                     }
-
                                   },
                                   icon: const Icon(Icons.message),
                                   label: const Text('Contact the Seller'),
@@ -311,7 +293,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ]),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: Text(
                     'Comments',
                     style: Theme.of(context).textTheme.headline6,
@@ -351,7 +334,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                 // Comment input field
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -378,7 +362,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                 ),
-              
               ],
             ),
           );
@@ -388,30 +371,102 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              if (!isUserSignedIn()) {
-              // If user is not signed in, show the sign-in required pop-up
-              _showSignInRequiredPopup(context);
-              } else {
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _sendingInProgress
+                      ? null
+                      : () {
+                          final sellerID = productData['sellerID'];
+                          final productName = productData['title'];
+                          double listingPrice;
 
-              }
-              // Implement logic to buy the product
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context)
-                  .primaryColor, // Change the background color here
-            ),
-            child: Text(
-              'Checkout',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Theme.of(context).scaffoldBackgroundColor),
-            ),
+                          double price =
+                              double.parse(productData['price'] ?? '0');
+                          double discountedPrice = double.parse(
+                              productData['discountedPrice'] ?? '0');
+                          if (discountedPrice > 0) {
+                            listingPrice = discountedPrice;
+                          } else {
+                            listingPrice = price;
+                          }
+
+                          _sendRequestToSeller(
+                            sellerID,
+                            productName,
+                            listingPrice,
+                          );
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  child: Text(
+                    _sendingInProgress ? 'In Progress' : 'Request To Buy',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  void _sendRequestToSeller(
+      String sellerID, String productName, double listingPrice) {
+    setState(() {
+      _sendingInProgress = true; // Set sending progress flag
+    });
+
+    ChatService().sendRequest(sellerID, productName, listingPrice).then((_) {
+      // Request sent successfully, show a confirmation dialog or perform other actions
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Text('Your request has been sent successfully.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }).catchError((error) {
+      // Handle errors if request sending fails
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to send request. Please try again later.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }).whenComplete(() {
+      // Reset sending progress after request is sent or failed
+      setState(() {
+        _sendingInProgress = true;
+      });
+    });
   }
 
   String getCurrentUserUid() {
@@ -419,6 +474,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final String uid = user?.uid ?? "Not Signed In";
     return uid;
   }
+
   bool isUserSignedIn() {
     final User? user = FirebaseAuth.instance.currentUser;
     return user != null;
@@ -442,14 +498,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: Text("Sign In"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context, AppRoutes.signInScreen); // Navigate to Sign In Screen
+                Navigator.pushNamed(context,
+                    AppRoutes.signInScreen); // Navigate to Sign In Screen
               },
             ),
             TextButton(
               child: Text("Sign Up"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context, AppRoutes.signUpScreen); // Navigate to Registration Screen
+                Navigator.pushNamed(context,
+                    AppRoutes.signUpScreen); // Navigate to Registration Screen
               },
             ),
           ],
@@ -472,6 +530,4 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       _commentController.clear();
     }
   }
-
-
 }

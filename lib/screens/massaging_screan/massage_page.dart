@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unisouq/components/chat_babble.dart';
-import 'package:unisouq/components/my_text_field.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -18,8 +18,15 @@ class MessagingPage extends StatefulWidget {
   static const String id = 'massaging_page';
 
   final String receiverUserID;
+  final String? initialMessage; // Optional initial message
+  final String? productImage;
 
-  MessagingPage({Key? key, required this.receiverUserID}) : super(key: key);
+  MessagingPage(
+      {Key? key,
+      required this.receiverUserID,
+      this.initialMessage,
+      this.productImage})
+      : super(key: key);
 
   @override
   State<MessagingPage> createState() => _MessagingPageState();
@@ -43,6 +50,10 @@ class _MessagingPageState extends State<MessagingPage> {
   @override
   void initState() {
     super.initState();
+    // Set the initial message to the _controller if it's not null
+    if (widget.initialMessage != null) {
+      _controller.text = widget.initialMessage!;
+    }
     _initializeNotifications();
     _fetchReceiverName(); // Fetch receiver's name when the page initializes
   }
@@ -221,17 +232,20 @@ class _MessagingPageState extends State<MessagingPage> {
               if (currentDate == null || !isSameDay(currentDate, messageDate)) {
                 // Add date above the messages
                 messageWidgets.add(
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        _formatDate(messageDate),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _formatDate(messageDate),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -320,38 +334,47 @@ class _MessagingPageState extends State<MessagingPage> {
     String senderName = '${data['senderFirstName']} ${data['senderLastName']}';
     String messageSentTime = _formatTimestamp(data['timestamp']);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      child: Column(
-        crossAxisAlignment: alignment,
-        children: [
-          Text(
-            senderName,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: alignment == CrossAxisAlignment.start
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
-            children: [
-              Flexible(
-                child: Container(
-                  constraints: const BoxConstraints(
-                      maxWidth: 250), // Adjust maximum width as needed
-                  padding: const EdgeInsets.all(8),
-                  child: ChatBubble(
-                    message: data['message'],
-                    imageUrl: data['imageUrl'],
-                    isSender: isSender,
-                    messageSentTime: messageSentTime, // Pass messageSentTime
+    return GestureDetector(
+      onTap: () {
+        // Retrieve the message when a message item is tapped
+        setState(() {
+          _controller.text = data['message'] ??
+              ''; // Set the message to the TextEditingController
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        child: Column(
+          crossAxisAlignment: alignment,
+          children: [
+            Text(
+              senderName,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: alignment == CrossAxisAlignment.start
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Container(
+                    constraints: const BoxConstraints(
+                        maxWidth: 250), // Adjust maximum width as needed
+                    padding: const EdgeInsets.all(8),
+                    child: ChatBubble(
+                      message: data['message'],
+                      imageUrl: data['imageUrl'],
+                      isSender: isSender,
+                      messageSentTime: messageSentTime, // Pass messageSentTime
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -372,9 +395,10 @@ class _MessagingPageState extends State<MessagingPage> {
 
   Widget _buildMessageInput() {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
+          SizedBox(width: 5.v),
           GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -382,18 +406,21 @@ class _MessagingPageState extends State<MessagingPage> {
             },
             child: const Icon(Icons.emoji_emotions), // Add emoji icon
           ),
-          Expanded(
+          SizedBox(width: 8.v),
+          Flexible(
             child: TextField(
               controller: _controller,
               keyboardType: TextInputType.multiline,
+              maxLines: null, // Allow the TextField to expand vertically
               obscureText: false,
               onTap: () {
                 if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
               },
               decoration: InputDecoration(
-                  hintText: 'Type Something...',
-                  hintStyle: TextStyle(color: Theme.of(context).hintColor),
-                  border: InputBorder.none),
+                hintText: 'Type Something...',
+                hintStyle: TextStyle(color: Theme.of(context).hintColor),
+                border: InputBorder.none,
+              ),
             ),
           ),
           CircleAvatar(
@@ -410,7 +437,7 @@ class _MessagingPageState extends State<MessagingPage> {
               size: 40,
             ),
           ),
-          SizedBox(width: .5.v),
+          SizedBox(width: 10.v),
         ],
       ),
     );

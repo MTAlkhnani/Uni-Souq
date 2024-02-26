@@ -60,6 +60,8 @@ dependencies:
   badges: ^3.1.2
   emoji_picker_flutter: ^1.5.1
   cupertino_will_pop_scope: ^1.2.1
+  google_maps_flutter: ^2.5.3
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

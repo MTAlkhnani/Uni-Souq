@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/models/massage.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
+import 'package:unisouq/screens/notification_page/notification_page.dart';
+import 'package:unisouq/utils/auth_utils.dart';
 
 class ChatService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -102,16 +104,28 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-  // void contactWithClients(BuildContext context, String sellerID) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => MessagingPage(
-  //         receiverUserID: sellerID,
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future<void> requestToBuy(
+      BuildContext context, Map<String, dynamic> productData) async {
+    String sellerId = productData['sellerID'];
+    String product = productData['title'] ?? 'Your Product';
+    double listingPrice = double.parse(productData['price'] ?? '0.0');
+
+    String message =
+        "I'm interested to buy $product with the listing price $listingPrice";
+
+    try {
+      // Send message directly to the seller without navigating to the messaging page
+      await sendMessage(sellerId, message);
+      // Show dialog if message sent successfully
+
+      // If you want to return something upon successful sending, you can return it here
+    } catch (e) {
+      // Handle errors if message sending fails
+      // You can throw an error or return something indicating the failure
+      throw e;
+    }
+  }
+
   void contactWithClients(BuildContext context, String sellerID) {
     Navigator.push(
       context,
@@ -120,5 +134,122 @@ class ChatService extends ChangeNotifier {
             ContactClientsPage(), // Navigate to the ContactClientsPage
       ),
     );
+  }
+
+  void requestToSeller(BuildContext context, String sellerId,
+      String productName, double listingPrice) {
+    String message =
+        "I'm interested to buy $productName with the listing price $listingPrice";
+
+    // Call a method to send the message to the seller
+    sendMessageToSeller(context, sellerId, message);
+
+    // Show a confirmation dialog to the user
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Notification Sent'),
+        content: Text('Your request has been sent to the seller.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void sendMessageToSeller(
+      BuildContext context, String sellerId, String message) {
+    // Show a dialog with options to the seller
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('New Message'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Handle accept action
+                _handleAccept(context, sellerId, message);
+                Navigator.of(dialogContext).pop(); // Close the dialog
+              },
+              child: Text('Accept'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Handle reject action
+                _handleReject(context, sellerId, message);
+                Navigator.of(dialogContext).pop(); // Close the dialog
+              },
+              child: Text('Reject'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleAccept(BuildContext context, String sellerId, String message) {
+    // Implement your logic to handle the accept action
+    print('Seller with ID $sellerId accepted the message: $message');
+  }
+
+  void _handleReject(BuildContext context, String sellerId, String message) {
+    // Implement your logic to handle the reject action
+    print('Seller with ID $sellerId rejected the message: $message');
+  }
+
+  Future<void> sendRequest(
+      String sellerID, String productName, double listingPrice) async {
+    String message =
+        "I'm interested to buy $productName with the listing price $listingPrice";
+
+    try {
+      // Get the client ID
+      String? clientId = await getUserId();
+      if (clientId == null) {
+        print("User ID not available.");
+        return;
+      }
+
+      // Send request directly to the seller
+      await _firestore.collection('requests').add({
+        'sellerID': sellerID,
+        'productName': productName,
+        'listingPrice': listingPrice,
+        'message': message,
+        'clientId': clientId,
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e) {
+      print('Failed to send request: $e');
+      throw e;
+    }
+  }
+
+  Future<void> sendResponse(
+    String clientId,
+    String sellerID,
+    String productName,
+    String responseMessage,
+  ) async {
+    try {
+      // Send response to the client
+      await FirebaseFirestore.instance.collection('responses').add({
+        'clientId': clientId,
+        'sellerID': sellerID,
+        'productName': productName,
+        'responseMessage': responseMessage,
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e) {
+      print('Failed to send response: $e');
+      throw e;
+    }
   }
 }
