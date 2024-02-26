@@ -74,6 +74,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     _searchResults != null && _searchResults.isNotEmpty
                         ? GridView.builder(
                             shrinkWrap: true,
+                            physics:
+                                NeverScrollableScrollPhysics(), // Important
                             padding: EdgeInsets.fromLTRB(
                               8,
                               8,
