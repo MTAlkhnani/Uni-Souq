@@ -12,6 +12,8 @@ import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../information_Screen/information_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String id = 'customer_screen';
 
@@ -460,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final newIndex = await Navigator.push<int>(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
+                            builder: (context) => InformationScreen(userId: ''),
                           ),
                         );
                         if (newIndex != null) {

@@ -18,7 +18,6 @@ import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/Search_Screen/searchScreen.dart';
 
-
 class AppRoutes {
   static const String signInScreen = '/sign_in_screen';
   static const String signUpScreen = '/sign_up_screen';
@@ -38,6 +37,7 @@ class AppRoutes {
   static const String notificationpage = '/notifications_page';
   static const String profilepage = '/profile_page';
   static const String searchScreen = '/search_screen';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
