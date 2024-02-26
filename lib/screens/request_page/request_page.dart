@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/order_information/order_information.dart';
+import 'package:unisouq/utils/auth_utils.dart';
 
 class RequestPage extends StatefulWidget {
   static const String id = 'request_page';
@@ -18,6 +19,13 @@ class _RequestPageState extends State<RequestPage> {
     'Other'
   ];
   String selectedReason = '';
+  late Future<String?> clientId;
+
+  @override
+  void initState() {
+    super.initState();
+    clientId = getUserId();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +33,30 @@ class _RequestPageState extends State<RequestPage> {
       appBar: AppBar(
         title: const Text('Clients Request'),
       ),
-      body: _buildRequestList(),
+      body: FutureBuilder<String?>(
+        future: clientId,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          // Only build the request list if clientId is available
+          return _buildRequestList(snapshot.data);
+        },
+      ),
     );
   }
 
-  Widget _buildRequestList() {
+  Widget _buildRequestList(String? clientId) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('requests').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('requests')
+          .where('sellerID', isEqualTo: clientId) // Filter requests by sellerID
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
