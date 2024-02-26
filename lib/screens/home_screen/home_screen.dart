@@ -64,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          // The user's header or another widget for the drawer header can be placed here
           DrawerHeader(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -89,20 +88,20 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildDrawerListTile(Icons.security, 'Security', () {
             // Implement navigation to security settings
           }),
+          _buildDrawerListTile(Icons.exit_to_app, 'Sign Out', () {
+            // Call the _signOut method here
+            _signOut(context);
+          }),
         ],
       ),
     );
   }
 
-
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    // Navigate to SignInScreen after signing out
-    Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
     Navigator.pushNamedAndRemoveUntil(
         context, AppRoutes.signInScreen, (route) => false);
-    // Clear the navigation stack so that the user can't navigate back to HomeScreen
   }
 
   @override
