@@ -123,28 +123,14 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: const Icon(Icons.category), onPressed: () {}),
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return MyDialog(
-                    title: "Sign Out",
-                    content: "Are you sure you want to sign out?",
-                    cancelText: "Cancel",
-                    signOutText: " Sign Out",
-                    titleTextStyle: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                    contentTextStyle: const TextStyle(fontSize: 16),
-                    buttonTextStyle: const TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
-                  );
-                },
-              );
-            },
-            tooltip: 'Sign Out',
-          ),
+          // Remove this IconButton to eliminate the sign-out button from the top right corner
+          // IconButton(
+          //   icon: const Icon(Icons.exit_to_app),
+          //   onPressed: () {
+          //     // Sign out logic
+          //   },
+          //   tooltip: 'Sign Out',
+          // ),
         ],
       ),
       drawer: _buildDrawer(context),
