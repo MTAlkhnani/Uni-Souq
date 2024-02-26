@@ -98,10 +98,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Function to handle user sign-out
-  void _signOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushNamedAndRemoveUntil(
-        context, AppRoutes.signInScreen, (route) => false);
+  void _signOut(BuildContext context) {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Log Out'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                // Just close the dialog
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () async {
+                // If confirmed, sign out and navigate to sign-in screen
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop(); // Close the dialog first
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRoutes.signInScreen, (route) => false);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -123,14 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(icon: const Icon(Icons.location_on), onPressed: () {}),
           IconButton(icon: const Icon(Icons.category), onPressed: () {}),
-          // Remove this IconButton to eliminate the sign-out button from the top right corner
-          // IconButton(
-          //   icon: const Icon(Icons.exit_to_app),
-          //   onPressed: () {
-          //     // Sign out logic
-          //   },
-          //   tooltip: 'Sign Out',
-          // ),
+
         ],
       ),
       drawer: _buildDrawer(context),
