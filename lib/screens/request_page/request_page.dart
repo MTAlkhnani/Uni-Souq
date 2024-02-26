@@ -111,7 +111,8 @@ class _RequestPageState extends State<RequestPage> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                _showRejectionReasonDialog(context);
+                                _showRejectionReasonDialog(context,
+                                    request); // Pass the DocumentSnapshot
                               },
                               child: const Text(
                                 'Reject',
@@ -162,7 +163,8 @@ class _RequestPageState extends State<RequestPage> {
     );
   }
 
-  void _showRejectionReasonDialog(BuildContext context) {
+  void _showRejectionReasonDialog(
+      BuildContext context, DocumentSnapshot request) {
     TextEditingController customReasonController = TextEditingController();
 
     showDialog(
@@ -176,11 +178,13 @@ class _RequestPageState extends State<RequestPage> {
               ...rejectionReasons.map((reason) => ListTile(
                     title: Text(reason),
                     onTap: () {
-                      setState(() {
-                        selectedReason = reason;
-                      });
+                      _sendRejectionMessage(reason);
                       Navigator.pop(context);
-                      _sendRejectionMessage(selectedReason);
+                      // Delete the request document from Firestore
+                      FirebaseFirestore.instance
+                          .collection('requests')
+                          .doc(request.id)
+                          .delete();
                     },
                   )),
               ListTile(
@@ -198,8 +202,13 @@ class _RequestPageState extends State<RequestPage> {
               onPressed: () {
                 String customReason = customReasonController.text.trim();
                 if (customReason.isNotEmpty) {
-                  Navigator.pop(context);
                   _sendRejectionMessage(customReason);
+                  Navigator.pop(context);
+                  // Delete the request document from Firestore
+                  FirebaseFirestore.instance
+                      .collection('requests')
+                      .doc(request.id)
+                      .delete();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

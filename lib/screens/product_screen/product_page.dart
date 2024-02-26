@@ -420,6 +420,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 _sendRequestToSeller(
                   productData['sellerID'],
                   productData['title'],
+                  productData['condition'],
+                  productData['description'],
                   enteredPrice,
                 );
               },
@@ -431,13 +433,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  void _sendRequestToSeller(
-      String sellerID, String productName, double listingPrice) {
+  void _sendRequestToSeller(String sellerID, String productName,
+      String condtion, String description, double listingPrice) {
     setState(() {
       _sendingInProgress = true; // Set sending progress flag
     });
 
-    ChatService().sendRequest(sellerID, productName, listingPrice).then((_) {
+    ChatService()
+        .sendRequest(sellerID, productName, condtion, description, listingPrice)
+        .then((_) {
       // Request sent successfully, show a confirmation dialog or perform other actions
       showDialog(
         context: context,

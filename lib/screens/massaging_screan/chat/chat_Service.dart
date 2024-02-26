@@ -136,10 +136,10 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-  Future<void> sendRequest(
-      String sellerID, String productName, double listingPrice) async {
+  Future<void> sendRequest(String sellerID, String productName, String condtion,
+      String description, double listingPrice) async {
     String message =
-        "I'm interested to buy $productName with the listing price $listingPrice";
+        "I'm interested to buy $productName with the \nPrice $listingPrice SAR\nCondtion: $condtion\nDescription : $description\n  ";
 
     try {
       // Get the client ID

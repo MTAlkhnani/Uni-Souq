@@ -91,11 +91,7 @@ class AppRoutes {
       case contactclientspage:
         return MaterialPageRoute(builder: (_) => ContactClientsPage());
       case notificationpage:
-        return MaterialPageRoute(
-            builder: (_) => NotificationPage(
-                  receiverUserId: '',
-                  message: '',
-                ));
+        return MaterialPageRoute(builder: (_) => NotificationPage());
       case requestpage:
         return MaterialPageRoute(builder: (_) => RequestPage());
       default:
