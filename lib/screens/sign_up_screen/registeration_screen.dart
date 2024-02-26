@@ -69,7 +69,18 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         'Phone': phone,
         'TwoFactorAuth': twoFactorEnabled,
       });
-
+      await FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(userCredential.user!.uid)
+          .set({
+        'userId': userCredential.user!.uid,
+        'fName': firstName,
+        'lName': lastName,
+        'phone': phone,
+        'university': '',
+        'userImage': null,
+        'address': '',
+      });
       // Dismiss any open dialogs or loading indicators
       Navigator.of(context).pop();
 
@@ -457,28 +468,28 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Text('I am a member!'),
                                           TextButton(
                                             child: Text(
                                               'Login now',
                                               style: TextStyle(
-                                                  color:
-                                                  Theme.of(context).primaryColor),
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
                                             ),
-                                            onPressed: () => Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                AppRoutes.signInScreen),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        AppRoutes.signInScreen),
                                           ),
                                         ],
                                       ),
-
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Text('Just browsing? '),
                                           TextButton(
@@ -490,11 +501,12 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                               ),
                                             ),
                                             onPressed: () =>
-                                                Navigator.pushReplacementNamed(context, AppRoutes.homeScreen),
+                                                Navigator.pushReplacementNamed(
+                                                    context,
+                                                    AppRoutes.homeScreen),
                                           ),
                                         ],
                                       ),
-
                                     ],
                                   )),
 

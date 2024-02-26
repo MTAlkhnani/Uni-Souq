@@ -76,9 +76,7 @@ class ProfileScreen extends StatelessWidget {
               context,
               icon: Icons.lock,
               title: 'Reset Password',
-              onTap: () {
-                // Navigate to reset password screen
-              },
+              onTap: () {},
             ),
             buildListTile(
               context,

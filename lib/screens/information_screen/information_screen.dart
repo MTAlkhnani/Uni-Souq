@@ -30,7 +30,7 @@ class _InformationScreenState extends State<InformationScreen> {
   bool _isLoading = false;
 
   String? _selectedUniversity;
-  List<String> _universities = [
+  final List<String> _universities = [
     'King Saud University',
     'King Fahd University of Petroleum and Minerals',
     'King Abdulaziz University',
@@ -55,7 +55,6 @@ class _InformationScreenState extends State<InformationScreen> {
     'University of Tabuk',
     'Al Jouf University',
     'Al Yamamah University',
-    // Add more university names as needed
   ];
 
   @override
@@ -74,18 +73,23 @@ class _InformationScreenState extends State<InformationScreen> {
     });
     try {
       final userSnapshot = await FirebaseFirestore.instance
-          .collection('User')
+          .collection('Profile')
           .doc(widget.userId)
           .get();
       if (userSnapshot.exists) {
         final userData = userSnapshot.data() as Map<String, dynamic>;
-        final firstName = userData['FirstName'] ?? '';
-        final lastName = userData['LastName'] ?? '';
-        final mobileNumber = userData['Phone'] ?? '';
-
+        final firstName = userData['fName'] ?? '';
+        final lastName = userData['lName'] ?? '';
+        final mobileNumber = userData['phone'] ?? '';
+        final university = userData['university'] ?? '';
+        final address = userData['address'] ?? '';
+        print('${university.toString()}');
         setState(() {
-          _nameController.text = '$firstName $lastName';
-          _mobileNumberController.text = mobileNumber;
+          _nameController.text =
+              '${firstName.toString()} ${lastName.toString()}';
+          _mobileNumberController.text = mobileNumber.toString();
+          _selectedUniversity = university.toString();
+          _addressController.text = address.toString();
         });
       } else {
         print('User document does not exist');
@@ -223,7 +227,7 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           SizedBox(height: 8.v),
           DropdownButtonFormField<String>(
-            value: _selectedUniversity,
+            value: null,
             hint: Text("Select University"),
             isExpanded: true,
             icon: const Icon(Icons.arrow_downward),
@@ -233,6 +237,7 @@ class _InformationScreenState extends State<InformationScreen> {
             onChanged: (String? newValue) {
               setState(() {
                 _selectedUniversity = newValue!;
+                _universityController.text = _selectedUniversity ?? " ";
               });
             },
             items: _universities.map<DropdownMenuItem<String>>((String value) {
