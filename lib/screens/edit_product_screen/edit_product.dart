@@ -23,16 +23,17 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _discountPriceController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _discountPriceController =
+      TextEditingController();
   String? _selectedCategory;
   String? _selectedCondition;
   List<String> _imageUrls = [];
   bool _isLoading = false;
 
-  List<String> _categories = [
+  final List<String> _categories = [
     'Electronics',
     'Books',
     'Clothing',
@@ -40,7 +41,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'Toys'
   ];
 
-  List<String> _conditions = [
+  final List<String> _conditions = [
     'New',
     'Used - Like New',
     'Used - Good',
@@ -118,7 +119,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         height: 200,
                         child: GridView.builder(
                           gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             childAspectRatio: 1,
                           ),
@@ -130,7 +131,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               children: [
                                 Image.file(image, fit: BoxFit.cover),
                                 IconButton(
-                                  icon: Icon(Icons.close, color: Colors.red),
+                                  icon: const Icon(Icons.close,
+                                      color: Colors.red),
                                   onPressed: () {
                                     setState(() {
                                       _images.removeAt(index);
@@ -425,7 +427,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(),
       ),
     );

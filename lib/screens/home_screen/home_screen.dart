@@ -7,11 +7,11 @@ import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
-import 'package:unisouq/screens/profile_page/profile_screen.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
 import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 import '../information_Screen/information_screen.dart';
 
@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            child: Text(
+            child: const Text(
               'Settings',
               style: TextStyle(
                 color: Colors.white,
@@ -274,7 +274,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
+              child: const SizedBox(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  strokeWidth: 4.0,
+                ),
+              ),
+            );
           }
 
           // Group items by category
@@ -420,10 +428,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     0], // Use the first image URL
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) =>
-                                                    CircularProgressIndicator(),
+                                                    const CircularProgressIndicator(),
                                                 errorWidget:
                                                     (context, url, error) =>
-                                                        Icon(Icons.error),
+                                                        const Icon(Icons.error),
                                               )
                                             : Container(),
                                       ),
@@ -443,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        SizedBox(height: 4),
+                                        const SizedBox(height: 4),
                                         Row(
                                           children: [
                                             Text(
@@ -461,11 +469,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             if (discountedPrice >
                                                 0) // Display the original price if discounted price is available
-                                              SizedBox(width: 8),
+                                              const SizedBox(width: 8),
                                             if (discountedPrice > 0)
                                               Text(
                                                 '${price.toStringAsFixed(0)} SAR',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 12,
                                                   decoration: TextDecoration
                                                       .lineThrough,
@@ -626,17 +634,18 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Sign In Required"),
-          content: Text("Please sign in or sign up to access this feature."),
+          title: const Text("Sign In Required"),
+          content:
+              const Text("Please sign in or sign up to access this feature."),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Sign In"),
+              child: const Text("Sign In"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,
@@ -644,7 +653,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             TextButton(
-              child: Text("Sign Up"),
+              child: const Text("Sign Up"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,

@@ -54,7 +54,7 @@ class _AddProductState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: const Text('Add Product'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -67,14 +67,14 @@ class _AddProductState extends State<AddProductScreen> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: _showBottomSheet,
-                    child: Text('Add Pictures'),
+                    child: const Text('Add Pictures'),
                   ),
                   _images.isNotEmpty
                       ? SizedBox(
                           height: 200,
                           child: GridView.builder(
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 1,
                             ),
@@ -86,7 +86,8 @@ class _AddProductState extends State<AddProductScreen> {
                                 children: [
                                   Image.file(image, fit: BoxFit.cover),
                                   IconButton(
-                                    icon: Icon(Icons.close, color: Colors.red),
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.red),
                                     onPressed: () {
                                       setState(() {
                                         _images.removeAt(index);
@@ -101,7 +102,8 @@ class _AddProductState extends State<AddProductScreen> {
                       : Container(),
                   TextFormField(
                     controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Product Name'),
+                    decoration:
+                        const InputDecoration(labelText: 'Product Name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter the product name';
@@ -109,10 +111,10 @@ class _AddProductState extends State<AddProductScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCategory,
-                    hint: Text('Select Category'),
+                    hint: const Text('Select Category'),
                     onChanged: (value) {
                       setState(() {
                         _selectedCategory = value;
@@ -129,10 +131,10 @@ class _AddProductState extends State<AddProductScreen> {
                         value == null ? 'Please select a category' : null,
                     dropdownColor: Theme.of(context).secondaryHeaderColor,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCondition,
-                    hint: Text('Select Condition'),
+                    hint: const Text('Select Condition'),
                     onChanged: (value) {
                       setState(() {
                         _selectedCondition = value;
@@ -149,10 +151,10 @@ class _AddProductState extends State<AddProductScreen> {
                         value == null ? 'Please select a condition' : null,
                     dropdownColor: Theme.of(context).secondaryHeaderColor,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Description'),
+                    decoration: const InputDecoration(labelText: 'Description'),
                     maxLines: 3,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -161,12 +163,12 @@ class _AddProductState extends State<AddProductScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _priceController,
-                    decoration: InputDecoration(labelText: 'Price'),
+                    decoration: const InputDecoration(labelText: 'Price'),
                     keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^\d+\.?\d{0,2}')),
@@ -178,23 +180,23 @@ class _AddProductState extends State<AddProductScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _discountPriceController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText:
                             'Discounted Price'), // Added discounted price field
                     keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^\d+\.?\d{0,2}')),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitProduct,
-                    child: Text('Submit Product'),
+                    child: const Text('Submit Product'),
                   ),
                 ],
               ),
@@ -206,8 +208,8 @@ class _AddProductState extends State<AddProductScreen> {
   }
 
   Future<void> _pickImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile> pickedImages = await _picker.pickMultiImage(
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> pickedImages = await picker.pickMultiImage(
       imageQuality: 5,
     );
 
@@ -298,7 +300,7 @@ class _AddProductState extends State<AddProductScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/order_information/order_information.dart';
 import 'package:unisouq/utils/auth_utils.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 class RequestPage extends StatefulWidget {
   static const String id = 'request_page';
@@ -37,7 +38,14 @@ class _RequestPageState extends State<RequestPage> {
         future: clientId,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
+              child: const SizedBox(
+                child: CircularProgressIndicator(
+                  strokeWidth: 4.0,
+                ),
+              ),
+            );
           }
 
           if (snapshot.hasError) {
@@ -63,7 +71,14 @@ class _RequestPageState extends State<RequestPage> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
+            child: const SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 4.0,
+              ),
+            ),
+          );
         }
 
         List<DocumentSnapshot> requestDocs = snapshot.data!.docs;
@@ -83,7 +98,15 @@ class _RequestPageState extends State<RequestPage> {
                   .get(),
               builder: (context, itemSnapshot) {
                 if (itemSnapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
+                    child: const SizedBox(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 4.0,
+                      ),
+                    ),
+                  );
                 }
 
                 if (itemSnapshot.hasError) {
@@ -103,9 +126,9 @@ class _RequestPageState extends State<RequestPage> {
                   },
                   background: Container(
                     color: Colors.red,
-                    child: Icon(Icons.delete, color: Colors.white),
+                    child: const Icon(Icons.delete, color: Colors.white),
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 20.0),
                   ),
                   direction: DismissDirection.endToStart,
                   child: Padding(
@@ -178,7 +201,7 @@ class _RequestPageState extends State<RequestPage> {
                                       // Handle item removal action
                                       _removeItem(context, request.id);
                                     },
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                     color: Colors.red,
                                   ),
                                 ],
@@ -207,7 +230,7 @@ class _RequestPageState extends State<RequestPage> {
       SnackBar(
         content: Text(message),
         action: SnackBarAction(
-          label: 'Accept',
+          label: 'Accepted',
           onPressed: () {
             // Handle accept action
             _handleAccept(context, message, clientId, sellerID);
@@ -226,7 +249,7 @@ class _RequestPageState extends State<RequestPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Select or enter a reason for rejection'),
+          title: const Text('Select or enter a reason for rejection'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -245,7 +268,7 @@ class _RequestPageState extends State<RequestPage> {
               ListTile(
                 title: TextField(
                   controller: customReasonController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter custom reason',
                   ),
                 ),
@@ -266,14 +289,14 @@ class _RequestPageState extends State<RequestPage> {
                       .delete();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text(
                           'Please enter a reason or select from the list.'),
                     ),
                   );
                 }
               },
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
             ),
           ],
         );
@@ -317,7 +340,7 @@ class _RequestPageState extends State<RequestPage> {
         .delete()
         .then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Item removed successfully.'),
         ),
       );

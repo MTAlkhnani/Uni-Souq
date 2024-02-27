@@ -172,7 +172,7 @@ class _InformationScreenState extends State<InformationScreen> {
           bottom: 0,
           right: 0,
           child: MaterialButton(
-            elevation: 1,
+            elevation: 3,
             onPressed: _showBottomSheet,
             shape: const CircleBorder(),
             color: Colors.white,
@@ -244,7 +244,6 @@ class _InformationScreenState extends State<InformationScreen> {
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
             onChanged: (String? newValue) {
               setState(() {
                 _selectedUniversity = newValue!;
@@ -257,6 +256,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 child: Text(value),
               );
             }).toList(),
+            dropdownColor: Theme.of(context).secondaryHeaderColor,
           ),
         ],
       ),

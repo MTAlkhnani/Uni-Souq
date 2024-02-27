@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
-import 'package:unisouq/screens/information_screen/information_screen.dart';
+import 'package:unisouq/screens/profile_page1/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
-import 'package:unisouq/screens/profile_page/profile_screen.dart';
+
 import 'package:unisouq/screens/request_page/request_page.dart';
 import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
@@ -27,7 +27,7 @@ class AppRoutes {
   static const String resetPasswordScreen = '/reset_password_screen';
   static const String forgotPasswordScreen = '/forgot_password_screen';
   static const String initialRoute = 'welcome_screen';
-  
+
   static const String onboardingScreen = '/onboarding_screen';
   static const String informationScreen = '/information_screen';
   static const String homeScreen = '/home_screen';
@@ -37,7 +37,7 @@ class AppRoutes {
   static const String editProduct = '/edit_product';
   static const String contactclientspage = '/contact_clients_page';
   static const String myorderpage = '/myorder_page';
-  static const String profilepage = '/profile_page';
+
   static const String searchScreen = '/search_screen';
   static const String requestpage = '/request_page';
   static const String confirmationpage = '/confirmation_page';
@@ -51,8 +51,7 @@ class AppRoutes {
       case verificationCodeScreen:
         return MaterialPageRoute(
             builder: (_) => const VerificationCodeScreen());
-      case profilepage:
-        return MaterialPageRoute(builder: (_) => ProfileScreen());
+
       case resetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
       case forgotPasswordScreen:

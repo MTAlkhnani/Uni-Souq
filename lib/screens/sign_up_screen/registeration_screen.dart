@@ -8,7 +8,7 @@ import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/routes/app_routes.dart';
-import 'package:unisouq/screens/information_screen/information_screen.dart';
+import 'package:unisouq/screens/information_Screen/information_screen.dart';
 
 import '../../components/background.dart';
 // import '../customer_screen.dart';

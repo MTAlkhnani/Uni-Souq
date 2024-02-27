@@ -5,7 +5,7 @@ import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/custom_pin_code_text_field.dart';
 import 'package:unisouq/routes/app_routes.dart';
-import 'package:unisouq/screens/information_screen/information_screen.dart';
+
 
 // import 'package:unisouq/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:unisouq/screens/verification_code_screen/notifier/verification_code_notifier.dart';
