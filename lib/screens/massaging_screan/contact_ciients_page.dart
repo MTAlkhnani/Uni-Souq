@@ -121,10 +121,17 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                         itemBuilder: (context, index) {
                           QueryDocumentSnapshot room = chatRooms[index];
                           List<dynamic> participants = room['participants'];
-                          String otherUserId = participants
-                              .firstWhere((id) =>
-                                  id != FirebaseAuth.instance.currentUser!.uid)
-                              .toString();
+                          String? otherUserId = participants.firstWhere(
+                            (id) =>
+                                id != FirebaseAuth.instance.currentUser!.uid,
+                            orElse: () => null,
+                          ) as String?;
+
+                          if (otherUserId == null) {
+                            // Handle the case where otherUserId is null
+                            return SizedBox.shrink();
+                          }
+
                           String userName = _usersMap[otherUserId]!['name'] ??
                               'User not found';
                           String chatRoomId = _getChatRoomId(otherUserId);

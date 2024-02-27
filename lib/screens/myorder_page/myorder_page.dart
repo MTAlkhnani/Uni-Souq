@@ -182,7 +182,7 @@ class ResponseList extends StatelessWidget {
               return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return AlertDialog(
-                    title: const Text('Recipe Details'),
+                    title: const Text('Item Details'), // Changed title here
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

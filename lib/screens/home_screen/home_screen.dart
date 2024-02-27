@@ -390,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Calculate the discounted price if available
                           double price = double.parse(item['price'] ?? '0');
                           double discountedPrice =
-                              double.parse(item['discountedPrice'] ?? "0");
+                              double.parse(item['discountedPrice'] ?? "0.0");
                           double displayPrice =
                               discountedPrice > 0 ? discountedPrice : price;
 
