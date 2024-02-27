@@ -155,6 +155,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     },
                   ),
                 ),
+
                 Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.v),
@@ -262,7 +263,57 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               final sellerId = productData['sellerID'];
 
                               if (currentUserUid == sellerId) {
-                                // Render only if the current user is not the seller
+                                // Render both buttons in a row if the current user is the seller
+                                return Row(
+                                  children: [
+                                    // Add spacing between buttons
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        if (isUserSignedIn()) {
+                                          // Implement logic to contact the clients
+                                          _chatService.contactWithClients(
+                                              context, sellerId);
+                                        } else {
+                                          _showSignInRequiredPopup(context);
+                                        }
+                                      },
+                                      icon: const Icon(
+                                        Icons.message,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text(
+                                        'Contact the Clients',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 94, 204, 98)),
+                                    ),
+                                    SizedBox(width: 50.v),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        if (isUserSignedIn()) {
+                                          // Implement logic to edit the product
+                                          // Navigate to the edit product screen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProductScreen(
+                                                productData: productData,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          _showSignInRequiredPopup(context);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                // Render the contact button if the current user is not the seller
                                 return ElevatedButton.icon(
                                   onPressed: () {
                                     if (isUserSignedIn()) {
@@ -287,8 +338,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                 );
                               }
-                              // Render the bottom navigation bar if the current user is not the seller
-                              return SizedBox.shrink();
                             },
                           ),
                         ),
@@ -302,6 +351,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
+
                 // Comment input field
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -337,46 +387,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           );
         },
       ),
-      bottomNavigationBar: Builder(
-        builder: (context) {
-          final currentUserUid = getCurrentUserUid();
-          final sellerId = productData['sellerID'];
-
-          if (currentUserUid == sellerId) {
-            // Render only if the current user is not the seller
-            return SizedBox.shrink();
-          }
-          // Render the bottom navigation bar if the current user is not the seller
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _sendingInProgress || _isItemSold
-                          ? null
-                          : () {
-                              _showPriceInputDialog(); // Show the price input dialog
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                      ),
-                      child: Text(
-                        _sendingInProgress ? 'In Progress' : 'Request To Buy',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _sendingInProgress || _isItemSold
+                      ? null
+                      : () {
+                          _showPriceInputDialog(); // Show the price input dialog
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  child: Text(
+                    _sendingInProgress ? 'In Progress' : 'Request To Buy',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
   }
