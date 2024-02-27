@@ -26,6 +26,7 @@ class _InformationScreenState extends State<InformationScreen> {
   late TextEditingController _mobileNumberController;
   late TextEditingController _universityController;
   late TextEditingController _addressController;
+  late TextEditingController _imageController;
   String? _image;
   bool _isLoading = false;
 
@@ -64,6 +65,7 @@ class _InformationScreenState extends State<InformationScreen> {
     _mobileNumberController = TextEditingController();
     _universityController = TextEditingController();
     _addressController = TextEditingController();
+    _imageController = TextEditingController();
     _fetchUserData();
   }
 
@@ -74,7 +76,7 @@ class _InformationScreenState extends State<InformationScreen> {
     _mobileNumberController.dispose();
     _universityController.dispose();
     _addressController.dispose();
-
+    _imageController.dispose();
     super.dispose();
   }
 
@@ -94,6 +96,7 @@ class _InformationScreenState extends State<InformationScreen> {
         final mobileNumber = userData['phone'] ?? '';
         final university = userData['university'] ?? '';
         final address = userData['address'] ?? '';
+        final _image = userData['userImage'];
         print('${university.toString()}');
         setState(() {
           _nameController.text =
@@ -101,6 +104,7 @@ class _InformationScreenState extends State<InformationScreen> {
           _mobileNumberController.text = mobileNumber.toString();
           _selectedUniversity = university.toString();
           _addressController.text = address.toString();
+          _imageController.text = _image.toString();
         });
       } else {
         print('User document does not exist');
@@ -150,24 +154,11 @@ class _InformationScreenState extends State<InformationScreen> {
   Widget _buildProfileImage() {
     return Stack(
       children: [
-        // Profile picture
-        _image != null
-            ? ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(100), // Increase border radius
-                child: Image.file(
-                  File(_image!),
-                  width: 150.v,
-                  height: 150.h,
-                  fit: BoxFit.cover,
-                ),
-              )
-            : const CircleAvatar(
-                child: Icon(Icons.person),
-                radius: 50,
-              ),
-
-        // Edit image button
+        ClipRRect(
+          borderRadius: BorderRadius.circular(100), // Increase border radius
+          child: _determineImageWidget(),
+        ),
+        // Edit image button remains the same
         Positioned(
           bottom: 0,
           right: 0,
@@ -181,6 +172,20 @@ class _InformationScreenState extends State<InformationScreen> {
         ),
       ],
     );
+  }
+
+// Helper method to determine which widget to use for displaying the image
+  Widget _determineImageWidget() {
+    if (_image != null && _image!.isNotEmpty && !_image!.startsWith('http')) {
+      return Image.file(File(_image!),
+          width: 150, height: 150, fit: BoxFit.cover);
+    } else if (_imageController.text.isNotEmpty &&
+        Uri.tryParse(_imageController.text)?.isAbsolute == true) {
+      return Image.network(_imageController.text,
+          width: 150, height: 150, fit: BoxFit.cover);
+    } else {
+      return const CircleAvatar(child: Icon(Icons.person), radius: 50);
+    }
   }
 
   Widget _buildInputFieldWithName() {
@@ -238,16 +243,20 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           SizedBox(height: 8.v),
           DropdownButtonFormField<String>(
-            value: null,
+            // Set the dropdown's value to _selectedUniversity if it's a valid university, otherwise null.
+            value: _universities.contains(_selectedUniversity)
+                ? _selectedUniversity
+                : null,
             hint: Text("Select University"),
             isExpanded: true,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
             onChanged: (String? newValue) {
               setState(() {
-                _selectedUniversity = newValue!;
-                _universityController.text = _selectedUniversity ?? " ";
+                _selectedUniversity = newValue;
+                _universityController.text = newValue ?? "";
               });
             },
             items: _universities.map<DropdownMenuItem<String>>((String value) {
@@ -345,11 +354,12 @@ class _InformationScreenState extends State<InformationScreen> {
     final picker = ImagePicker();
     final image = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 80,
+      imageQuality: 5,
     );
     if (image != null) {
       setState(() {
         _image = image.path;
+        // print(_image);
       });
       _updateProfilePicture(File(_image!));
       Navigator.pop(context);
@@ -360,7 +370,7 @@ class _InformationScreenState extends State<InformationScreen> {
     final picker = ImagePicker();
     final image = await picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 80,
+      imageQuality: 5,
     );
     if (image != null) {
       setState(() {
@@ -380,13 +390,21 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   void onTapCompleteButton() async {
+    print('Local image path: $_image');
+    print('Network image URL: ${_imageController.text}');
     try {
+      if (_imageController.text.isNotEmpty) {
+        _image = _imageController.text;
+      }
+      // print(_imageController.text);
+      // print(_image);
+
       final profile = Profile(
         fName: _nameController.text.split(' ')[0], // Extract first name
         lName: _nameController.text.split(' ')[1], // Extract last name
         phone: int.parse(_mobileNumberController.text),
         userID: widget.userId,
-        university: _universityController.text,
+        university: _selectedUniversity,
         address: _addressController.text,
         userImage: _image,
       );
