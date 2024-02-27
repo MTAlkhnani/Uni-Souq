@@ -103,6 +103,17 @@ class ChatService extends ChangeNotifier {
       ),
     );
   }
+  void contactSellerproblem(BuildContext context, String receiverUserID, String productIssueMessage) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MessagingPage(
+          receiverUserID: receiverUserID,
+          initialMessage: productIssueMessage,
+        ),
+      ),
+    );
+  }
 
 
 
