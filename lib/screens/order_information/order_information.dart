@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:unisouq/screens/order_information/confirmation_page.dart';
+import 'package:unisouq/utils/auth_utils.dart';
 
 class OrderInformationScreen extends StatelessWidget {
   final String message;
+  final String clientId;
+  final String sellerID;
 
-  const OrderInformationScreen({Key? key, required this.message})
-      : super(key: key);
+  const OrderInformationScreen({
+    Key? key,
+    required this.message,
+    required this.clientId,
+    required this.sellerID,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +23,56 @@ class OrderInformationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Order Information'),
       ),
-      body: OrderForm(message: message),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('requests')
+            .where('clientId', isEqualTo: clientId)
+            .where('sellerID', isEqualTo: sellerID)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            var data = snapshot.data!.docs;
+            if (data.isNotEmpty) {
+              var document = data.first;
+              String clientId = document['clientId'];
+              String sellerID = document['sellerID'];
+              return OrderForm(
+                message: message,
+                clientId: clientId,
+                sellerID: sellerID,
+                productName: document['productName'],
+                itemDetails: document['message'],
+                orderId: document.id, // Pass the order ID
+              );
+            }
+          }
+          // You can return a loading indicator or error message here if needed
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 }
 
 class OrderForm extends StatefulWidget {
   final String message;
+  final String clientId;
+  final String sellerID;
+  final String productName;
+  final String itemDetails;
+  final String orderId; // Add order ID to track the specific order
 
-  const OrderForm({Key? key, required this.message}) : super(key: key);
+  const OrderForm({
+    Key? key,
+    required this.message,
+    required this.clientId,
+    required this.sellerID,
+    required this.productName,
+    required this.itemDetails,
+    required this.orderId,
+  }) : super(key: key);
 
   @override
   _OrderFormState createState() => _OrderFormState();
@@ -94,7 +145,7 @@ class _OrderFormState extends State<OrderForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  _confirmOrder(context);
+                  _confirmOrder(context, widget.itemDetails);
                 }
               },
               child: Text('Confirm Order'),
@@ -119,13 +170,7 @@ class _OrderFormState extends State<OrderForm> {
     }
   }
 
-  void _confirmOrder(BuildContext context) {
-    final message =
-        'Order confirmed: Location: $location, Pickup Time: $pickupTime, Final Price: $finalPrice';
-    _sendReceipt(context, message);
-  }
-
-  void _sendReceipt(BuildContext context, String message) {
+  Future<void> _sendReceipt(BuildContext context, String message) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -143,5 +188,114 @@ class _OrderFormState extends State<OrderForm> {
         );
       },
     );
+  }
+
+  void _confirmOrder(BuildContext context, String itemDetails) async {
+    final message =
+        'Order confirmed: \nLocation: $location \nPickup Time: $pickupTime \nFinal Price: $finalPrice \n$itemDetails';
+    _sendReceipt(context, message);
+
+    // Fetch the document based on the productName
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Item')
+        .where('title', isEqualTo: widget.productName)
+        .limit(1) // Limit to 1 document
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Get the first document
+      var document = querySnapshot.docs.first;
+
+      // Ensure that the document has the required fields
+      if (document.exists) {
+        // Access the data fields using null-aware operators or provide default values
+        String? sellerID = document['sellerID'];
+        String? productName = document['title'];
+
+        // Retrieve the clientId and ItemId from the requests collection
+        var clientData = await _fetchClientData(widget.productName);
+
+        // Optionally provide default values if the fields are null
+        sellerID ??= 'Default Seller ID';
+        productName ??= 'Default Product Name';
+
+        String? clientId = clientData['clientId'];
+        String? itemId = clientData['itemId'];
+
+        clientId ??= 'Default Client ID';
+        itemId ??= 'Default Item ID';
+
+        // Send response to the client
+        await sendResponse(
+            clientId, sellerID, productName, message, clientId, itemId);
+
+        // Update the order status to "Sold" in the Item collection
+        await FirebaseFirestore.instance
+            .collection('Item')
+            .doc(itemId)
+            .update({'status': 'Sold'});
+
+        // Navigate to the confirmation page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ConfirmationPage()),
+        );
+      } else {
+        // Handle the case where the document does not exist
+        print('Document does not exist for productName ${widget.productName}');
+      }
+    } else {
+      // Handle the case where no document is found
+      print('Document with productName ${widget.productName} not found');
+    }
+  }
+
+  Future<Map<String, String?>> _fetchClientData(String productName) async {
+    // Fetch the document from the requests collection based on productName
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('requests')
+        .where('productName', isEqualTo: productName)
+        .limit(1) // Limit to 1 document
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Get the first document
+      var document = querySnapshot.docs.first;
+
+      // Access the clientId and ItemId fields
+      String? clientId = document['clientId'];
+      String? itemId = document['ItemId'];
+
+      return {'clientId': clientId, 'itemId': itemId};
+    } else {
+      // Handle the case where no document is found
+      print(
+          'Document with productName $productName not found in requests collection');
+      return {'clientId': null, 'itemId': null};
+    }
+  }
+
+  Future<void> sendResponse(
+      String clientId,
+      String sellerID,
+      String productName,
+      String responseMessage,
+      String recipientClientId,
+      String itemId) async {
+    try {
+      // Send response to the client
+      await FirebaseFirestore.instance.collection('responses').add({
+        'clientId': clientId,
+        'sellerID': sellerID,
+        'productName': productName,
+        'responseMessage': responseMessage,
+        'recipientClientId': recipientClientId,
+        'itemId': itemId,
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e) {
+      print('Failed to send response: $e');
+      throw e;
+    }
   }
 }

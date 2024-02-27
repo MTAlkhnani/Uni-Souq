@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:unisouq/screens/customer_screen.dart';
+
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
-import 'package:unisouq/screens/notification_page/notification_page.dart';
+import 'package:unisouq/screens/myorder_page/myorder_page.dart';
+import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/profile_page/profile_screen.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
@@ -26,7 +27,7 @@ class AppRoutes {
   static const String resetPasswordScreen = '/reset_password_screen';
   static const String forgotPasswordScreen = '/forgot_password_screen';
   static const String initialRoute = 'welcome_screen';
-  static const String customerScreen = '/customer_screen';
+  
   static const String onboardingScreen = '/onboarding_screen';
   static const String informationScreen = '/information_screen';
   static const String homeScreen = '/home_screen';
@@ -35,10 +36,11 @@ class AppRoutes {
   static const String massagingPage = '/massaging_page';
   static const String editProduct = '/edit_product';
   static const String contactclientspage = '/contact_clients_page';
-  static const String notificationpage = '/notifications_page';
+  static const String myorderpage = '/myorder_page';
   static const String profilepage = '/profile_page';
   static const String searchScreen = '/search_screen';
   static const String requestpage = '/request_page';
+  static const String confirmationpage = '/confirmation_page';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -57,8 +59,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
       case initialRoute:
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
-      case customerScreen:
-        return MaterialPageRoute(builder: (_) => const CustomerScreen());
+
+      case confirmationpage:
+        return MaterialPageRoute(builder: (_) => ConfirmationPage());
       case searchScreen:
         return MaterialPageRoute(builder: (_) => const SearchScreen());
       case onboardingScreen:
@@ -90,8 +93,8 @@ class AppRoutes {
                 ));
       case contactclientspage:
         return MaterialPageRoute(builder: (_) => ContactClientsPage());
-      case notificationpage:
-        return MaterialPageRoute(builder: (_) => NotificationPage());
+      case myorderpage:
+        return MaterialPageRoute(builder: (_) => MyOrderpage());
       case requestpage:
         return MaterialPageRoute(builder: (_) => RequestPage());
       default:

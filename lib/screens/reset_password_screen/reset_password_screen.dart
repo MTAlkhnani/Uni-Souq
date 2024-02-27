@@ -6,7 +6,6 @@ import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
-import 'package:unisouq/screens/customer_screen.dart';
 import 'package:unisouq/screens/reset_password_screen/notifier/reset_password_notifier.dart';
 
 import 'package:unisouq/utils/size_utils.dart';
@@ -196,7 +195,7 @@ class ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   /// Navigates to the exploreShopScreen when the action is triggered.
   onTapConfirm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.customerScreen);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
     }
   }
 

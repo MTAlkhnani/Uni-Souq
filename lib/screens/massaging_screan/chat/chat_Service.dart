@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/models/massage.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
-import 'package:unisouq/screens/notification_page/notification_page.dart';
+import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 
 class ChatService extends ChangeNotifier {
@@ -104,27 +104,7 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-  Future<void> requestToBuy(
-      BuildContext context, Map<String, dynamic> productData) async {
-    String sellerId = productData['sellerID'];
-    String product = productData['title'] ?? 'Your Product';
-    double listingPrice = double.parse(productData['price'] ?? '0.0');
 
-    String message =
-        "I'm interested to buy $product with the listing price $listingPrice";
-
-    try {
-      // Send message directly to the seller without navigating to the messaging page
-      await sendMessage(sellerId, message);
-      // Show dialog if message sent successfully
-
-      // If you want to return something upon successful sending, you can return it here
-    } catch (e) {
-      // Handle errors if message sending fails
-      // You can throw an error or return something indicating the failure
-      throw e;
-    }
-  }
 
   void contactWithClients(BuildContext context, String sellerID) {
     Navigator.push(
@@ -137,7 +117,7 @@ class ChatService extends ChangeNotifier {
   }
 
   Future<void> sendRequest(String sellerID, String productName, String condtion,
-      String description, double listingPrice) async {
+      String description, double listingPrice, String productId) async {
     String message =
         "I'm interested to buy $productName with the \nPrice $listingPrice SAR\nCondtion: $condtion\nDescription : $description\n  ";
 
@@ -157,30 +137,10 @@ class ChatService extends ChangeNotifier {
         'message': message,
         'clientId': clientId,
         'timestamp': Timestamp.now(),
+        'ItemId': productId,
       });
     } catch (e) {
       print('Failed to send request: $e');
-      throw e;
-    }
-  }
-
-  Future<void> sendResponse(
-    String clientId,
-    String sellerID,
-    String productName,
-    String responseMessage,
-  ) async {
-    try {
-      // Send response to the client
-      await FirebaseFirestore.instance.collection('responses').add({
-        'clientId': clientId,
-        'sellerID': sellerID,
-        'productName': productName,
-        'responseMessage': responseMessage,
-        'timestamp': Timestamp.now(),
-      });
-    } catch (e) {
-      print('Failed to send response: $e');
       throw e;
     }
   }

@@ -74,72 +74,126 @@ class _RequestPageState extends State<RequestPage> {
             DocumentSnapshot request = requestDocs[index];
             String message = request['message'];
             String clientId = request['clientId'];
+            String itemId = request['ItemId'];
 
-            return Dismissible(
-              key: Key(request.id), // Unique key for each request
-              onDismissed: (direction) {
-                // Remove the item from Firestore when dismissed
-                FirebaseFirestore.instance
-                    .collection('requests')
-                    .doc(request.id)
-                    .delete();
-              },
-              background: Container(
-                color: Colors.red,
-                child: Icon(Icons.delete, color: Colors.white),
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 20.0),
-              ),
-              direction: DismissDirection.endToStart,
-              child: Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Card(
-                  child: ListTile(
-                    title: Text(message),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Client ID: $clientId'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('Item')
+                  .doc(itemId)
+                  .get(),
+              builder: (context, itemSnapshot) {
+                if (itemSnapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (itemSnapshot.hasError) {
+                  return Text('Error: ${itemSnapshot.error}');
+                }
+
+                bool isItemSold = itemSnapshot.data?['status'] == 'Sold';
+
+                return Dismissible(
+                  key: Key(request.id), // Unique key for each request
+                  onDismissed: (direction) {
+                    // Remove the item from Firestore when dismissed
+                    FirebaseFirestore.instance
+                        .collection('requests')
+                        .doc(request.id)
+                        .delete();
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    child: Icon(Icons.delete, color: Colors.white),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20.0),
+                  ),
+                  direction: DismissDirection.endToStart,
+                  child: Padding(
+                    padding: const EdgeInsets.all(7.0),
+                    child: Card(
+                      child: ListTile(
+                        title: Text(message),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                _handleAccept(context, message);
-                              },
-                              child: const Text('Accept'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _showRejectionReasonDialog(context,
-                                    request); // Pass the DocumentSnapshot
-                              },
-                              child: const Text(
-                                'Reject',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 193, 45, 34)),
+                            Text('Client ID: $clientId'),
+                            if (!isItemSold)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _handleAccept(
+                                          context,
+                                          message,
+                                          request['clientId'],
+                                          request['sellerID']);
+                                    },
+                                    child: const Text('Accept'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _showRejectionReasonDialog(context,
+                                          request); // Pass the DocumentSnapshot
+                                    },
+                                    child: const Text(
+                                      'Reject',
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 193, 45, 34)),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _contactClient(context, clientId);
+                                    },
+                                    child: const Text(
+                                      'Contact Client',
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 59, 186, 63)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _contactClient(context, clientId);
-                              },
-                              child: const Text(
-                                'Contact Client',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 59, 186, 63)),
-                              ),
-                            ),
+                            if (isItemSold)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _contactClient(context, clientId);
+                                    },
+                                    child: const Text(
+                                      'Contact Client',
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 59, 186, 63)),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      // Handle item removal action
+                                      _removeItem(context, request.id);
+                                    },
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.red,
+                                  ),
+                                ],
+                              )
                           ],
                         ),
-                      ],
+                        onTap: () {
+                          _showRequestSnackbar(context, message,
+                              request['clientId'], request['sellerID']);
+                        },
+                      ),
                     ),
-                    onTap: () {
-                      _showRequestSnackbar(context, message);
-                    },
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );
@@ -147,7 +201,8 @@ class _RequestPageState extends State<RequestPage> {
     );
   }
 
-  void _showRequestSnackbar(BuildContext context, String message) {
+  void _showRequestSnackbar(
+      BuildContext context, String message, String clientId, String sellerID) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -155,7 +210,7 @@ class _RequestPageState extends State<RequestPage> {
           label: 'Accept',
           onPressed: () {
             // Handle accept action
-            _handleAccept(context, message);
+            _handleAccept(context, message, clientId, sellerID);
           },
         ),
         duration: const Duration(seconds: 5),
@@ -229,12 +284,18 @@ class _RequestPageState extends State<RequestPage> {
   void _sendRejectionMessage(String reason) {
     // Implement your logic to send the rejection message to the client with the selected reason
   }
+
   // Modify _handleAccept method to navigate to the order information screen
-  void _handleAccept(BuildContext context, String message) {
+  void _handleAccept(
+      BuildContext context, String message, String clientId, String sellerID) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OrderInformationScreen(message: message),
+        builder: (context) => OrderInformationScreen(
+          message: message,
+          clientId: clientId,
+          sellerID: sellerID,
+        ),
       ),
     );
   }
@@ -246,5 +307,27 @@ class _RequestPageState extends State<RequestPage> {
         builder: (context) => MessagingPage(receiverUserID: clientId),
       ),
     );
+  }
+
+  void _removeItem(BuildContext context, String itemId) {
+    // Remove the item document from the Firestore collection
+    FirebaseFirestore.instance
+        .collection('Item')
+        .doc(itemId)
+        .delete()
+        .then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Item removed successfully.'),
+        ),
+      );
+    }).catchError((error) {
+      print('Error removing item: $error'); // Add debug logging
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to remove item: $error'),
+        ),
+      );
+    });
   }
 }

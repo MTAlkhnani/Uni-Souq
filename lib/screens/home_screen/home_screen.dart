@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
-import 'package:unisouq/screens/notification_page/notification_page.dart';
+import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/profile_page/profile_screen.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
@@ -545,7 +545,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: currentIconIndex == 2
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).cardColor.withOpacity(0.5),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MyOrderpage(), // Navigate to the ContactClientsPage
+                            ),
+                          );
+                        }),
                   ),
                 ],
               ),

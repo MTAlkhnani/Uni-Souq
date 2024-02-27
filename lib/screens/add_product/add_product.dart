@@ -334,6 +334,7 @@ class _AddProductState extends State<AddProductScreen> {
           'user': "N/A",
           'itemID': itemId,
           'imageURLs': validImageUrls,
+          'status': 'available', // Add item status
         });
 
         Navigator.of(context).pop();

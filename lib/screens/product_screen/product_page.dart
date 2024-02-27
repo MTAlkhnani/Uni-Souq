@@ -27,6 +27,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       TextEditingController(); // Controller for the comment input field
   late String _userName = ''; // Variable to hold the user's name
   bool _isLoading = false;
+  bool _isItemSold = false;
 
   final ChatService _chatService = ChatService();
   late Map<String, dynamic> productData = {};
@@ -37,6 +38,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     _fetchProductAndUser();
+    _checkItemStatus();
+  }
+
+  Future<void> _checkItemStatus() async {
+    try {
+      DocumentSnapshot itemSnapshot = await FirebaseFirestore.instance
+          .collection('Item')
+          .doc(widget.productId)
+          .get();
+
+      if (itemSnapshot.exists) {
+        setState(() {
+          _isItemSold = itemSnapshot['status'] == 'Sold';
+        });
+      } else {
+        setState(() {
+          _isItemSold = false;
+        });
+      }
+    } catch (e) {
+      print('Error checking item status: $e');
+    }
   }
 
   Future<void> _fetchProductAndUser() async {
@@ -184,6 +207,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           productData['description'] ?? '',
                           style: const TextStyle(fontSize: 16),
                         ),
+                        Text(
+                          'status : ${productData['status']}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
                         const SizedBox(height: 16),
                         // Seller's rating and share button
                         Row(
@@ -213,14 +240,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               icon: const Icon(Icons.share),
                               onPressed: () {
                                 // Implement share functionality
-                                final String productTitle = productData['title'] ?? 'No Title';
-                                final String productPrice = productData['price'].toString();
+                                final String productTitle =
+                                    productData['title'] ?? 'No Title';
+                                final String productPrice =
+                                    productData['price'].toString();
                                 final String shareContent =
                                     "Check out this product: $productTitle for $productPrice SAR on Uni-Souq!";
 
                                 // Using the share package to share the content
                                 Share.share(shareContent);
-
                               },
                             ),
                           ],
@@ -353,7 +381,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _sendingInProgress
+                  onPressed: _sendingInProgress || _isItemSold
                       ? null
                       : () {
                           _showPriceInputDialog(); // Show the price input dialog
@@ -427,12 +455,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
                 _sendRequestToSeller(
-                  productData['sellerID'],
-                  productData['title'],
-                  productData['condition'],
-                  productData['description'],
-                  enteredPrice,
-                );
+                    productData['sellerID'],
+                    productData['title'],
+                    productData['condition'],
+                    productData['description'],
+                    enteredPrice,
+                    widget.productId);
               },
               child: const Text('Send Request'),
             ),
@@ -442,14 +470,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  void _sendRequestToSeller(String sellerID, String productName,
-      String condtion, String description, double listingPrice) {
+  void _sendRequestToSeller(
+    String sellerID,
+    String productName,
+    String condtion,
+    String description,
+    double listingPrice,
+    String productId,
+  ) {
     setState(() {
       _sendingInProgress = true; // Set sending progress flag
     });
 
     ChatService()
-        .sendRequest(sellerID, productName, condtion, description, listingPrice)
+        .sendRequest(sellerID, productName, condtion, description, listingPrice,
+            productId)
         .then((_) {
       // Request sent successfully, show a confirmation dialog or perform other actions
       showDialog(
