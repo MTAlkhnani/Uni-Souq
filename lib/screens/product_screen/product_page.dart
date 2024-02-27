@@ -277,9 +277,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           _showSignInRequiredPopup(context);
                                         }
                                       },
-                                      icon: const Icon(Icons.message),
-                                      label: const Text('Contact the Clients'),
-                                      style: ElevatedButton.styleFrom(),
+                                      icon: const Icon(
+                                        Icons.message,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text(
+                                        'Contact the Clients',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 94, 204, 98)),
                                     ),
                                     SizedBox(width: 50.v),
                                     IconButton(
@@ -316,11 +324,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       _showSignInRequiredPopup(context);
                                     }
                                   },
-                                  icon: const Icon(Icons.message),
-                                  label: const Text('Contact the Seller'),
+                                  icon: const Icon(
+                                    Icons.message,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text(
+                                    'Contact the Seller',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        const Color.fromARGB(255, 77, 139, 79),
+                                        const Color.fromARGB(255, 94, 204, 98),
                                   ),
                                 );
                               }

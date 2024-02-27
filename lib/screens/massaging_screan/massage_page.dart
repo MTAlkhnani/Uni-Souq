@@ -177,12 +177,11 @@ class _MessagingPageState extends State<MessagingPage> {
               var profileData = snapshot.data!.data() as Map<String, dynamic>;
               String profileImageUrl = profileData['userImage'] ?? '';
               return CircleAvatar(
-                radius: 20,
-                backgroundImage: profileImageUrl.isNotEmpty
-                    ? CachedNetworkImageProvider(profileImageUrl)
-                        as ImageProvider
-                    : const AssetImage('path_to_placeholder_image'),
-              );
+                  radius: 20,
+                  backgroundImage: profileImageUrl.isNotEmpty
+                      ? CachedNetworkImageProvider(profileImageUrl)
+                          as ImageProvider
+                      : const AssetImage('assets/images/profile_Defulat.jpg'));
             },
           ),
           const SizedBox(width: 10),
