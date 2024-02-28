@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
@@ -320,59 +321,82 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Return a ListView to display categories and their items
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Popular categories section
               const Padding(
-                padding: EdgeInsets.only(left: 0, top: 5),
+                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 5),
                 child: Text(
                   'Popular Categories',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
+
+              // Popular categories section
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: popularCategories.map((category) {
-                    // Get the index of the current category
-                    int index = popularCategories.indexOf(category);
-                    // Get the corresponding icon
-                    IconData icon = popularCategoryIcons[index];
-                    // Check if the category is selected
-                    bool isSelected = selectedCategory == category;
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 1),
+                  child: Row(
+                    children: popularCategories.map((category) {
+                      // Get the index of the current category
+                      int index = popularCategories.indexOf(category);
+                      // Get the corresponding icon
+                      IconData icon = popularCategoryIcons[index];
+                      // Check if the category is selected
+                      bool isSelected = selectedCategory == category;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = category;
-                          });
-                        },
-                        child: Chip(
-                          avatar: Icon(icon,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .hintColor
-                                      .withOpacity(.7)),
-                          label: Text(
-                            category,
-                            style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = category;
+                            });
+                          },
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 28,
+                                backgroundColor: isSelected
+                                    ? Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.7)
                                     : Theme.of(context)
-                                        .hintColor
-                                        .withOpacity(.7)),
+                                        .scaffoldBackgroundColor
+                                        .withOpacity(.7),
+                                child: Icon(
+                                  icon,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Theme.of(context)
+                                          .shadowColor
+                                          .withOpacity(.7),
+                                ),
+                              ),
+                              const SizedBox(
+                                  height: 3), // Adjust spacing as needed
+                              Text(
+                                category,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Theme.of(context)
+                                          .hintColor
+                                          .withOpacity(.7)
+                                      : Theme.of(context)
+                                          .hintColor
+                                          .withOpacity(.7),
+                                ),
+                              ),
+                            ],
                           ),
-                          backgroundColor: isSelected
-                              ? Theme.of(context).primaryColor.withOpacity(.7)
-                              : Theme.of(context).scaffoldBackgroundColor,
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
+
               // Items section
               Expanded(
                 child: filteredItems != null && filteredItems.isNotEmpty
@@ -421,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Theme.of(context).scaffoldBackgroundColor,
                               elevation: 4,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(9),
+                                borderRadius: BorderRadius.circular(4),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,35 +109,54 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                     });
                   },
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (item['imageURLs'] != null &&
-                            item['imageURLs'].isNotEmpty)
-                          Image.network(
-                            item['imageURLs'][0],
-                            height: 120,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                        AspectRatio(
+                          aspectRatio: 16 / 10,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              color: Theme.of(context).hoverColor,
+                              child: item['imageURLs'] != null &&
+                                      item['imageURLs'].isNotEmpty
+                                  ? CachedNetworkImage(
+                                      imageUrl: item['imageURLs']
+                                          [0], // Use the first image URL
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    )
+                                  : Container(),
+                            ),
                           ),
+                        ),
                         SingleChildScrollView(
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: ListTile(
-                                  title: Text(
-                                    item['title'] ?? 'Item not available',
-                                    style: const TextStyle(fontSize: 12),
+                          child: Flexible(
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: ListTile(
+                                    title: Text(
+                                      item['title'] ?? 'Item not available',
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    subtitle: item['price'] != null
+                                        ? Text(
+                                            'Price: ${item['price']} SAR',
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          )
+                                        : null,
                                   ),
-                                  subtitle: item['price'] != null
-                                      ? Text(
-                                          'Price: ${item['price']} SAR',
-                                          style: const TextStyle(fontSize: 12),
-                                        )
-                                      : null,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],

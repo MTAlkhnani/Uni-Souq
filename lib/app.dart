@@ -45,6 +45,7 @@ class UniSouqApp extends ConsumerWidget {
           secondaryHeaderColor: const Color.fromRGBO(52, 47, 63, 1),
           hoverColor: Colors.white38,
           iconTheme: IconThemeData(color: Colors.deepPurple[300]),
+          shadowColor: Colors.white,
           textTheme: TextTheme(
             bodyText1: TextStyle(color: Colors.white),
             bodyText2: TextStyle(color: Colors.grey[300]),

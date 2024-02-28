@@ -1,13 +1,17 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_carousel_slider/carousel_slider.dart';
 
 import '../my_profile_page/my_profilepage.dart';
 
@@ -167,17 +171,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 // Product images slider
                 SizedBox(
                   height: 250,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: imageURLs.length,
-                    itemBuilder: (context, index) {
+                  child: CarouselSlider.builder(
+                    slideBuilder: (index) {
                       return Container(
-                        width: MediaQuery.of(context)
-                            .size
-                            .width, // Full width of the screen
+                        width: MediaQuery.of(context).size.width,
                         child: CachedNetworkImage(
                           imageUrl: imageURLs[index],
-                          fit: BoxFit.cover, // Fill the container
+                          fit: BoxFit.cover,
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
@@ -185,6 +185,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       );
                     },
+                    viewportFraction: .99,
+                    slideTransform: CubeTransform(),
+                    itemCount: imageURLs.length,
+                    initialPage: 0,
+                    enableAutoSlider: false,
+                    autoSliderTransitionTime: Duration(seconds: 2),
+                    autoSliderDelay: Duration(seconds: 2),
                   ),
                 ),
 
@@ -233,18 +240,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           'Condition: ${productData['condition']}',
                           style: const TextStyle(fontSize: 16),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         // Product description
                         Text(
                           productData['description'] ?? '',
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'status : ${productData['status']}',
+                          'Status : ${productData['status']}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 16),
-                        _buildSellerProfileButton(),
+                        Center(
+                            child:
+                                Container(child: _buildSellerProfileButton())),
                         // Seller's rating and share button
                         Row(
                           children: [
@@ -625,10 +634,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             horizontal: 24,
           ), // Button padding
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), // Button border radius
+            borderRadius: BorderRadius.circular(20), // Button border radius
           ),
         ),
-        child: Text('View Seller Profile'),
+        child: Text(
+          'View Seller Profile',
+          style: TextStyle(fontSize: 18),
+        ),
       ),
     );
   }
