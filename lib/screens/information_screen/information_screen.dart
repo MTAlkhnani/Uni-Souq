@@ -184,7 +184,28 @@ class _InformationScreenState extends State<InformationScreen> {
       return Image.network(_imageController.text,
           width: 150, height: 150, fit: BoxFit.cover);
     } else {
-      return const CircleAvatar(child: Icon(Icons.person), radius: 50);
+      return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Profile')
+            .doc(widget.userId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const CircularProgressIndicator(); // Show loading indicator if data is not yet available
+          }
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
+          final defaultImage = userData['defaultImage'];
+          if (defaultImage != null && defaultImage.isNotEmpty) {
+            return Image.network(defaultImage,
+                width: 150, height: 150, fit: BoxFit.cover);
+          } else {
+            return const CircleAvatar(
+                child: Icon(Icons.person),
+                radius:
+                    50); // Use default placeholder if defaultImage is not available
+          }
+        },
+      );
     }
   }
 

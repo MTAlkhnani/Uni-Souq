@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:unisouq/screens/information_screen/information_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   final String userId; // Accept userId as a parameter
@@ -20,11 +21,23 @@ class _ProfilePageState extends State<ProfilePage> {
   double sellerRating = 0.0; // Variable to store seller's rating
   int numRatings = 0; // Variable to store the number of ratings
 
+  late String currentUserId; // Variable to store the current user's ID
+
   @override
   void initState() {
     super.initState();
     fetchUserData();
     fetchSellerRating(); // Fetch the seller's rating when the page initializes
+    getCurrentUserId(); // Get the current user's ID
+  }
+
+  Future<void> getCurrentUserId() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        currentUserId = user.uid;
+      });
+    }
   }
 
   Future<void> fetchUserData() async {
@@ -68,16 +81,32 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        actions: [
+          if (currentUserId ==
+              widget
+                  .userId) // Display edit button if it's the current user's profile
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () async {
+                // Navigate to the edit profile page
+                // You can implement the navigation logic here
+                final newIndex = await Navigator.push<int>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InformationScreen(
+                        userId: FirebaseAuth.instance.currentUser!.uid),
+                  ),
+                );
+              },
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
+            _buildDefaultProfileImage(),
             const SizedBox(height: 20),
             Text(
               userName,
@@ -97,9 +126,9 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Rating: ',
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16),
                 ),
                 RatingBar.builder(
                   initialRating: sellerRating,
@@ -108,8 +137,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   allowHalfRating: true,
                   itemCount: 5,
                   itemSize: 20,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                  itemBuilder: (context, _) => Icon(
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  itemBuilder: (context, _) => const Icon(
                     Icons.star,
                     color: Colors.amber,
                   ),
@@ -162,6 +191,33 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDefaultProfileImage() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(widget.userId)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const CircularProgressIndicator(); // Show loading indicator if data is not yet available
+        }
+        final userData = snapshot.data!.data() as Map<String, dynamic>;
+        final defaultImage = userData['defaultImage'];
+        if (defaultImage != null && defaultImage.isNotEmpty) {
+          return CircleAvatar(
+            backgroundImage: Image.network(defaultImage).image,
+            radius: 50,
+          );
+        } else {
+          return CircleAvatar(
+            backgroundImage: AssetImage('assets/images/profile_Default.jpg'),
+            radius: 50,
+          ); // Use default placeholder if defaultImage is not available
+        }
+      },
     );
   }
 }

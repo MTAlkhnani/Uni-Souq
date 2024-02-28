@@ -31,15 +31,14 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Number of tabs
+      length: 2, // Number of tabs
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Network'),
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(text: 'My Collection'),
               Tab(text: 'My Clients'),
-              Tab(text: 'My profile'),
             ],
           ),
         ),
@@ -47,9 +46,6 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
           children: [
             _buildMyCollectionTab(),
             ContactClientsPage(),
-            ProfilePage(
-              userId: currentUserId,
-            ), // Use ContactClientsPage for "My Clients" tab
           ],
         ),
       ),

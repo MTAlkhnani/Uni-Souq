@@ -6,6 +6,7 @@ import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
+import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
@@ -592,7 +593,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           final newIndex = await Navigator.push<int>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => InformationScreen(
+                              builder: (context) => ProfilePage(
                                   userId:
                                       FirebaseAuth.instance.currentUser!.uid),
                             ),
