@@ -245,17 +245,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               'Seller Rating: ',
                               style: TextStyle(fontSize: 16),
                             ),
-                            Row(
-                              children: List.generate(
-                                5,
-                                (index) => Icon(
-                                  Icons.star,
-                                  color: index < _sellerRating
-                                      ? Colors.orange
-                                      : Colors.grey[400],
-                                ),
-                              ),
-                            ),
+                            _sellerRating != null
+                                ? Row(
+                                    children: List.generate(
+                                      5,
+                                      (index) => Icon(
+                                        Icons.star,
+                                        color: index < _sellerRating!
+                                            ? Colors.orange
+                                            : Colors.grey[400],
+                                      ),
+                                    ),
+                                  )
+                                : const CircularProgressIndicator(),
                             const SizedBox(width: 8),
                             Text(
                               '($_numRatings)',
@@ -334,22 +336,78 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: _sendingInProgress || _isItemSold
-                      ? null
-                      : () {
-                          _showPriceInputDialog(); // Show the price input dialog
-                        },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  child: Text(
-                    _sendingInProgress ? 'In Progress' : 'Request To Buy',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
-                  ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Item')
+                      .doc(widget.productId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ElevatedButton(
+                        onPressed: null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).disabledColor,
+                        ),
+                        child: Text(
+                          'Loading...',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                        ),
+                      );
+                    }
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return ElevatedButton(
+                        onPressed: null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).disabledColor,
+                        ),
+                        child: Text(
+                          'Product Not Found',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                        ),
+                      );
+                    }
+                    final itemData =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    final sellerID = itemData['sellerID'];
+                    if (sellerID == getCurrentUserUid()) {
+                      return ElevatedButton(
+                        onPressed: null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).disabledColor,
+                        ),
+                        child: Text(
+                          'You Are The Seller',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                        ),
+                      );
+                    }
+                    return ElevatedButton(
+                      onPressed: _sendingInProgress || _isItemSold
+                          ? null
+                          : () {
+                              _showPriceInputDialog(); // Show the price input dialog
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      child: Text(
+                        _sendingInProgress ? 'In Progress' : 'Request To Buy',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
