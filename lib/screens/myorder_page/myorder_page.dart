@@ -375,11 +375,9 @@ class ResponseList extends StatelessWidget {
                 Icons.close,
                 color: Color.fromARGB(255, 184, 31, 20),
               ),
-              label: const Text(
+              label: Text(
                 'Close',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 184, 31, 20),
-                ),
+                style: TextStyle(color: Theme.of(context).hintColor),
               ),
             ),
             const SizedBox(width: 8), // Add spacing between buttons

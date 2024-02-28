@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
+import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
@@ -115,6 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
           }),
           _buildDrawerListTile(Icons.language, 'Language', () {
             // Implement navigation to language settings
+          }),
+          _buildDrawerListTile(Icons.shopping_bag, 'My Collection', () {
+            // Implement navigation to language settings
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyCollectionPage(),
+              ),
+            );
           }),
           _buildDrawerListTile(Icons.help, 'Help Center', () {
             // Implement navigation to help center

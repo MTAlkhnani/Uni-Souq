@@ -47,6 +47,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'Used - Good',
     'Used - Acceptable'
   ];
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   List<File> _images = [];
   @override
@@ -69,6 +73,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Product'),
+        actions: [
+          // IconButton(
+          //   icon: Icon(Icons.delete),
+          //   onPressed: () {
+          //     _deleteItem(widget.productData['itemID']);
+          //   },
+          // ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -305,6 +317,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
       }
 
       setState(() => _isLoading = false);
+    }
+  }
+
+  void _deleteItem(String itemId) async {
+    try {
+      await FirebaseFirestore.instance.collection('Item').doc(itemId).delete();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Item deleted successfully'),
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting item: ${error.toString()}'),
+        ),
+      );
     }
   }
 

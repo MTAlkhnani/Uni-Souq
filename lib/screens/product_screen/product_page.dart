@@ -290,26 +290,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                               255, 94, 204, 98)),
                                     ),
                                     SizedBox(width: 50.v),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () {
-                                        if (isUserSignedIn()) {
-                                          // Implement logic to edit the product
-                                          // Navigate to the edit product screen
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditProductScreen(
-                                                productData: productData,
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          _showSignInRequiredPopup(context);
-                                        }
-                                      },
-                                    ),
                                   ],
                                 );
                               } else {

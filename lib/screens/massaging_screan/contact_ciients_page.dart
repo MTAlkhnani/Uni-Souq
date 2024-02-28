@@ -90,9 +90,6 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Contact Clients'),
-      ),
       body: _usersMap.isEmpty
           ? Center(child: CircularProgressIndicator())
           : StreamBuilder<QuerySnapshot>(
