@@ -6,7 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 
-import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart'; // Import the ContactClientsPage
+import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
+import 'package:unisouq/screens/my_profile_page/my_profilepage.dart'; // Import the ContactClientsPage
 
 class MyCollectionPage extends StatefulWidget {
   @override
@@ -30,21 +31,25 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 3, // Number of tabs
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('My Collection & Clients'),
+          title: const Text('My Network'),
           bottom: TabBar(
             tabs: [
               Tab(text: 'My Collection'),
               Tab(text: 'My Clients'),
+              Tab(text: 'My profile'),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             _buildMyCollectionTab(),
-            ContactClientsPage(), // Use ContactClientsPage for "My Clients" tab
+            ContactClientsPage(),
+            ProfilePage(
+              userId: currentUserId,
+            ), // Use ContactClientsPage for "My Clients" tab
           ],
         ),
       ),

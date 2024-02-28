@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:unisouq/components/chat_babble.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
@@ -175,13 +176,29 @@ class _MessagingPageState extends State<MessagingPage> {
                 );
               }
               var profileData = snapshot.data!.data() as Map<String, dynamic>;
-              String profileImageUrl = profileData['userImage'] ?? '' ;
-              return CircleAvatar(
+              String profileImageUrl = profileData['userImage'] ?? '';
+              String receiverName =
+                  '${profileData['FirstName']} ${profileData['LastName']}';
+              return GestureDetector(
+                onTap: () {
+                  // Navigate to the profile page when the avatar is tapped
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                        userId: widget.receiverUserID,
+                      ),
+                    ),
+                  );
+                },
+                child: CircleAvatar(
                   radius: 20,
                   backgroundImage: profileImageUrl.isNotEmpty
                       ? CachedNetworkImageProvider(profileImageUrl)
                           as ImageProvider
-                      : const AssetImage('assets/images/profile_Defulat.jpg'));
+                      : const AssetImage('assets/images/profile_Defulat.jpg'),
+                ),
+              );
             },
           ),
           const SizedBox(width: 10),

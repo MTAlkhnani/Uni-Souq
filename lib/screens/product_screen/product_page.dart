@@ -21,8 +21,8 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Future<DocumentSnapshot> _productFuture;
-  int _sellerRating = 4; // Set the seller's rating
-  int _numRatings = 150; // Set the number of ratings
+  late int _sellerRating = 0; // Set the seller's rating
+  late int _numRatings = 0; // Set the number of ratings
   TextEditingController _commentController =
       TextEditingController(); // Controller for the comment input field
   late String _userName = ''; // Variable to hold the user's name
@@ -81,14 +81,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       productData = productSnapshot.data()
           as Map<String, dynamic>; // Assign to class-level variable
 
-      if (productData == null || !productData.containsKey('userId')) {
+      if (productData == null || !productData.containsKey('sellerID')) {
         setState(() {
           _userName = '';
         });
         return;
       }
 
-      String userId = productData['userId'];
+      String userId = productData['sellerID'];
 
       DocumentSnapshot userSnapshot =
           await FirebaseFirestore.instance.collection('User').doc(userId).get();
@@ -96,9 +96,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       setState(() {
         _userName = userSnapshot['FirstName'] + ' ' + userSnapshot['LastName'];
       });
+
+      // Fetch the seller's rating
+      await fetchSellerRating(userId);
     } catch (e) {
       print('Error fetching product and user data: $e');
     }
+  }
+
+  Future<void> fetchSellerRating(String sellerId) async {
+    try {
+      final QuerySnapshot ratingSnapshot = await FirebaseFirestore.instance
+          .collection('Rating')
+          .where('sellerId', isEqualTo: sellerId)
+          .get();
+
+      // Calculate the average rating
+      if (ratingSnapshot.docs.isNotEmpty) {
+        double totalRating = 0;
+        _numRatings =
+            ratingSnapshot.docs.length; // Update the number of ratings
+        ratingSnapshot.docs.forEach((doc) {
+          totalRating += doc['rating'] as double;
+        });
+        _sellerRating = (totalRating / _numRatings).toInt();
+      }
+    } catch (e) {
+      print('Error fetching seller rating: $e');
+    }
+    setState(() {});
   }
 
   @override
@@ -255,72 +281,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         const SizedBox(height: 16),
                         // Button to contact the seller or client
-                        Padding(
-                          padding: const EdgeInsets.all(9.0),
-                          child: Builder(
-                            builder: (context) {
-                              final currentUserUid = getCurrentUserUid();
-                              final sellerId = productData['sellerID'];
-
-                              if (currentUserUid == sellerId) {
-                                // Render both buttons in a row if the current user is the seller
-                                return Row(
-                                  children: [
-                                    // Add spacing between buttons
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        if (isUserSignedIn()) {
-                                          // Implement logic to contact the clients
-                                          _chatService.contactWithClients(
-                                              context, sellerId);
-                                        } else {
-                                          _showSignInRequiredPopup(context);
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.message,
-                                        color: Colors.white,
-                                      ),
-                                      label: const Text(
-                                        'Contact the Clients',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                              255, 94, 204, 98)),
-                                    ),
-                                    SizedBox(width: 50.v),
-                                  ],
-                                );
-                              } else {
-                                // Render the contact button if the current user is not the seller
-                                return ElevatedButton.icon(
-                                  onPressed: () {
-                                    if (isUserSignedIn()) {
-                                      // Implement logic to contact the seller
-                                      _chatService.contactSeller(
-                                          context, sellerId);
-                                    } else {
-                                      _showSignInRequiredPopup(context);
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.message,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text(
-                                    'Contact the Seller',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 94, 204, 98),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
                       ]),
                 ),
                 Padding(
