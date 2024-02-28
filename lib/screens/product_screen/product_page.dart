@@ -9,6 +9,8 @@ import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../my_profile_page/my_profilepage.dart';
+
 class ProductDetailPage extends StatefulWidget {
   static const String id = 'product_Detail';
   final String productId;
@@ -39,6 +41,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.initState();
     _fetchProductAndUser();
     _checkItemStatus();
+  }
+
+  String getSellerUserID() {
+    return productData['sellerID'];
   }
 
   Future<void> _checkItemStatus() async {
@@ -238,6 +244,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 16),
+                        _buildSellerProfileButton(),
                         // Seller's rating and share button
                         Row(
                           children: [
@@ -589,6 +596,40 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildSellerProfileButton() {
+    return Card(
+      elevation: 3, // Card elevation
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10), // Card border radius
+      ),
+      child: ElevatedButton(
+        onPressed: () {
+          // Navigate to the seller's profile screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                userId: getSellerUserID(),
+              ),
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 48, 177, 52), // Text color
+          padding: EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 24,
+          ), // Button padding
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Button border radius
+          ),
+        ),
+        child: Text('View Seller Profile'),
+      ),
     );
   }
 
