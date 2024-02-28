@@ -256,7 +256,8 @@ class _RequestPageState extends State<RequestPage> {
               ...rejectionReasons.map((reason) => ListTile(
                     title: Text(reason),
                     onTap: () {
-                      _sendRejectionMessage(reason);
+                      _sendRejectionMessage(request['sellerID'],
+                          request['ItemId'], request['clientId'], reason);
                       Navigator.pop(context);
                       // Delete the request document from Firestore
                       FirebaseFirestore.instance
@@ -280,7 +281,8 @@ class _RequestPageState extends State<RequestPage> {
               onPressed: () {
                 String customReason = customReasonController.text.trim();
                 if (customReason.isNotEmpty) {
-                  _sendRejectionMessage(customReason);
+                  _sendRejectionMessage(request['sellerID'], request['ItemId'],
+                      request['clientId'], customReason);
                   Navigator.pop(context);
                   // Delete the request document from Firestore
                   FirebaseFirestore.instance
@@ -304,13 +306,31 @@ class _RequestPageState extends State<RequestPage> {
     );
   }
 
-  void _sendRejectionMessage(String reason) {
-    // Implement your logic to send the rejection message to the client with the selected reason
+  void _sendRejectionMessage(
+      String sellerId, String itemId, String clientId, String massage) {
+    String rejectionMessage = massage;
+    String status = 'rejected'; // Use a string to represent the status
+
+    // Use Firestore to send the rejection message
+    FirebaseFirestore.instance.collection('responses').add({
+      "sellerID": sellerId,
+      'clientId': clientId,
+      'productName': null, // Pass the product name
+      'itemId': itemId,
+      'responseMessage': rejectionMessage,
+      'status': status, // Use the string status
+      'timestamp': Timestamp.now(),
+    }).then((value) {
+      print('Rejection message sent successfully.');
+    }).catchError((error) {
+      print('Failed to send rejection message: $error');
+    });
   }
 
   // Modify _handleAccept method to navigate to the order information screen
   void _handleAccept(
       BuildContext context, String message, String clientId, String sellerID) {
+    String status = 'accepted';
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -318,6 +338,7 @@ class _RequestPageState extends State<RequestPage> {
           message: message,
           clientId: clientId,
           sellerID: sellerID,
+          state: status,
         ),
       ),
     );

@@ -9,12 +9,14 @@ class OrderInformationScreen extends StatelessWidget {
   final String message;
   final String clientId;
   final String sellerID;
+  final String state;
 
   const OrderInformationScreen({
     Key? key,
     required this.message,
     required this.clientId,
     required this.sellerID,
+    required this.state,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class OrderInformationScreen extends StatelessWidget {
                 productName: document['productName'],
                 itemDetails: document['message'],
                 orderId: document.id, // Pass the order ID
+                state: state,
               );
             }
           }
@@ -63,16 +66,18 @@ class OrderForm extends StatefulWidget {
   final String productName;
   final String itemDetails;
   final String orderId; // Add order ID to track the specific order
+  final String state;
 
-  const OrderForm({
-    Key? key,
-    required this.message,
-    required this.clientId,
-    required this.sellerID,
-    required this.productName,
-    required this.itemDetails,
-    required this.orderId,
-  }) : super(key: key);
+  const OrderForm(
+      {Key? key,
+      required this.message,
+      required this.clientId,
+      required this.sellerID,
+      required this.productName,
+      required this.itemDetails,
+      required this.orderId,
+      required this.state})
+      : super(key: key);
 
   @override
   _OrderFormState createState() => _OrderFormState();
@@ -226,8 +231,8 @@ class _OrderFormState extends State<OrderForm> {
         itemId ??= 'Default Item ID';
 
         // Send response to the client
-        await sendResponse(
-            clientId, sellerID, productName, message, clientId, itemId);
+        await sendResponse(clientId, sellerID, productName, message, clientId,
+            itemId, widget.state);
 
         // Update the order status to "Sold" in the Item collection
         await FirebaseFirestore.instance
@@ -281,7 +286,8 @@ class _OrderFormState extends State<OrderForm> {
       String productName,
       String responseMessage,
       String recipientClientId,
-      String itemId) async {
+      String itemId,
+      String state) async {
     try {
       // Send response to the client
       await FirebaseFirestore.instance.collection('responses').add({
@@ -291,6 +297,7 @@ class _OrderFormState extends State<OrderForm> {
         'responseMessage': responseMessage,
         'recipientClientId': recipientClientId,
         'itemId': itemId,
+        'status': state,
         'timestamp': Timestamp.now(),
       });
     } catch (e) {
