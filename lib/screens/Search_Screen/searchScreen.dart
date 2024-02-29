@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -12,11 +13,34 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<DocumentSnapshot> _searchResults = [];
+  List<String> _suggestedKeywords = [
+    'book',
+    'Sony',
+    'Watches',
+    'Accessories',
+    'frige',
+    'Home Decor',
+  ];
+
+  late FocusNode _searchFocusNode;
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void searchItems(String query) async {
     var collection = FirebaseFirestore.instance.collection('Item');
-    var snapshots = await collection
-        .get(); // Note: Consider scalability and cost implications
+    var snapshots = await collection.get();
 
     String searchLowercase = query.toLowerCase();
 
@@ -26,7 +50,6 @@ class _SearchScreenState extends State<SearchScreen> {
       final condition = doc.get('condition') as String;
       final description = doc.get('description') as String;
 
-      // Check if any of the fields contain the search query
       return title.toLowerCase().contains(searchLowercase) ||
           category.toLowerCase().contains(searchLowercase) ||
           condition.toLowerCase().contains(searchLowercase) ||
@@ -55,162 +78,214 @@ class _SearchScreenState extends State<SearchScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchBar(
-                onSearchChanged: (query) => searchItems(query),
+                onSearchChanged: (query) {
+                  setState(() {
+                    _searchController.text = query;
+                  });
+                  searchItems(query);
+                },
+                focusNode: _searchFocusNode,
+                controller: _searchController,
               ),
             ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('Item').snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Column(
-                  children: [
-                    // Items section
-                    _searchResults != null && _searchResults.isNotEmpty
-                        ? GridView.builder(
-                            shrinkWrap: true,
-                            physics:
-                                NeverScrollableScrollPhysics(), // Important
-                            padding: EdgeInsets.fromLTRB(
-                              8,
-                              8,
-                              8,
-                              MediaQuery.of(context).size.height *
-                                  0.05, // Adjust the bottom padding using MediaQuery
-                            ),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.8,
-                            ),
-                            itemCount: _searchResults.length,
-                            // Inside the GridView.builder itemBuilder method, update the UI of each item card
-                            itemBuilder: (context, index) {
-                              final item = _searchResults[index].data()
-                                  as Map<String, dynamic>;
+            if ((!_searchFocusNode.hasFocus &&
+                    _searchController.text.isEmpty &&
+                    _searchResults.isEmpty) ||
+                (_searchFocusNode.hasFocus &&
+                    _searchController.text.isEmpty &&
+                    _searchResults.isEmpty))
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding:
+                    EdgeInsets.symmetric(vertical: 120.v, horizontal: 10.h),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 18,
+                  childAspectRatio:
+                      1.75, // Adjust this value to make the containers smaller
+                ),
+                itemCount: _suggestedKeywords.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _searchController.text = _suggestedKeywords[index];
+                      });
+                      searchItems(_suggestedKeywords[index]);
+                    },
+                    child: Card(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: Center(
+                        child: Text(
+                          _suggestedKeywords[index],
+                          style: TextStyle(
+                            fontSize:
+                                14, // Adjust the font size to make the keywords smaller
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            if (!_searchFocusNode.hasFocus &&
+                    _searchController.text.isNotEmpty &&
+                    _searchResults.isEmpty ||
+                _searchFocusNode.hasFocus &&
+                    _searchController.text.isNotEmpty &&
+                    _searchResults.isEmpty)
+              Center(child: Text('No items found.')),
+            if ((_searchFocusNode.hasFocus &&
+                    _searchController.text.isNotEmpty &&
+                    _searchResults.isNotEmpty) ||
+                (!_searchFocusNode.hasFocus &&
+                    _searchController.text.isNotEmpty &&
+                    _searchResults.isNotEmpty))
+              StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection('Item').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return (_searchFocusNode.hasFocus &&
+                              _searchResults.isNotEmpty &&
+                              _searchController.text.isNotEmpty) ||
+                          (!_searchFocusNode.hasFocus &&
+                              _searchResults.isNotEmpty &&
+                              _searchController.text.isNotEmpty)
+                      ? GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.all(8),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.8,
+                          ),
+                          itemCount: _searchResults.length,
+                          itemBuilder: (context, index) {
+                            final item = _searchResults[index].data()
+                                as Map<String, dynamic>;
 
-                              // Calculate the discounted price if available
-                              double price = double.parse(item['price'] ?? '0');
-                              double discountedPrice =
-                                  double.parse(item['discountedPrice'] ?? "0");
-                              double displayPrice =
-                                  discountedPrice > 0 ? discountedPrice : price;
+                            double price = double.parse(item['price'] ?? '0');
+                            double discountedPrice =
+                                double.parse(item['discountedPrice'] ?? "0");
+                            double displayPrice =
+                                discountedPrice > 0 ? discountedPrice : price;
 
-                              return GestureDetector(
-                                onTap: () {
-                                  // Navigate to the product detail screen
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId: _searchResults[index].id,
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailPage(
+                                      productId: _searchResults[index].id,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AspectRatio(
+                                      aspectRatio: 16 / 14,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Container(
+                                          color: Theme.of(context).hoverColor,
+                                          child: item['imageURLs'] != null &&
+                                                  item['imageURLs'].isNotEmpty
+                                              ? CachedNetworkImage(
+                                                  imageUrl: item['imageURLs']
+                                                      [0],
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                )
+                                              : Container(),
+                                        ),
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Card(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(9),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AspectRatio(
-                                        aspectRatio: 16 / 14,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: Container(
-                                            color: Theme.of(context).hoverColor,
-                                            child: item['imageURLs'] != null &&
-                                                    item['imageURLs'].isNotEmpty
-                                                ? CachedNetworkImage(
-                                                    imageUrl: item['imageURLs'][
-                                                        0], // Use the first image URL
-                                                    fit: BoxFit.cover,
-                                                    placeholder: (context,
-                                                            url) =>
-                                                        CircularProgressIndicator(),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(Icons.error),
-                                                  )
-                                                : Container(),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item['title'] ?? '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              item['title'] ?? '',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            SizedBox(height: 4),
-                                            Row(
-                                              children: [
+                                          SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${displayPrice.toStringAsFixed(0)} SAR',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: discountedPrice > 0
+                                                      ? Theme.of(context)
+                                                          .hintColor
+                                                          .withOpacity(0.7)
+                                                      : null,
+                                                ),
+                                              ),
+                                              if (discountedPrice > 0)
+                                                SizedBox(width: 8),
+                                              if (discountedPrice > 0)
                                                 Text(
-                                                  '${displayPrice.toStringAsFixed(0)} SAR',
+                                                  '${price.toStringAsFixed(0)} SAR',
                                                   style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: discountedPrice > 0
-                                                        ? Theme.of(context)
-                                                            .hintColor
-                                                            .withOpacity(
-                                                                0.7) // If discounted price is available, display it in red
-                                                        : null, // Otherwise, use the default text color
+                                                    fontSize: 12,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: Colors.red,
                                                   ),
                                                 ),
-                                                if (discountedPrice >
-                                                    0) // Display the original price if discounted price is available
-                                                  SizedBox(width: 8),
-                                                if (discountedPrice > 0)
-                                                  Text(
-                                                    '${price.toStringAsFixed(0)} SAR',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text('No items found.'),
-                          ),
-                  ],
-                );
-              },
-            ),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(); // Empty SizedBox when no items found and search bar not focused
+                },
+              ),
           ],
         ),
       ),
@@ -220,7 +295,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
 class SearchBar extends StatelessWidget {
   final Function(String) onSearchChanged;
-  const SearchBar({Key? key, required this.onSearchChanged}) : super(key: key);
+  final FocusNode focusNode;
+  final TextEditingController controller;
+
+  const SearchBar({
+    Key? key,
+    required this.onSearchChanged,
+    required this.focusNode,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +317,9 @@ class SearchBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
-        onChanged: onSearchChanged, // Added
+        onChanged: onSearchChanged,
+        focusNode: focusNode,
+        controller: controller,
         decoration: InputDecoration(
           hintText: 'Search',
           prefixIcon: Icon(Icons.search, color: theme.iconTheme.color),

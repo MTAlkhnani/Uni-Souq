@@ -121,12 +121,17 @@ class _HomeScreenState extends State<HomeScreen> {
           }),
           _buildDrawerListTile(Icons.shopping_bag, 'My Collection', () {
             // Implement navigation to language settings
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyCollectionPage(),
-              ),
-            );
+            if (isUserSignedIn()) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyCollectionPage(),
+                ),
+              );
+            } else {
+              // Show sign-in required pop-up if the user is not signed in
+              _showSignInRequiredPopup(context);
+            }
           }),
           _buildDrawerListTile(Icons.help, 'Help Center', () {
             // Implement navigation to help center
@@ -256,13 +261,18 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               icon: const Icon(Icons.shopping_bag),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        RequestPage(), // Navigate to the ContactClientsPage
-                  ),
-                );
+                if (isUserSignedIn()) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RequestPage(), // Navigate to the ContactClientsPage
+                    ),
+                  );
+                } else {
+                  // Show sign-in required pop-up if the user is not signed in
+                  _showSignInRequiredPopup(context);
+                }
               }),
           IconButton(
             icon: const Icon(Icons.location_on),
@@ -325,75 +335,72 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Popular categories section
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 5),
+                padding: EdgeInsets.only(left: 10, top: 5),
                 child: Text(
-                  'Popular Categories',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  'Categories',
+                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
               ),
 
               // Popular categories section
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 1),
-                  child: Row(
-                    children: popularCategories.map((category) {
-                      // Get the index of the current category
-                      int index = popularCategories.indexOf(category);
-                      // Get the corresponding icon
-                      IconData icon = popularCategoryIcons[index];
-                      // Check if the category is selected
-                      bool isSelected = selectedCategory == category;
+                child: Row(
+                  children: popularCategories.map((category) {
+                    // Get the index of the current category
+                    int index = popularCategories.indexOf(category);
+                    // Get the corresponding icon
+                    IconData icon = popularCategoryIcons[index];
+                    // Check if the category is selected
+                    bool isSelected = selectedCategory == category;
 
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedCategory = category;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 28,
-                                backgroundColor: isSelected
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = category;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundColor: isSelected
+                                  ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.7)
+                                  : Theme.of(context)
+                                      .scaffoldBackgroundColor
+                                      .withOpacity(.7),
+                              child: Icon(
+                                icon,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .shadowColor
+                                        .withOpacity(.7),
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 3), // Adjust spacing as needed
+                            Text(
+                              category,
+                              style: TextStyle(
+                                color: isSelected
                                     ? Theme.of(context)
-                                        .primaryColor
+                                        .hintColor
                                         .withOpacity(.7)
                                     : Theme.of(context)
-                                        .scaffoldBackgroundColor
+                                        .hintColor
                                         .withOpacity(.7),
-                                child: Icon(
-                                  icon,
-                                  color: isSelected
-                                      ? Colors.white
-                                      : Theme.of(context)
-                                          .shadowColor
-                                          .withOpacity(.7),
-                                ),
                               ),
-                              const SizedBox(
-                                  height: 3), // Adjust spacing as needed
-                              Text(
-                                category,
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? Theme.of(context)
-                                          .hintColor
-                                          .withOpacity(.7)
-                                      : Theme.of(context)
-                                          .hintColor
-                                          .withOpacity(.7),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
 
@@ -589,13 +596,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).cardColor.withOpacity(0.5),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  MyOrderpage(), // Navigate to the ContactClientsPage
-                            ),
-                          );
+                          if (isUserSignedIn()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MyOrderpage(), // Navigate to the ContactClientsPage
+                              ),
+                            );
+                          } else {
+                            // Show sign-in required pop-up if the user is not signed in
+                            _showSignInRequiredPopup(context);
+                          }
                         }),
                   ),
                 ],
