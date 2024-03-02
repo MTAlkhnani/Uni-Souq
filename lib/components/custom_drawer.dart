@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/screens/payment_page/cardpaymentview.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -125,8 +126,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
           _buildDrawerListTile(Icons.help, 'Help Center', () {
             // Implement navigation to help center
           }),
-          _buildDrawerListTile(Icons.payment, 'Payment', () {
-            // Implement navigation to help center
+          _buildDrawerListTile(Icons.payment, 'Payment', () async {
+            // Check if user is signed in
+            if (isUserSignedIn()) {
+              // Get the current user ID
+              final userId = FirebaseAuth.instance.currentUser!.uid;
+
+              // Navigate to CardPaymentView with the user ID
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CardPaymentView(
+                    userId: userId,
+                  ),
+                ),
+              );
+            } else {
+              // Show sign-in required pop-up if the user is not signed in
+              _showSignInRequiredPopup(context);
+            }
           }),
           _buildDrawerListTile(Icons.security, 'Security', () {
             // Implement navigation to security settings

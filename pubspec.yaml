@@ -67,6 +67,10 @@ dependencies:
   flutter_carousel_slider: ^1.1.0
   dots_indicator: ^3.0.0
   google_fonts: ^6.2.0
+  flutter_credit_card: ^3.0.4
+  cryptography: ^2.7.0
+  uuid: ^4.3.3
+ 
  
   
 
@@ -136,5 +140,5 @@ flutter:
     - assets/lotties/
     - assets/images/uni_souq.png
     - assets/images/profile_Defulat.jpg
-
+    - assets/images/mask.png
     
