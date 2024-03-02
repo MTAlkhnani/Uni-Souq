@@ -3,21 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:unisouq/components/adavtive_dailog.dart';
+
 import 'package:unisouq/components/custom_drawer.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
-import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
+
 import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
-import 'package:unisouq/screens/sign_in_screen/login_screen.dart';
-import 'package:unisouq/screens/sign_up_screen/registeration_screen.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:unisouq/utils/size_utils.dart';
-
-import '../information_Screen/information_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'customer_screen';

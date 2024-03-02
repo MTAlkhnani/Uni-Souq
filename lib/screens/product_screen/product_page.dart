@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
+import 'package:unisouq/screens/payment_page/payment_page.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -446,118 +447,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       price = currentPrice;
     }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        double enteredPrice = price; // Default to the current price
-
-        return AlertDialog(
-          title: const Text('Enter the Price'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Current Listing Price: ${price.toStringAsFixed(2)} SAR'),
-              const SizedBox(height: 10),
-              const SizedBox(height: 10),
-              const Text(
-                  'Enter a new listing price (leave blank to keep current)'),
-              TextFormField(
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    enteredPrice = double.parse(value);
-                  }
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-                _sendRequestToSeller(
-                    productData['sellerID'],
-                    productData['title'],
-                    productData['condition'],
-                    productData['description'],
-                    enteredPrice,
-                    widget.productId);
-              },
-              child: const Text('Send Request'),
-            ),
-          ],
-        );
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PaymentPage(
+                sellerID: productData['sellerID'],
+                productName: productData['title'],
+                condition: productData['condition'],
+                description: productData['description'],
+                productId: widget.productId,
+                currentPrice: price,
+              )),
     );
-  }
-
-  void _sendRequestToSeller(
-    String sellerID,
-    String productName,
-    String condtion,
-    String description,
-    double listingPrice,
-    String productId,
-  ) {
-    setState(() {
-      _sendingInProgress = true; // Set sending progress flag
-    });
-
-    ChatService()
-        .sendRequest(sellerID, productName, condtion, description, listingPrice,
-            productId)
-        .then((_) {
-      // Request sent successfully, show a confirmation dialog or perform other actions
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Your request has been sent successfully.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }).catchError((error) {
-      // Handle errors if request sending fails
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content:
-                const Text('Failed to send request. Please try again later.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }).whenComplete(() {
-      // Reset sending progress after request is sent or failed
-      setState(() {
-        _sendingInProgress = true;
-      });
-    });
   }
 
   String getCurrentUserUid() {
