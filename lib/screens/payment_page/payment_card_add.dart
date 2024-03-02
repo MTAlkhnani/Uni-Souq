@@ -51,7 +51,7 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     if (formKey.currentState!.validate()) {
       print('valid!');
       try {
-        final cardId = Uuid().v4(); // Generate random cardId
+        final cardId = const Uuid().v4(); // Generate random cardId
         await _paymentService.addPaymentCard(
           cardNumber: cardNumber,
           expiryDate: expiryDate,
@@ -73,14 +73,14 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          IntroWidgetWithoutLogos(title: 'Add Card'),
+          IntroWidgetWithoutLogos(title: 'Add Card', context: context),
           Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 150,
               ),
               CreditCardWidget(
@@ -96,7 +96,7 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                     Theme.of(context).primaryColor, // Change the color here
                 isSwipeGestureEnabled: true,
                 onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
-                customCardTypeIcons: <CustomCardTypeIcon>[],
+                customCardTypeIcons: const <CustomCardTypeIcon>[],
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -116,30 +116,38 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                         cardNumberDecoration: InputDecoration(
                           labelText: 'Number',
                           hintText: 'XXXX XXXX XXXX XXXX',
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelStyle: TextStyle(color: Colors.black),
+                          hintStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
                           focusedBorder: border,
                           enabledBorder: border,
                         ),
                         expiryDateDecoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelStyle: TextStyle(color: Colors.black),
+                          hintStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
                           focusedBorder: border,
                           enabledBorder: border,
                           labelText: 'Expired Date',
                           hintText: 'XX/XX',
                         ),
                         cvvCodeDecoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelStyle: TextStyle(color: Colors.black),
+                          hintStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
                           focusedBorder: border,
                           enabledBorder: border,
                           labelText: 'CVV',
                           hintText: 'XXX',
                         ),
                         cardHolderDecoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelStyle: TextStyle(color: Colors.black),
+                          hintStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
                           focusedBorder: border,
                           enabledBorder: border,
                           labelText: 'Card Holder',
@@ -147,7 +155,7 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                         onCreditCardModelChange: onCreditCardModelChange,
                         themeColor: Theme.of(context).primaryColor,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
@@ -170,8 +178,8 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.all(12),
-                          child: Text(
+                          margin: const EdgeInsets.all(12),
+                          child: const Text(
                             'Save',
                             style: TextStyle(
                               color: Colors.white,

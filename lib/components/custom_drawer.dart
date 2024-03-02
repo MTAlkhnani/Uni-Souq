@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/routes/app_routes.dart';
@@ -77,7 +80,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           placeholder: (context, url) =>
                               const Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -150,26 +153,58 @@ class _CustomDrawerState extends State<CustomDrawer> {
             // Implement navigation to security settings
           }),
           _buildDrawerListTile(Icons.exit_to_app, 'Sign Out', () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return MyDialog(
-                  title: "Sign Out",
-                  content: "Are you sure you want to sign out?",
-                  cancelText: "Cancel",
-                  signOutText: " Sign Out",
-                  titleTextStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                  contentTextStyle: const TextStyle(fontSize: 16),
-                  buttonTextStyle: const TextStyle(
-                      fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
-                );
-              },
-            );
+            _showSignOutDialog(context);
           }),
         ],
       ),
     );
+  }
+
+  void _showSignOutDialog(BuildContext context) {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text("Sign Out"),
+            content: const Text("Are you sure you want to sign out?"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text("Sign Out"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog first
+                  // Perform sign out action here
+                },
+                isDestructiveAction: true,
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return MyDialog(
+            title: "Sign Out",
+            content: "Are you sure you want to sign out?",
+            cancelText: "Cancel",
+            signOutText: " Sign Out",
+            titleTextStyle:
+                const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            contentTextStyle: const TextStyle(fontSize: 16),
+            buttonTextStyle: const TextStyle(
+                fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
+          );
+        },
+      );
+    }
   }
 
   // Method to create a ListTile for the Drawer

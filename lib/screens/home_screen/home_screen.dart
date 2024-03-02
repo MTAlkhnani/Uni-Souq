@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -602,39 +604,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showSignInRequiredPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Sign In Required"),
-          content:
-              const Text("Please sign in or sign up to access this feature."),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text("Sign In"),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context,
-                    AppRoutes.signInScreen); // Navigate to Sign In Screen
-              },
-            ),
-            TextButton(
-              child: const Text("Sign Up"),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog first
-                Navigator.pushNamed(context,
-                    AppRoutes.signUpScreen); // Navigate to Registration Screen
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text("Sign In Required"),
+            content:
+                const Text("Please sign in or sign up to access this feature."),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text("Sign In"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog first
+                  Navigator.pushNamed(context, AppRoutes.signInScreen);
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text("Sign Up"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog first
+                  Navigator.pushNamed(context, AppRoutes.signUpScreen);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Sign In Required"),
+            content:
+                const Text("Please sign in or sign up to access this feature."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text("Sign In"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog first
+                  Navigator.pushNamed(context, AppRoutes.signInScreen);
+                },
+              ),
+              TextButton(
+                child: const Text("Sign Up"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog first
+                  Navigator.pushNamed(context, AppRoutes.signUpScreen);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
