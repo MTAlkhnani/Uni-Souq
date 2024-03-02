@@ -125,6 +125,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           _buildDrawerListTile(Icons.help, 'Help Center', () {
             // Implement navigation to help center
           }),
+          _buildDrawerListTile(Icons.payment, 'Payment', () {
+            // Implement navigation to help center
+          }),
           _buildDrawerListTile(Icons.security, 'Security', () {
             // Implement navigation to security settings
           }),
