@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,9 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
       if (ratingSnapshot.docs.isNotEmpty) {
         double totalRating = 0;
         numRatings = ratingSnapshot.docs.length; // Update the number of ratings
-        ratingSnapshot.docs.forEach((doc) {
+        for (var doc in ratingSnapshot.docs) {
           totalRating += doc['rating'] as double;
-        });
+        }
         sellerRating = totalRating / numRatings;
       }
     } catch (e) {
@@ -86,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
               widget
                   .userId) // Display edit button if it's the current user's profile
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () async {
                 // Navigate to the edit profile page
                 // You can implement the navigation logic here
@@ -119,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(width: 20),
             Text(
-              '$university',
+              university,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -205,17 +206,17 @@ class _ProfilePageState extends State<ProfilePage> {
           return const CircularProgressIndicator(); // Show loading indicator if data is not yet available
         }
         final userData = snapshot.data!.data() as Map<String, dynamic>;
-        final defaultImage = userData['defaultImage'];
+        final defaultImage = userData['userImage'];
         if (defaultImage != null && defaultImage.isNotEmpty) {
           return CircleAvatar(
-            backgroundImage: Image.network(defaultImage).image,
+            backgroundImage: CachedNetworkImageProvider(defaultImage),
             radius: 50,
           );
         } else {
-          return CircleAvatar(
-            backgroundImage: AssetImage('assets/images/profile_Default.jpg'),
+          return const CircleAvatar(
+            child: Icon(Icons.person),
             radius: 50,
-          ); // Use default placeholder if defaultImage is not available
+          ); // Use person icon if defaultImage is not available
         }
       },
     );

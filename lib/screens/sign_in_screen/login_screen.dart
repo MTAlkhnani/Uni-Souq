@@ -7,6 +7,8 @@ import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/constants/constants.dart';
+import 'package:unisouq/global.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
@@ -85,6 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
       // Use Navigator to pushReplacementNamed
       showSuccessMessage(context, "Login Succussfully");
       Future.delayed(Duration(seconds: 1), () {
+        Global.storageService
+            .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
         Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
       });
     } on FirebaseAuthException catch (error) {
@@ -258,7 +262,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Theme.of(context).primaryColor,
                                 press: _trySubmit,
                               ),
-
                             if (!_isLogingIn)
                               Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -266,7 +269,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -287,10 +289,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ],
                                       ),
-
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Text('Just browsing? '),
                                           TextButton(
@@ -302,14 +303,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                               ),
                                             ),
                                             onPressed: () =>
-                                                Navigator.pushReplacementNamed(context, AppRoutes.homeScreen),
+                                                Navigator.pushReplacementNamed(
+                                                    context,
+                                                    AppRoutes.homeScreen),
                                           ),
                                         ],
                                       ),
-
                                     ],
                                   )),
-
                           ],
                         ),
                       ),

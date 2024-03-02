@@ -122,12 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildDrawerListTile(Icons.shopping_bag, 'My Collection', () {
             // Implement navigation to language settings
             if (isUserSignedIn()) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyCollectionPage(),
-                ),
-              );
+              Navigator.pushNamed(context, AppRoutes.mycollrctionpage);
             } else {
               // Show sign-in required pop-up if the user is not signed in
               _showSignInRequiredPopup(context);

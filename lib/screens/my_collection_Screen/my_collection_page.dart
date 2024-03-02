@@ -11,6 +11,7 @@ import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/my_profile_page/my_profilepage.dart'; // Import the ContactClientsPage
 
 class MyCollectionPage extends StatefulWidget {
+  static const String id = 'mycollection_screen';
   @override
   _MyCollectionPageState createState() => _MyCollectionPageState();
 }
@@ -32,7 +33,7 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Network'),
@@ -46,7 +47,8 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
         body: TabBarView(
           children: [
             _buildMyCollectionTab(),
-            ContactClientsPage(),
+            // Remove ContactClientsPage from here
+            ContactClientsPage(), // Placeholder for the second tab content
           ],
         ),
       ),
@@ -137,26 +139,23 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                           ),
                         ),
                         SingleChildScrollView(
-                          child: Flexible(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: ListTile(
-                                    title: Text(
-                                      item['title'] ?? 'Item not available',
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    subtitle: item['price'] != null
-                                        ? Text(
-                                            'Price: ${item['price']} SAR',
-                                            style:
-                                                const TextStyle(fontSize: 12),
-                                          )
-                                        : null,
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: ListTile(
+                                  title: Text(
+                                    item['title'] ?? 'Item not available',
+                                    style: const TextStyle(fontSize: 12),
                                   ),
+                                  subtitle: item['price'] != null
+                                      ? Text(
+                                          'Price: ${item['price']} SAR',
+                                          style: const TextStyle(fontSize: 12),
+                                        )
+                                      : null,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

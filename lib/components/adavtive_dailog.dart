@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:unisouq/constants/constants.dart';
+import 'package:unisouq/global.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 class MyDialog extends StatelessWidget {
@@ -101,6 +103,8 @@ class MyDialog extends StatelessWidget {
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     // Navigate to SignInScreen after signing out
+    Global.storageService
+        .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, false);
     Navigator.popAndPushNamed(context, AppRoutes.signInScreen);
     Navigator.pushNamedAndRemoveUntil(
         context, AppRoutes.signInScreen, (route) => false);

@@ -14,7 +14,10 @@ class WelcomeScreen extends StatelessWidget {
     // Delayed navigation after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
       bool deviceFirstTime = Global.storageService.getDeviceFirstOpen();
-      if (deviceFirstTime) {
+      bool deviceSignTime = Global.storageService.getDeviceSignIn();
+      if (deviceFirstTime && deviceSignTime) {
+        Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+      } else if (deviceFirstTime && !deviceSignTime) {
         Navigator.pushReplacementNamed(context, AppRoutes.signInScreen);
       } else {
         Navigator.pushReplacementNamed(context, AppRoutes.onboardingScreen);

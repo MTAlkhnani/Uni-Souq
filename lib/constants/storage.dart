@@ -20,4 +20,7 @@ class StorageService {
   bool getDeviceFirstOpen() {
     return _pref.getBool(AppConstrants.STORAGE_DEVICE_OPEN_FIRST_KEY) ?? false;
   }
+  bool getDeviceSignIn() {
+    return _pref.getBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY) ?? false;
+  }
 }

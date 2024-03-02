@@ -6,6 +6,7 @@ import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/intro_boarding/onboarding.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
+import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
@@ -41,6 +42,7 @@ class AppRoutes {
   static const String searchScreen = '/search_screen';
   static const String requestpage = '/request_page';
   static const String confirmationpage = '/confirmation_page';
+  static const String mycollrctionpage = '/mycollection_screen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -96,6 +98,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => MyOrderpage());
       case requestpage:
         return MaterialPageRoute(builder: (_) => RequestPage());
+      case mycollrctionpage:
+        return MaterialPageRoute(builder: (_) => MyCollectionPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
