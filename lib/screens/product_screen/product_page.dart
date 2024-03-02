@@ -447,17 +447,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       price = currentPrice;
     }
 
+    // Convert dynamic list to List<String>
+    List<String> imageUrlList = List<String>.from(productData['imageURLs']);
+
+// Navigate to PaymentPage
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => PaymentPage(
-                sellerID: productData['sellerID'],
-                productName: productData['title'],
-                condition: productData['condition'],
-                description: productData['description'],
-                productId: widget.productId,
-                currentPrice: price,
-              )),
+        builder: (context) => PaymentPage(
+          sellerID: productData['sellerID'],
+          productName: productData['title'],
+          condition: productData['condition'],
+          description: productData['description'],
+          productId: widget.productId,
+          currentPrice: price,
+          imageUrl: imageUrlList, // Pass the converted list
+        ),
+      ),
     );
   }
 

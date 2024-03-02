@@ -114,6 +114,7 @@ class AppRoutes {
                   condition: '',
                   description: '',
                   productId: '',
+                  imageUrl: [],
                 ));
       default:
         return MaterialPageRoute(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 class PaymentPage extends StatefulWidget {
   final String sellerID;
@@ -8,6 +10,7 @@ class PaymentPage extends StatefulWidget {
   final String description;
   final String productId;
   final double currentPrice;
+  final List<String> imageUrl; // Add imageUrl field
 
   PaymentPage({
     required this.sellerID,
@@ -16,6 +19,7 @@ class PaymentPage extends StatefulWidget {
     required this.description,
     required this.productId,
     required this.currentPrice,
+    required this.imageUrl, // Initialize imageUrl field
   });
 
   @override
@@ -28,6 +32,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   late double enteredPrice = widget.currentPrice;
   TextEditingController _priceController = TextEditingController();
+  late List<String> imageUrlList = List<String>.from(widget.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -36,79 +41,98 @@ class _PaymentPageState extends State<PaymentPage> {
         title: const Text('Enter Price and Payment Method'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Current Listing Price: ${widget.currentPrice.toStringAsFixed(2)} SAR',
-                  style: const TextStyle(fontSize: 18),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Display item image at the top
+              Center(
+                child: Image.network(
+                  imageUrlList.isNotEmpty ? imageUrlList[0] : '',
+                  fit: BoxFit.cover,
+                  height: 250.h,
+                  // Adjust the height as needed
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Enter New Listing Price',
-                  ),
-                  onChanged: (value) {
-                    if (value.isNotEmpty) {
-                      enteredPrice = double.parse(value);
-                    }
-                  },
-                  controller: _priceController,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Select Payment Method:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField(
-                  value: _paymentMethod,
-                  onChanged: (value) {
-                    setState(() {
-                      _paymentMethod = value.toString();
-                    });
-                  },
-                  items: ['Cash', 'Card']
-                      .map((method) => DropdownMenuItem(
-                            value: method,
-                            child: Text(method),
-                          ))
-                      .toList(),
-                  decoration: const InputDecoration(
-                    labelText: 'Payment Method',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String priceText = _priceController.text;
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Current Listing Price: ${widget.currentPrice.toStringAsFixed(2)} SAR',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        labelText: 'Enter New Listing Price',
+                      ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          enteredPrice = double.parse(value);
+                        }
+                      },
+                      controller: _priceController,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Select Payment Method:',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButtonFormField(
+                      value: _paymentMethod,
+                      onChanged: (value) {
+                        setState(() {
+                          _paymentMethod = value.toString();
+                        });
+                      },
+                      isDense: false,
+                      items: ['Cash', 'Card']
+                          .map((method) => DropdownMenuItem(
+                                value: method,
+                                child: Text(method),
+                              ))
+                          .toList(),
+                      dropdownColor: Theme.of(context)
+                          .scaffoldBackgroundColor
+                          .withOpacity(0.8),
+                      decoration: const InputDecoration(
+                        labelText: 'Payment Method',
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          String priceText = _priceController.text;
 
-                      if (priceText.isNotEmpty) {
-                        enteredPrice = double.parse(priceText);
-                      }
+                          if (priceText.isNotEmpty) {
+                            enteredPrice = double.parse(priceText);
+                          }
 
-                      // Call the method to send request to the seller
-                      _sendRequestToSeller(
-                        widget.sellerID,
-                        widget.productName,
-                        widget.condition,
-                        widget.description,
-                        enteredPrice,
-                        widget.productId,
-                      );
-                    },
-                    child: const Text('Submit'),
-                  ),
+                          // Call the method to send request to the seller
+                          _sendRequestToSeller(
+                            widget.sellerID,
+                            widget.productName,
+                            widget.condition,
+                            widget.description,
+                            enteredPrice,
+                            widget.productId,
+                          );
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -141,6 +165,7 @@ class _PaymentPageState extends State<PaymentPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
                 child: const Text('OK'),

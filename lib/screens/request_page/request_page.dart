@@ -126,13 +126,13 @@ class _RequestPageState extends State<RequestPage> {
                   },
                   background: Container(
                     color: Colors.red,
-                    child: const Icon(Icons.delete, color: Colors.white),
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20.0),
+                    child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   direction: DismissDirection.endToStart,
                   child: Padding(
-                    padding: const EdgeInsets.all(7.0),
+                    padding: const EdgeInsets.all(3.0),
                     child: Card(
                       child: ListTile(
                         title: Text(message),
