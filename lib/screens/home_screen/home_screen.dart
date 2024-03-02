@@ -584,7 +584,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Tooltip(
-                    message: 'chat',
+                    message: 'Order',
                     child: IconButton(
                         icon: const Icon(Icons.local_shipping),
                         color: currentIconIndex == 2

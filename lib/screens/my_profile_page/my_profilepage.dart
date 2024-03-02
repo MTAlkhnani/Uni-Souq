@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
+import 'package:unisouq/screens/product_screen/product_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String userId; // Accept userId as a parameter
@@ -16,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late String userName = '';
+
   late String imageUrl = '';
   late int phone = 0;
   late String university = '';
@@ -177,12 +179,47 @@ class _ProfilePageState extends State<ProfilePage> {
                   itemBuilder: (context, index) {
                     final itemData =
                         items[index].data() as Map<String, dynamic>;
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(itemData['imageURLs'][0]),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                StreamBuilder<DocumentSnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('Item')
+                                  .doc(items[index].id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+                                if (!snapshot.hasData ||
+                                    snapshot.data == null) {
+                                  return Text('Document does not exist');
+                                }
+                                final itemData = snapshot.data!.data()
+                                    as Map<String, dynamic>;
+                                // Now we have the correct itemData, navigate to ProductDetailPage
+                                return ProductDetailPage(
+                                    productId: items[index].id);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(itemData['imageURLs'][0]),
+                        ),
+                        title: Text(itemData['title']),
+                        subtitle: Text(itemData['discountedPrice'] == ""
+                            ? 'Price: ${itemData['discountedPrice']} SAR'
+                            : 'Price: ${itemData['price']} SAR'),
+                        trailing: Icon(Icons.arrow_forward_ios),
                       ),
-                      title: Text(itemData['title']),
-                      subtitle: Text('Price: ${itemData['price']} SAR'),
                     );
                   },
                 );
