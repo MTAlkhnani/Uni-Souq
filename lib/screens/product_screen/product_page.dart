@@ -40,16 +40,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   late Map<String, dynamic> productData = {};
 
   bool _sendingInProgress = false; // State variable to track sending progress
+  late bool _isRequestInProgress = false;
 
   @override
   void initState() {
     super.initState();
     _fetchProductAndUser();
     _checkItemStatus();
+    _checkRequestStatus(); // Call method to check request status
   }
 
   String getSellerUserID() {
     return productData['sellerID'];
+  }
+
+  Future<void> _checkRequestStatus() async {
+    try {
+      final currentUserUid = getCurrentUserUid();
+      final requestSnapshot = await FirebaseFirestore.instance
+          .collection('requests')
+          .where('ItemId', isEqualTo: widget.productId)
+          .where('clientId', isEqualTo: currentUserUid)
+          .get();
+
+      setState(() {
+        _isRequestInProgress = requestSnapshot.docs.isNotEmpty;
+      });
+    } catch (e) {
+      print('Error checking request status: $e');
+    }
   }
 
   Future<void> _checkItemStatus() async {
@@ -187,12 +206,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       );
                     },
                     viewportFraction: .99,
-                    slideTransform: CubeTransform(),
+                    slideTransform: const CubeTransform(),
                     itemCount: imageURLs.length,
                     initialPage: 0,
                     enableAutoSlider: false,
-                    autoSliderTransitionTime: Duration(seconds: 2),
-                    autoSliderDelay: Duration(seconds: 2),
+                    autoSliderTransitionTime: const Duration(seconds: 2),
+                    autoSliderDelay: const Duration(seconds: 2),
                   ),
                 ),
 
@@ -204,103 +223,112 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Theme.of(context).scaffoldBackgroundColor),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Product title
-                        Text(
-                          productData['title'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        // Display the discounted price if available
-                        if (discountedPrice > 0)
-                          Text(
-                            'Now: ${discountedPrice.toStringAsFixed(0)} SAR',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context)
-                                  .cardColor, // Display discounted price in red
-                            ),
-                          ),
-                        // Display original price only if there is a discount
-                        if (discountedPrice > 0)
-                          Text(
-                            'Before: ${price.toStringAsFixed(2)} SAR',
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.lineThrough,
-                                color: Color.fromARGB(255, 207, 68, 58)),
-                          ),
-                        const SizedBox(height: 8),
-                        // Product condition
-                        Text(
-                          'Condition: ${productData['condition']}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 8),
-                        // Product description
-                        Text(
-                          productData['description'] ?? '',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Status : ${productData['status']}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 16),
-                        Center(
-                            child:
-                                Container(child: _buildSellerProfileButton())),
-                        // Seller's rating and share button
-                        Row(
-                          children: [
-                            const Text(
-                              'Seller Rating: ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            _sellerRating != null
-                                ? Row(
-                                    children: List.generate(
-                                      5,
-                                      (index) => Icon(
-                                        Icons.star,
-                                        color: index < _sellerRating!
-                                            ? Colors.orange
-                                            : Colors.grey[400],
-                                      ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.v),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Product title
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                productData['title'] ?? '',
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    // Seller's rating and share button
+                                    _sellerRating != null
+                                        ? Row(
+                                            children: List.generate(
+                                              5,
+                                              (index) => Icon(
+                                                Icons.star,
+                                                color: index < _sellerRating!
+                                                    ? Colors.orange
+                                                    : Colors.grey[400],
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(width: 8.v),
+                                    Text(
+                                      '($_numRatings)',
+                                      style: const TextStyle(fontSize: 16),
                                     ),
-                                  )
-                                : const CircularProgressIndicator(),
-                            const SizedBox(width: 8),
-                            Text(
-                              '($_numRatings)',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const Spacer(), // Adds space between the rating and the share button
-                            IconButton(
-                              icon: const Icon(Icons.share),
-                              onPressed: () {
-                                // Implement share functionality
-                                final String productTitle =
-                                    productData['title'] ?? 'No Title';
-                                final String productPrice =
-                                    productData['price'].toString();
-                                final String shareContent =
-                                    "Check out this product: $productTitle for $productPrice SAR on Uni-Souq!";
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          // Display the discounted price if available
+                          if (discountedPrice > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Now: ${discountedPrice.toStringAsFixed(0)} SAR',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .cardColor, // Display discounted price in red
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.share),
+                                  onPressed: () {
+                                    // Implement share functionality
+                                    final String productTitle =
+                                        productData['title'] ?? 'No Title';
+                                    final String productPrice =
+                                        productData['price'].toString();
+                                    final String shareContent =
+                                        "Check out this product: $productTitle for $productPrice SAR on Uni-Souq!";
 
-                                // Using the share package to share the content
-                                Share.share(shareContent);
-                              },
+                                    // Using the share package to share the content
+                                    Share.share(shareContent);
+                                  },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // Button to contact the seller or client
-                      ]),
+                          // Display original price only if there is a discount
+                          if (discountedPrice > 0)
+                            Text(
+                              'Before: ${price.toStringAsFixed(2)} SAR',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Color.fromARGB(255, 207, 68, 58)),
+                            ),
+                          const SizedBox(height: 8),
+                          // Product condition
+                          Text(
+                            'Condition: ${productData['condition']}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 8),
+                          // Product description
+                          Text(
+                            productData['description'] ?? '',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            'Status : ${productData['status']}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(child: _buildSellerProfileButton()),
+
+                          const SizedBox(height: 16),
+                          // Button to contact the seller or client
+                        ]),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -346,89 +374,134 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           );
         },
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Item')
-                      .doc(widget.productId)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ElevatedButton(
-                        onPressed: null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).disabledColor,
-                        ),
-                        child: Text(
-                          'Loading...',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                        ),
-                      );
-                    }
-                    if (!snapshot.hasData || snapshot.data == null) {
-                      return ElevatedButton(
-                        onPressed: null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).disabledColor,
-                        ),
-                        child: Text(
-                          'Product Not Found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                        ),
-                      );
-                    }
-                    final itemData =
-                        snapshot.data!.data() as Map<String, dynamic>;
-                    final sellerID = itemData['sellerID'];
-                    if (sellerID == getCurrentUserUid()) {
-                      return ElevatedButton(
-                        onPressed: null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).disabledColor,
-                        ),
-                        child: Text(
-                          'You Are The Seller',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                        ),
-                      );
-                    }
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.0.h, vertical: 10.v),
+        child: Row(
+          children: [
+            Expanded(
+              child: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Item')
+                    .doc(widget.productId)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {}
+                  if (!snapshot.hasData || snapshot.data == null) {
                     return ElevatedButton(
-                      onPressed: _sendingInProgress || _isItemSold
-                          ? null
-                          : () {
-                              _showPriceInputDialog(); // Show the price input dialog
-                            },
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).disabledColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Increase shape here
+                        ),
                       ),
                       child: Text(
-                        _sendingInProgress ? 'In Progress' : 'Request To Buy',
+                        'Product Not Found',
                         style: TextStyle(
                           fontSize: 18,
                           color: Theme.of(context).scaffoldBackgroundColor,
                         ),
                       ),
                     );
-                  },
-                ),
+                  }
+                  final itemData =
+                      snapshot.data!.data() as Map<String, dynamic>;
+                  final sellerID = itemData['sellerID'];
+                  if (sellerID == getCurrentUserUid()) {
+                    return ElevatedButton(
+                      onPressed: null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).disabledColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Increase shape here
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.sell,
+                              color: Theme.of(context).dividerColor), // Icon
+                          const SizedBox(width: 5), // SizedBox for spacing
+                          const Text(
+                            'You Are The Seller',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // Check if item is sold
+                  if (_isItemSold) {
+                    return ElevatedButton(
+                      onPressed: null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).disabledColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Increase shape here
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle,
+                              color: Theme.of(context).dividerColor), // Icon
+                          const SizedBox(width: 5), // SizedBox for spacing
+                          Text(
+                            'This item is sold',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).dividerColor),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ElevatedButton(
+                    onPressed: _sendingInProgress ||
+                            _isItemSold ||
+                            _isRequestInProgress // Check if request is in progress
+                        ? null
+                        : () {
+                            _showPriceInputDialog();
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(30.0), // Increase shape here
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_cart,
+                            color: Theme.of(context)
+                                .scaffoldBackgroundColor), // Icon
+                        const SizedBox(width: 5), // SizedBox for spacing
+                        Text(
+                          _sendingInProgress
+                              ? 'In Progress'
+                              : _isRequestInProgress // Update button text based on request status
+                                  ? 'Request In Progress'
+                                  : 'Request To Buy',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -521,7 +594,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // Card border radius
       ),
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
         onPressed: () {
           // Navigate to the seller's profile screen
           Navigator.push(
@@ -533,20 +606,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           );
         },
+        icon: Icon(Icons.person,
+            color: Theme.of(context).primaryColor), // Add icon here
+        label: const Text(
+          'View Seller Profile',
+          style: TextStyle(fontSize: 18),
+        ),
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: const Color.fromARGB(255, 48, 177, 52), // Text color
+          foregroundColor: Theme.of(context).primaryColor,
+          backgroundColor:
+              Theme.of(context).scaffoldBackgroundColor, // Text color
           padding: EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 24,
+            vertical: 15.v,
+            horizontal: 90.h,
           ), // Button padding
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), // Button border radius
           ),
-        ),
-        child: Text(
-          'View Seller Profile',
-          style: TextStyle(fontSize: 18),
         ),
       ),
     );

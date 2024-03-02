@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/utils/auth_utils.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 class OrderInformationScreen extends StatelessWidget {
   final String message;
@@ -23,7 +24,7 @@ class OrderInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Information'),
+        title: const Text('Order Information'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -50,7 +51,7 @@ class OrderInformationScreen extends StatelessWidget {
             }
           }
           // You can return a loading indicator or error message here if needed
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },
@@ -95,67 +96,76 @@ class _OrderFormState extends State<OrderForm> {
       padding: const EdgeInsets.all(16.0),
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.message),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Location'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a location';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                location = value!;
-              },
-            ),
-            GestureDetector(
-              onTap: () {
-                _selectPickupDate(context);
-              },
-              child: AbsorbPointer(
-                child: TextFormField(
-                  decoration: InputDecoration(labelText: 'Pickup Time'),
-                  controller: TextEditingController(
-                    text: pickupTime == null
-                        ? ''
-                        : DateFormat.yMd().add_jm().format(pickupTime),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.message),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Location'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a location';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  location = value!;
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+                  _selectPickupDate(context);
+                },
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    decoration: const InputDecoration(labelText: 'Pickup Time'),
+                    controller: TextEditingController(
+                      text: pickupTime == null
+                          ? ''
+                          : DateFormat.yMd().add_jm().format(pickupTime),
+                    ),
+                    validator: (value) {
+                      if (pickupTime == null) {
+                        return 'Please select a pickup time';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (pickupTime == null) {
-                      return 'Please select a pickup time';
-                    }
-                    return null;
-                  },
                 ),
               ),
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Final Price'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || double.tryParse(value) == null) {
-                  return 'Please enter a valid price';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                finalPrice = double.parse(value!);
-              },
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  _confirmOrder(context, widget.itemDetails);
-                }
-              },
-              child: Text('Confirm Order'),
-            ),
-          ],
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Final Price'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || double.tryParse(value) == null) {
+                    return 'Please enter a valid price';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  finalPrice = double.parse(value!);
+                },
+              ),
+              SizedBox(height: 60.h),
+              Center(
+                child: SizedBox(
+                  width: 400.v,
+                  height: 40.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        _confirmOrder(context, widget.itemDetails);
+                      }
+                    },
+                    child: const Text('Confirm Order'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -166,7 +176,7 @@ class _OrderFormState extends State<OrderForm> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (pickedDate != null && pickedDate != pickupTime) {
       setState(() {
@@ -180,14 +190,14 @@ class _OrderFormState extends State<OrderForm> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Receipt'),
+          title: const Text('Receipt'),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -243,7 +253,7 @@ class _OrderFormState extends State<OrderForm> {
         // Navigate to the confirmation page
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ConfirmationPage()),
+          MaterialPageRoute(builder: (context) => const ConfirmationPage()),
         );
       } else {
         // Handle the case where the document does not exist

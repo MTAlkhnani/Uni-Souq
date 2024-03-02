@@ -13,7 +13,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<DocumentSnapshot> _searchResults = [];
-  List<String> _suggestedKeywords = [
+  final List<String> _suggestedKeywords = [
     'book',
     'Sony',
     'Watches',
@@ -23,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   ];
 
   late FocusNode _searchFocusNode;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search', style: theme.textTheme.headline6),
+        title: Text('Search', style: theme.textTheme.titleLarge),
         backgroundColor: theme.primaryColor,
         elevation: 0,
       ),
@@ -96,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     _searchResults.isEmpty))
               GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 padding:
                     EdgeInsets.symmetric(vertical: 120.v, horizontal: 10.h),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -126,9 +126,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           _suggestedKeywords[index],
                           style: TextStyle(
                             fontSize:
-                                14, // Adjust the font size to make the keywords smaller
+                                16, // Adjust the font size to make the keywords smaller
                             fontWeight: FontWeight.bold,
-                            color: theme.primaryColor,
+                            color: theme.hintColor,
                           ),
                         ),
                       ),
@@ -142,7 +142,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 _searchFocusNode.hasFocus &&
                     _searchController.text.isNotEmpty &&
                     _searchResults.isEmpty)
-              Center(child: Text('No items found.')),
+              const Center(child: Text('No items found.')),
             if ((_searchFocusNode.hasFocus &&
                     _searchController.text.isNotEmpty &&
                     _searchResults.isNotEmpty) ||
@@ -168,8 +168,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               _searchController.text.isNotEmpty)
                       ? GridView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.all(8),
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(8),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -222,10 +222,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       [0],
                                                   fit: BoxFit.cover,
                                                   placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(Icons.error),
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
                                                 )
                                               : Container(),
                                         ),
@@ -245,7 +245,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          SizedBox(height: 4),
+                                          const SizedBox(height: 4),
                                           Row(
                                             children: [
                                               Text(
@@ -261,11 +261,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 ),
                                               ),
                                               if (discountedPrice > 0)
-                                                SizedBox(width: 8),
+                                                const SizedBox(width: 8),
                                               if (discountedPrice > 0)
                                                 Text(
                                                   '${price.toStringAsFixed(0)} SAR',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 12,
                                                     decoration: TextDecoration
                                                         .lineThrough,

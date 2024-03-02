@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:unisouq/components/green_intro_widget.dart';
+import 'package:unisouq/utils/size_utils.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:unisouq/service/payment_service.dart';
@@ -180,15 +181,18 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                         child: Container(
                           margin: const EdgeInsets.all(12),
                           child: const Text(
-                            'Save',
+                            'Save the Card',
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'halter',
-                              fontSize: 14,
+                              fontSize: 18,
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 10.h,
+                      )
                     ],
                   ),
                 ),

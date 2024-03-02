@@ -107,17 +107,8 @@ class ResponseList extends StatelessWidget {
                     .doc(itemId)
                     .get(),
                 builder: (context, itemSnapshot) {
-                  if (itemSnapshot.connectionState == ConnectionState.waiting) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 170.h, vertical: 10.v),
-                      child: const SizedBox(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 4.0,
-                        ),
-                      ),
-                    );
-                  }
+                  if (itemSnapshot.connectionState ==
+                      ConnectionState.waiting) {}
                   if (itemSnapshot.hasError || !itemSnapshot.hasData) {
                     return const SizedBox(); // Return empty SizedBox if item snapshot has error or no data
                   }

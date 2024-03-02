@@ -103,7 +103,9 @@ class ChatService extends ChangeNotifier {
       ),
     );
   }
-  void contactSellerproblem(BuildContext context, String receiverUserID, String productIssueMessage) {
+
+  void contactSellerproblem(
+      BuildContext context, String receiverUserID, String productIssueMessage) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -115,8 +117,6 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-
-
   void contactWithClients(BuildContext context, String sellerID) {
     Navigator.push(
       context,
@@ -127,10 +127,16 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-  Future<void> sendRequest(String sellerID, String productName, String condtion,
-      String description, double listingPrice, String productId) async {
+  Future<void> sendRequest(
+      String sellerID,
+      String productName,
+      String condtion,
+      String description,
+      double listingPrice,
+      String productId,
+      String Paymentmathod) async {
     String message =
-        "I'm interested to buy $productName with the \nPrice $listingPrice SAR\nCondtion: $condtion\nDescription : $description\n  ";
+        "I'm interested to buy $productName with the \nPrice $listingPrice SAR\nCondtion: $condtion\nDescription : $description\nPayment Method Prefer: $Paymentmathod";
 
     try {
       // Get the client ID

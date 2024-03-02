@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:unisouq/components/custom_drawer.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/screens/Search_Screen/searchScreen.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 
 import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
@@ -495,18 +496,29 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    color: currentIconIndex == 1
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).cardColor.withOpacity(0.5),
-                    onPressed: () {
-                      setState(() {
-                        currentIconIndex = 1;
-                      });
-                      // Add the navigation call here
-                      Navigator.pushNamed(context, AppRoutes.searchScreen);
-                    },
+                  Tooltip(
+                    message: 'search',
+                    child: IconButton(
+                      icon: const Icon(Icons.search),
+                      color: currentIconIndex == 1
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).cardColor.withOpacity(0.5),
+                      onPressed: () async {
+                        // Add the navigation call here
+
+                        final newIndex = await Navigator.push<int>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchScreen(),
+                          ),
+                        );
+                        if (newIndex != null) {
+                          setState(() {
+                            currentIconIndex = newIndex;
+                          });
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -522,15 +534,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: currentIconIndex == 2
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).cardColor.withOpacity(0.5),
-                        onPressed: () {
+                        onPressed: () async {
                           if (isUserSignedIn()) {
-                            Navigator.push(
+                            final newIndex = await Navigator.push<int>(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    MyOrderpage(), // Navigate to the ContactClientsPage
+                                builder: (context) => MyOrderpage(),
                               ),
                             );
+                            if (newIndex != null) {
+                              setState(() {
+                                currentIconIndex = newIndex;
+                              });
+                            }
                           } else {
                             // Show sign-in required pop-up if the user is not signed in
                             _showSignInRequiredPopup(context);
