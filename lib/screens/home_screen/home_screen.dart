@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
+import 'package:unisouq/components/custom_drawer.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
 import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
@@ -84,78 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'Al Jouf University',
     'Al Yamamah University',
   ];
-  // Method to create a ListTile for the Drawer
-  ListTile _buildDrawerListTile(
-      IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: const Icon(Icons.keyboard_arrow_right),
-      onTap: onTap,
-    );
-  }
-
-  // Method to build the Drawer
-  Drawer _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: const Text(
-              'Settings',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24.0,
-              ),
-            ),
-          ),
-          _buildDrawerListTile(Icons.lock, 'Reset Password', () {
-            // Implement navigation to reset password
-          }),
-          _buildDrawerListTile(Icons.language, 'Language', () {
-            // Implement navigation to language settings
-          }),
-          _buildDrawerListTile(Icons.shopping_bag, 'My Collection', () {
-            // Implement navigation to language settings
-            if (isUserSignedIn()) {
-              Navigator.pushNamed(context, AppRoutes.mycollrctionpage);
-            } else {
-              // Show sign-in required pop-up if the user is not signed in
-              _showSignInRequiredPopup(context);
-            }
-          }),
-          _buildDrawerListTile(Icons.help, 'Help Center', () {
-            // Implement navigation to help center
-          }),
-          _buildDrawerListTile(Icons.security, 'Security', () {
-            // Implement navigation to security settings
-          }),
-          _buildDrawerListTile(Icons.exit_to_app, 'Sign Out', () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return MyDialog(
-                  title: "Sign Out",
-                  content: "Are you sure you want to sign out?",
-                  cancelText: "Cancel",
-                  signOutText: " Sign Out",
-                  titleTextStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                  contentTextStyle: const TextStyle(fontSize: 16),
-                  buttonTextStyle: const TextStyle(
-                      fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
-                );
-              },
-            );
-          }),
-        ],
-      ),
-    );
-  }
 
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {
@@ -245,8 +174,12 @@ class _HomeScreenState extends State<HomeScreen> {
             return IconButton(
               icon: const Icon(Icons.menu), // This is the burger icon
               onPressed: () {
-                Scaffold.of(context)
-                    .openDrawer(); // This will now work correctly.
+                if (isUserSignedIn()) {
+                  Scaffold.of(context)
+                      .openDrawer(); // This will now work correctly.
+                } else {
+                  _showSignInRequiredPopup(context);
+                }
               },
             );
           },
@@ -283,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // ),
         ],
       ),
-      drawer: _buildDrawer(context),
+      drawer: CustomDrawer(),
       body: StreamBuilder(
         stream: itemsStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -100,7 +100,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                InformationScreen(userId: userCredential.user!.uid),
+                InformationScreen(userId: userCredential.user!.uid,),
           ),
         );
       }
@@ -124,17 +124,30 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     });
   }
 
-  void _submit() {
+  void _submit() async {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
       _formKey.currentState!.save();
-      _submiteForm(
-          emailController.text.trim(),
-          passwordController.text.trim(),
-          firstnameController.text.trim(),
-          lastnameController.text.trim(),
-          phoneController.text.trim());
+
+      // Check if the email is already in use
+      final existingUser = await FirebaseFirestore.instance
+          .collection('User')
+          .where('Email', isEqualTo: emailController.text.trim())
+          .get();
+
+      if (existingUser.docs.isNotEmpty) {
+        // Email is already in use
+        showErrorMessage(context, 'Email is already in use!');
+      } else {
+        // Email is not in use, proceed with registration
+        _submiteForm(
+            emailController.text.trim(),
+            passwordController.text.trim(),
+            firstnameController.text.trim(),
+            lastnameController.text.trim(),
+            phoneController.text.trim());
+      }
     }
   }
 

@@ -209,16 +209,27 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         );
                       },
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(itemData['imageURLs'][0]),
+                      child: Card(
+                        shadowColor: Theme.of(context).primaryColor,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                            color: Theme.of(context).hintColor.withOpacity(0.3),
+                            width: 1.0,
+                          ),
                         ),
-                        title: Text(itemData['title']),
-                        subtitle: Text(itemData['discountedPrice'] == ""
-                            ? 'Price: ${itemData['discountedPrice']} SAR'
-                            : 'Price: ${itemData['price']} SAR'),
-                        trailing: Icon(Icons.arrow_forward_ios),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(itemData['imageURLs'][0]),
+                          ),
+                          title: Text(itemData['title']),
+                          subtitle: Text(itemData['discountedPrice'] == ""
+                              ? 'Price: ${itemData['discountedPrice']} SAR'
+                              : 'Price: ${itemData['price']} SAR'),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                        ),
                       ),
                     );
                   },

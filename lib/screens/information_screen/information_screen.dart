@@ -143,11 +143,26 @@ class _InformationScreenState extends State<InformationScreen> {
             _buildUniversityDropdown(),
             SizedBox(height: 19.v),
             _buildInputFieldWithAddress(),
-            SizedBox(height: 50.v),
+            SizedBox(height: 30.v),
+            _buildCancelButton(),
             _buildCompleteButton(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCancelButton() {
+    return RoundedButton(
+      text: "Cancel",
+      press: () {
+        if (ModalRoute.of(context)!.settings.name == AppRoutes.signUpScreen) {
+          Navigator.of(context).pop();
+        } else {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
+        }
+      },
+      color: Colors.redAccent,
     );
   }
 
