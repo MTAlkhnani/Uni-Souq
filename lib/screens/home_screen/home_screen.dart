@@ -26,14 +26,42 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String? selectedCategory;
   int currentIconIndex = 0;
+  String? userId;
+  // Add a variable to store the user ID
   @override
   void initState() {
     super.initState();
     // Default itemsStream to fetch all items initially
+    WidgetsBinding.instance?.addObserver(this);
+    _getCurrentUserId();
+    _createUserActivityCollection();
     itemsStream = FirebaseFirestore.instance.collection('Item').snapshots();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update user activity status when the user logs in
+    _updateUserActivityStatus(true);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Update user activity status based on app lifecycle state
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _updateUserActivityStatus(true); // User resumed the app
+        break;
+      case AppLifecycleState.paused:
+        _updateUserActivityStatus(false); // User paused the app
+        break;
+      default:
+        break;
+    }
   }
 
   // Define a list of icons for popular categories
@@ -85,6 +113,61 @@ class _HomeScreenState extends State<HomeScreen> {
     'Al Jouf University',
     'Al Yamamah University',
   ];
+  void _getCurrentUserId() {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+    }
+  }
+
+  void _updateUserActivityStatus(bool isActive) {
+    if (userId != null && userId!.isNotEmpty) {
+      FirebaseFirestore.instance.collection('user_activity').doc(userId).set({
+        'isActive': isActive,
+        'lastSeen': Timestamp.now(),
+      });
+    } else {
+      print('User ID is null or empty. Cannot update user activity status.');
+    }
+  }
+
+  void _createUserActivityCollection() async {
+    try {
+      // Check if the collection already exists
+      bool collectionExists = await FirebaseFirestore.instance
+          .collection('user_activity')
+          .doc(userId)
+          .get()
+          .then((docSnapshot) => docSnapshot.exists);
+
+      // If the collection doesn't exist, create it
+      if (!collectionExists) {
+        await FirebaseFirestore.instance
+            .collection('user_activity')
+            .doc(userId)
+            .set({
+          'isActive': false, // Initial value for isActive
+          'lastSeen': Timestamp.now(), // Initial value for lastSeen
+        });
+        print('User activity collection created successfully.');
+      } else {
+        print('User activity collection already exists.');
+      }
+    } catch (error) {
+      print('Error creating user activity collection: $error');
+    }
+  }
+
+  @override
+  void dispose() {
+    // Update user activity status when the user logs out or closes the app
+    _updateUserActivityStatus(false);
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
 
   // Function to handle user sign-out
   void _signOut(BuildContext context) async {

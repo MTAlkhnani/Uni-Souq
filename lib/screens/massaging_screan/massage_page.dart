@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:unisouq/components/chat_babble.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -159,23 +160,21 @@ class _MessagingPageState extends State<MessagingPage> {
                 .collection('Profile')
                 .doc(widget.receiverUserID)
                 .get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircleAvatar(
-                  radius: 20,
-                  child: CircularProgressIndicator(),
-                );
+            builder: (context, profileSnapshot) {
+              if (profileSnapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
               }
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+              if (profileSnapshot.hasError) {
+                return Text('Error: ${profileSnapshot.error}');
               }
-              if (!snapshot.hasData || !snapshot.data!.exists) {
+              if (!profileSnapshot.hasData || !profileSnapshot.data!.exists) {
                 return const CircleAvatar(
                   radius: 20,
                   child: Icon(Icons.person),
                 );
               }
-              var profileData = snapshot.data!.data() as Map<String, dynamic>;
+              var profileData =
+                  profileSnapshot.data!.data() as Map<String, dynamic>;
               String profileImageUrl = profileData['userImage'] ?? '';
               String receiverName =
                   '${profileData['FirstName']} ${profileData['LastName']}';
@@ -202,21 +201,70 @@ class _MessagingPageState extends State<MessagingPage> {
             },
           ),
           const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                receiverName,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const Text(
-                'Last seen: LAST_SEEN_TIME',
-                style: TextStyle(fontSize: 12),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  receiverName,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('user_activity')
+                      .doc(widget.receiverUserID)
+                      .snapshots(),
+                  builder: (context, activitySnapshot) {
+                    if (activitySnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Text(
+                        'Loading...',
+                        style: TextStyle(fontSize: 12),
+                      );
+                    }
+                    if (activitySnapshot.hasError) {
+                      return Text(
+                        'Error: ${activitySnapshot.error}',
+                        style: const TextStyle(fontSize: 12),
+                      );
+                    }
+                    if (!activitySnapshot.hasData ||
+                        !activitySnapshot.data!.exists) {
+                      return const Text(
+                        'Last seen: Not available',
+                        style: TextStyle(fontSize: 12),
+                      );
+                    }
+                    var activityData =
+                        activitySnapshot.data!.data() as Map<String, dynamic>;
+                    bool isActive = activityData['isActive'] ?? false;
+                    Timestamp lastSeen = activityData['lastSeen'];
+                    String lastSeenTime;
+                    if (isActive) {
+                      lastSeenTime = 'Active now';
+                    } else {
+                      lastSeenTime =
+                          DateFormat.yMd().add_jm().format(lastSeen.toDate());
+                    }
+                    return Text(
+                      lastSeenTime,
+                      style: const TextStyle(fontSize: 12),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.more_vert), // Add your option icon here
+          onPressed: () {
+            // Implement the action for the option icon
+          },
+        ),
+      ],
     );
   }
 
@@ -352,11 +400,24 @@ class _MessagingPageState extends State<MessagingPage> {
 
     return GestureDetector(
       onTap: () {
-        // Retrieve the message when a message item is tapped
-        setState(() {
-          _controller.text = data['message'] ??
-              ''; // Set the message to the TextEditingController
-        });
+        // Open the image when tapped
+        if (data['imageUrl'] != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(),
+                body: Center(
+                  child: CachedNetworkImage(
+                    imageUrl: data['imageUrl'],
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -411,50 +472,48 @@ class _MessagingPageState extends State<MessagingPage> {
 
   Widget _buildMessageInput() {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Row(
-        children: [
-          SizedBox(width: 5.v),
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              setState(() => _showEmoji = !_showEmoji);
-            },
-            child: const Icon(Icons.emoji_emotions), // Add emoji icon
-          ),
-          SizedBox(width: 8.v),
-          Flexible(
-            child: TextField(
-              controller: _controller,
-              keyboardType: TextInputType.multiline,
-              maxLines: null, // Allow the TextField to expand vertically
-              obscureText: false,
-              onTap: () {
-                if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
-              },
-              decoration: InputDecoration(
-                hintText: 'Type Something...',
-                hintStyle: TextStyle(color: Theme.of(context).hintColor),
-                border: InputBorder.none,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 3.v),
+        child: Row(
+          children: [
+            SizedBox(width: 5.v),
+            SizedBox(width: 8.v),
+            Flexible(
+              child: TextField(
+                controller: _controller,
+                keyboardType: TextInputType.multiline,
+                maxLines: null, // Allow the TextField to expand vertically
+                obscureText: false,
+                onTap: () {
+                  if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Type Something...',
+                  hintStyle: TextStyle(color: Theme.of(context).hintColor),
+                  border: InputBorder.none,
+                ),
               ),
             ),
-          ),
-          CircleAvatar(
-            radius: 20,
-            child: IconButton(
-              icon: const Icon(Icons.camera_alt, color: Colors.white),
-              onPressed: _getImageFromGallery,
+            CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              radius: 20,
+              child: IconButton(
+                icon: const Icon(Icons.flip_camera_ios, color: Colors.white),
+                onPressed: _getImageFromGallery,
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: sendMessage,
-            icon: const Icon(
-              Icons.arrow_forward,
-              size: 40,
+            IconButton(
+              onPressed: sendMessage,
+              icon: Icon(
+                color: Theme.of(context).primaryColor,
+                Icons.arrow_forward_ios,
+                size: 30,
+              ),
             ),
-          ),
-          SizedBox(width: 10.v),
-        ],
+            SizedBox(width: 10.v),
+          ],
+        ),
       ),
     );
   }
@@ -497,7 +556,7 @@ class _MessagingPageState extends State<MessagingPage> {
         _scrollController.position.maxScrollExtent > 0) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
       );
     } else {

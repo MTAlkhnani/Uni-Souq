@@ -17,7 +17,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color bubbleColor = isSender
-        ? Theme.of(context).primaryColor // Sender's bubble color
+        ? Color.fromARGB(255, 181, 100, 228)! // Sender's bubble color
         : Colors.grey[300]!; // Receiver's bubble color
 
     final Color textColor = isSender
@@ -27,7 +27,7 @@ class ChatBubble extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(13),
         color: bubbleColor,
       ),
       child: Column(

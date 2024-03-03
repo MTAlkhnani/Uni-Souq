@@ -22,12 +22,13 @@ class UniSouqApp extends ConsumerWidget {
         final ThemeData lightTheme = ThemeData(
           brightness: Brightness.light,
           primaryColor: const Color.fromRGBO(142, 108, 239, 1),
-          hintColor: const Color.fromRGBO(39, 39, 39, 0.498),
+          hintColor: Color.fromARGB(211, 29, 29, 29),
           canvasColor: Colors.black87,
           cardColor: Colors.black,
           hoverColor: const Color.fromRGBO(142, 108, 239, 1),
           scaffoldBackgroundColor: Colors.white,
           secondaryHeaderColor: const Color.fromRGBO(244, 244, 244, 1),
+          bottomAppBarColor: const Color.fromRGBO(244, 244, 244, 1),
           iconTheme: IconThemeData(color: Colors.indigo[800]),
           textTheme: TextTheme(
             bodyText1: TextStyle(color: Colors.black),
@@ -46,6 +47,7 @@ class UniSouqApp extends ConsumerWidget {
           hoverColor: Colors.white38,
           iconTheme: IconThemeData(color: Colors.deepPurple[300]),
           shadowColor: Colors.white,
+          bottomAppBarColor: const Color.fromRGBO(244, 244, 244, 1),
           textTheme: TextTheme(
             bodyText1: TextStyle(color: Colors.white),
             bodyText2: TextStyle(color: Colors.grey[300]),

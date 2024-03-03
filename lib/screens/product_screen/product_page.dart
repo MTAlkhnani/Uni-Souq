@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unisouq/routes/app_routes.dart';
-import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
+
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/screens/payment_page/payment_page.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -391,9 +391,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).disabledColor,
+                        padding: EdgeInsets.symmetric(vertical: 10.v),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              30.0), // Increase shape here
+                          borderRadius:
+                              BorderRadius.circular(5.0), // Increase shape here
                         ),
                       ),
                       child: Text(
@@ -413,9 +414,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).disabledColor,
+                        padding: EdgeInsets.symmetric(vertical: 10.v),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              30.0), // Increase shape here
+                          borderRadius:
+                              BorderRadius.circular(5.0), // Increase shape here
                         ),
                       ),
                       child: Row(
@@ -423,7 +425,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         children: [
                           Icon(Icons.sell,
                               color: Theme.of(context).dividerColor), // Icon
-                          const SizedBox(width: 5), // SizedBox for spacing
+                          SizedBox(width: 5.v), // SizedBox for spacing
                           const Text(
                             'You Are The Seller',
                             style: TextStyle(
@@ -441,9 +443,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).disabledColor,
+                        padding: EdgeInsets.symmetric(vertical: 10.v),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              30.0), // Increase shape here
+                          borderRadius:
+                              BorderRadius.circular(5.0), // Increase shape here
                         ),
                       ),
                       child: Row(
@@ -451,11 +454,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         children: [
                           Icon(Icons.check_circle,
                               color: Theme.of(context).dividerColor), // Icon
-                          const SizedBox(width: 5), // SizedBox for spacing
+                          SizedBox(width: 5.v), // SizedBox for spacing
                           Text(
                             'This item is sold',
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 18.h,
                                 color: Theme.of(context).dividerColor),
                           ),
                         ],
@@ -473,18 +476,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.symmetric(vertical: 10.v),
                       shape: RoundedRectangleBorder(
                         borderRadius:
-                            BorderRadius.circular(30.0), // Increase shape here
+                            BorderRadius.circular(5.0), // Increase shape here
                       ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.shopping_cart,
-                            color: Theme.of(context)
-                                .scaffoldBackgroundColor), // Icon
-                        const SizedBox(width: 5), // SizedBox for spacing
+                        Icon(Icons.shopping_cart_checkout_sharp,
+                            color: Theme.of(context).hintColor), // Icon
+                        SizedBox(width: 5.v), // SizedBox for spacing
                         Text(
                           _sendingInProgress
                               ? 'In Progress'
@@ -492,8 +495,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ? 'Request In Progress'
                                   : 'Request To Buy',
                           style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).scaffoldBackgroundColor),
+                              fontSize: 18.h,
+                              color: Theme.of(context).hintColor),
                         ),
                       ],
                     ),
@@ -607,13 +610,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           );
         },
         icon: Icon(Icons.person,
-            color: Theme.of(context).primaryColor), // Add icon here
+            color: Theme.of(context).hintColor), // Add icon here
         label: const Text(
           'View Seller Profile',
           style: TextStyle(fontSize: 18),
         ),
         style: ElevatedButton.styleFrom(
-          foregroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Theme.of(context).hintColor,
           backgroundColor:
               Theme.of(context).scaffoldBackgroundColor, // Text color
           padding: EdgeInsets.symmetric(

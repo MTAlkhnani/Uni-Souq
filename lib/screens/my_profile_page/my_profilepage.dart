@@ -72,11 +72,15 @@ class _ProfilePageState extends State<ProfilePage> {
           totalRating += doc['rating'] as double;
         }
         sellerRating = totalRating / numRatings;
+
+        // Check if the widget is mounted before calling setState
+        if (mounted) {
+          setState(() {});
+        }
       }
     } catch (e) {
       print('Error fetching seller rating: $e');
     }
-    setState(() {});
   }
 
   @override

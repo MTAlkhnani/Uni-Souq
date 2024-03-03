@@ -108,10 +108,19 @@ class _PaymentPageState extends State<PaymentPage> {
                           labelText: 'Payment Method',
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 130.h),
                       Center(
                         child: ElevatedButton(
                           clipBehavior: Clip.antiAlias,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.v, horizontal: 85.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  5.0), // Increase shape here
+                            ),
+                          ),
                           onPressed: () {
                             String priceText = _priceController.text;
 
@@ -131,7 +140,9 @@ class _PaymentPageState extends State<PaymentPage> {
                           },
                           child: Text(
                             'Submit the Request',
-                            style: TextStyle(fontSize: 20.h),
+                            style: TextStyle(
+                                fontSize: 18.h,
+                                color: Theme.of(context).bottomAppBarColor),
                           ),
                         ),
                       ),
