@@ -75,6 +75,11 @@
           "Pleaselist": "يرجى إدخال سبب أو اختياره من القائمة.",
           "Confirm": "تأكيد",
     "AddProductScreen": "شاشة إضافة المنتج",
+
+            "c1": "جديد",
+            "c2": "مستعمل - كالجديد",
+            "c3": "مستعمل - جيد",
+            "c4": "مستعمل - قابل للاستخدام",
           "AddProduct": "إضافة منتج",
           "AddPictures": "إضافة صور",
           "ProductName": "اسم المنتج",
@@ -197,15 +202,25 @@
 
 "drawer":"drawer",
       "ResetPassword": "إعادة تعيين كلمة المرور",
-      "Language": "اللغة",
+      "Language": "اللغة-السمه",
       "MyCollectiond": "مجموعتي",
       "HelpCenter": "مركز المساعدة",
       "Payment": "الدفع",
       "Security": "الأمان",
       "SignOut": "تسجيل الخروج",
       "SignOutb": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-      "selectLanguage":"اختراللغة"
-        
+
+"languagepage":"languagepage",     
+      "selectLanguage":"اختراللغة",
+      "Theme": "السمة",
+      "English": "الإنجليزية",
+      "Arabic": "العربية",
+      "SelectTheme": "اختر السمة",
+      "SystemTheme": "السمة النظامية",
+      "LightTheme": "السمة الفاتحة",
+      "DarkTheme": "السمة الداكنة",
+      "Langtheme":"اللغة-السمه"
+            
 
   }
   

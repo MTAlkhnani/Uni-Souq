@@ -177,6 +177,16 @@
         "Carddeleted":"Card deleted",
         "Delete":"Delete",
 "AddPaymentCardScreen":"CardPaymentView",
+
+        "c1":"New",
+        "c2":"Used - Like New",
+        "c3":"Used - Good",
+        "c4":"Used - Acceptable",
+
+
+
+
+
     
         "payss":"Payment card details saved successfully!",
         "errorpay":"Error saving payment card: $e",
@@ -212,14 +222,24 @@
         "ViewSellerProfile":"View Seller Profile",
 "drawer":"drawer",
         "ResetPassword": "Reset Password",
-        "Language" :"Language",
+        "Language" :"Language/Theme",
         "MyCollectiond":"My Collection",
         "HelpCenter":"Help Center",
         "Payment":"Payment",
         "Security":"Security",
         "SignOut":"Sign Out",
         "SignOutb":"Are you sure you want to sign out?",
-        "selectLanguage":"selectLanguage"
+"languagepage":"languagepage",           
+        "selectLanguage":"select Language",
+        "Theme":"Theme",
+        "English" :"English",
+        "Arabic":"Arabic",
+        "SelectTheme":"Select Theme",
+        "SystemTheme":"System Theme",
+        "LightTheme":"Light Theme",
+        "DarkTheme":"Dark Theme",
+        "Langtheme":"language/Theme"
+
         
 
 

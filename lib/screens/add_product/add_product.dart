@@ -23,21 +23,37 @@ class _AddProductState extends State<AddProductScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _discountPriceController =
       TextEditingController(); // Added for discounted price
+  late List<String> _categories;
+  late List<String> _conditions;
   String? _selectedCategory;
   String? _selectedCondition;
-  final List<String> _categories = [
-    'Electronics',
-    'Books',
-    'Clothing',
-    'Home',
-    'Toys'
-  ];
-  final List<String> _conditions = [
-    'New',
-    'Used - Like New',
-    'Used - Good',
-    'Used - Acceptable'
-  ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _categories = initializeCategories(context);
+    _conditions = initializeConditions(context);
+  }
+
+  List<String> initializeCategories(BuildContext context) {
+    return [
+      S.of(context).popularCategories2,
+      S.of(context).popularCategories3,
+      S.of(context).popularCategories4,
+      S.of(context).popularCategories6,
+      S.of(context).popularCategories5,
+    ];
+  }
+
+  List<String> initializeConditions(BuildContext context) {
+    return [
+      S.of(context).c1,
+      S.of(context).c2,
+      S.of(context).c3,
+      S.of(context).c4,
+    ];
+  }
+
   List<File> _images = [];
   bool _isLoading = false;
 
@@ -53,15 +69,6 @@ class _AddProductState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> translatedCategories = [
-      S.of(context).popularCategories1,
-      S.of(context).popularCategories2,
-      S.of(context).popularCategories3,
-      S.of(context).popularCategories4,
-      S.of(context).popularCategories5,
-      S.of(context).popularCategories6,
-      // Add more categories as needed
-    ];
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddProduct),
@@ -130,7 +137,7 @@ class _AddProductState extends State<AddProductScreen> {
                         _selectedCategory = value;
                       });
                     },
-                    items: translatedCategories
+                    items: _categories
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -334,6 +341,11 @@ class _AddProductState extends State<AddProductScreen> {
         final List<String?> imageUrls = await _uploadImages(_images);
         final List<String> validImageUrls =
             imageUrls.where((url) => url != null).map((url) => url!).toList();
+
+        // Map the selected category to its English translation
+        final String translatedCategory =
+            _translateToEnglish(_selectedCategory);
+
         DocumentReference docRef =
             FirebaseFirestore.instance.collection('Item').doc();
         String itemId = docRef.id;
@@ -345,7 +357,7 @@ class _AddProductState extends State<AddProductScreen> {
               _discountPriceController.text, // Added discounted price field
           'description': _descriptionController.text,
           'sellerID': getCurrentUserUid(),
-          'category': _selectedCategory,
+          'category': translatedCategory, // Use the translated category
           'condition': _selectedCondition,
           'user': "N/A",
           'itemID': itemId,
@@ -361,6 +373,25 @@ class _AddProductState extends State<AddProductScreen> {
         showErrorMessage(context, "Some error happened: ${e.toString()}");
       }
       setState(() => _isLoading = false);
+    }
+  }
+
+  String _translateToEnglish(String? category) {
+    switch (category) {
+      case 'الإلكترونيات':
+        return 'Electronics'; // Translate the Arabic category to English
+      case 'الملابس':
+        return 'Clothing';
+      case 'الكتب':
+        return 'Books';
+      case 'الأثاث':
+        return 'Furniture';
+      case 'المنزل':
+        return 'Home';
+      // Add more cases for other categories
+      default:
+        return category ??
+            ''; // Return the original category if translation not found
     }
   }
 

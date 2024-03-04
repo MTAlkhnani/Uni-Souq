@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "AddProductScreen":
             MessageLookupByLibrary.simpleMessage("AddProductScreen"),
         "Address": MessageLookupByLibrary.simpleMessage("Address"),
+        "Arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "Back": MessageLookupByLibrary.simpleMessage("Back"),
         "Cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "CardPaymentView":
@@ -50,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ConfirmOrder": MessageLookupByLibrary.simpleMessage("Confirm Order"),
         "ContactClient": MessageLookupByLibrary.simpleMessage("Contact Client"),
         "ContactSeller": MessageLookupByLibrary.simpleMessage("Contact Seller"),
+        "DarkTheme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
         "Delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "Description": MessageLookupByLibrary.simpleMessage("Description"),
         "DiscountedPrice":
@@ -58,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "EditProductscreen":
             MessageLookupByLibrary.simpleMessage("Edit Product_Screen"),
         "Editprofile": MessageLookupByLibrary.simpleMessage("Edit profile"),
+        "English": MessageLookupByLibrary.simpleMessage("English"),
         "Entercustomreason":
             MessageLookupByLibrary.simpleMessage("Enter custom reason"),
         "Error": MessageLookupByLibrary.simpleMessage("Error"),
@@ -80,7 +83,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Itemnotavailable":
             MessageLookupByLibrary.simpleMessage("Item not available"),
         "Justbrowsing": MessageLookupByLibrary.simpleMessage("Just browsing?"),
-        "Language": MessageLookupByLibrary.simpleMessage("Language"),
+        "Langtheme": MessageLookupByLibrary.simpleMessage("language/Theme"),
+        "Language": MessageLookupByLibrary.simpleMessage("Language/Theme"),
+        "LightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
         "Location": MessageLookupByLibrary.simpleMessage("Location"),
         "MobileNumber": MessageLookupByLibrary.simpleMessage("Mobile Number"),
         "MyClients": MessageLookupByLibrary.simpleMessage("My Clients"),
@@ -167,6 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Select Category"),
         "SelectCondition":
             MessageLookupByLibrary.simpleMessage("Select Condition"),
+        "SelectTheme": MessageLookupByLibrary.simpleMessage("Select Theme"),
         "SelectUniversity":
             MessageLookupByLibrary.simpleMessage("Select University"),
         "Selectrejection": MessageLookupByLibrary.simpleMessage(
@@ -189,6 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "SubmittheRequest":
             MessageLookupByLibrary.simpleMessage("Submit the Request"),
         "Success": MessageLookupByLibrary.simpleMessage("Success"),
+        "SystemTheme": MessageLookupByLibrary.simpleMessage("System Theme"),
+        "Theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "Thisitemissold":
             MessageLookupByLibrary.simpleMessage("This item is sold"),
         "TypeSomething":
@@ -205,6 +213,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("add new pictures"),
         "befoer": MessageLookupByLibrary.simpleMessage(
             "Before: \${price.toStringAsFixed(2)} SAR"),
+        "c1": MessageLookupByLibrary.simpleMessage("New"),
+        "c2": MessageLookupByLibrary.simpleMessage("Used - Like New"),
+        "c3": MessageLookupByLibrary.simpleMessage("Used - Good"),
+        "c4": MessageLookupByLibrary.simpleMessage("Used - Acceptable"),
         "carddele": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this card?"),
         "check": MessageLookupByLibrary.simpleMessage(
@@ -235,6 +247,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "information":
             MessageLookupByLibrary.simpleMessage("information_screen"),
         "invalid": MessageLookupByLibrary.simpleMessage("invalid!"),
+        "languagepage": MessageLookupByLibrary.simpleMessage("languagepage"),
         "lastseen":
             MessageLookupByLibrary.simpleMessage("Last seen: Not available"),
         "listprice":
@@ -296,7 +309,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Reset code has been sent to your email"),
         "search": MessageLookupByLibrary.simpleMessage("search"),
         "selectLanguage":
-            MessageLookupByLibrary.simpleMessage("selectLanguage"),
+            MessageLookupByLibrary.simpleMessage("select Language"),
         "selectpick":
             MessageLookupByLibrary.simpleMessage("Please select a pickup time"),
         "sendCode": MessageLookupByLibrary.simpleMessage("send Code"),

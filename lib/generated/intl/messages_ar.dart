@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "AddProductScreen":
             MessageLookupByLibrary.simpleMessage("شاشة إضافة المنتج"),
         "Address": MessageLookupByLibrary.simpleMessage("العنوان"),
+        "Arabic": MessageLookupByLibrary.simpleMessage("العربية"),
         "Back": MessageLookupByLibrary.simpleMessage("عودة"),
         "Cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "CardPaymentView":
@@ -50,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ConfirmOrder": MessageLookupByLibrary.simpleMessage("تأكيد الطلب"),
         "ContactClient": MessageLookupByLibrary.simpleMessage("تواصل بالعميل"),
         "ContactSeller": MessageLookupByLibrary.simpleMessage("تواصل بالبائع"),
+        "DarkTheme": MessageLookupByLibrary.simpleMessage("السمة الداكنة"),
         "Delete": MessageLookupByLibrary.simpleMessage("حذف"),
         "Description": MessageLookupByLibrary.simpleMessage("الوصف"),
         "DiscountedPrice": MessageLookupByLibrary.simpleMessage("السعر المخفض"),
@@ -58,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شاشة تحرير المنتج"),
         "Editprofile":
             MessageLookupByLibrary.simpleMessage("تحرير الملف الشخصي"),
+        "English": MessageLookupByLibrary.simpleMessage("الإنجليزية"),
         "Entercustomreason":
             MessageLookupByLibrary.simpleMessage("أدخل سببًا مخصصًا"),
         "Error": MessageLookupByLibrary.simpleMessage("خطأ"),
@@ -80,7 +83,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Itemnotavailable":
             MessageLookupByLibrary.simpleMessage("العنصر غير متاح"),
         "Justbrowsing": MessageLookupByLibrary.simpleMessage("هل تتصفح فقط؟"),
-        "Language": MessageLookupByLibrary.simpleMessage("اللغة"),
+        "Langtheme": MessageLookupByLibrary.simpleMessage("اللغة-السمه"),
+        "Language": MessageLookupByLibrary.simpleMessage("اللغة-السمه"),
+        "LightTheme": MessageLookupByLibrary.simpleMessage("السمة الفاتحة"),
         "Location": MessageLookupByLibrary.simpleMessage("الموقع"),
         "MobileNumber": MessageLookupByLibrary.simpleMessage("رقم الجوال"),
         "MyClients": MessageLookupByLibrary.simpleMessage("عملائي"),
@@ -167,6 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Security": MessageLookupByLibrary.simpleMessage("الأمان"),
         "SelectCategory": MessageLookupByLibrary.simpleMessage("اختر الفئة"),
         "SelectCondition": MessageLookupByLibrary.simpleMessage("اختر الحالة"),
+        "SelectTheme": MessageLookupByLibrary.simpleMessage("اختر السمة"),
         "SelectUniversity":
             MessageLookupByLibrary.simpleMessage("اختر الجامعة"),
         "Selectrejection":
@@ -188,6 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "SubmitProduct": MessageLookupByLibrary.simpleMessage("إرسال المنتج"),
         "SubmittheRequest": MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
         "Success": MessageLookupByLibrary.simpleMessage("نجاح"),
+        "SystemTheme": MessageLookupByLibrary.simpleMessage("السمة النظامية"),
+        "Theme": MessageLookupByLibrary.simpleMessage("السمة"),
         "Thisitemissold":
             MessageLookupByLibrary.simpleMessage("تم بيع هذا العنصر"),
         "TypeSomething": MessageLookupByLibrary.simpleMessage("اكتب شيئًا..."),
@@ -203,6 +211,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إضافة صور جديدة"),
         "befoer": MessageLookupByLibrary.simpleMessage(
             "قبل: \${price.toStringAsFixed(2)} ريال"),
+        "c1": MessageLookupByLibrary.simpleMessage("جديد"),
+        "c2": MessageLookupByLibrary.simpleMessage("مستعمل - كالجديد"),
+        "c3": MessageLookupByLibrary.simpleMessage("مستعمل - جيد"),
+        "c4": MessageLookupByLibrary.simpleMessage("مستعمل - قابل للاستخدام"),
         "carddele": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف هذه البطاقة؟"),
         "check": MessageLookupByLibrary.simpleMessage(
@@ -229,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "if_else2": MessageLookupByLibrary.simpleMessage("اسم قصير جدًا"),
         "information": MessageLookupByLibrary.simpleMessage("شاشة المعلومات"),
         "invalid": MessageLookupByLibrary.simpleMessage("غير صالح!"),
+        "languagepage": MessageLookupByLibrary.simpleMessage("languagepage"),
         "lastseen": MessageLookupByLibrary.simpleMessage("آخر ظهور: غير متوفر"),
         "listprice":
             MessageLookupByLibrary.simpleMessage("أدخل سعر قائمة جديد"),

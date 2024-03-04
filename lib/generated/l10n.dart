@@ -1640,6 +1640,46 @@ class S {
     );
   }
 
+  /// `New`
+  String get c1 {
+    return Intl.message(
+      'New',
+      name: 'c1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used - Like New`
+  String get c2 {
+    return Intl.message(
+      'Used - Like New',
+      name: 'c2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used - Good`
+  String get c3 {
+    return Intl.message(
+      'Used - Good',
+      name: 'c3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used - Acceptable`
+  String get c4 {
+    return Intl.message(
+      'Used - Acceptable',
+      name: 'c4',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Payment card details saved successfully!`
   String get payss {
     return Intl.message(
@@ -1980,10 +2020,10 @@ class S {
     );
   }
 
-  /// `Language`
+  /// `Language/Theme`
   String get Language {
     return Intl.message(
-      'Language',
+      'Language/Theme',
       name: 'Language',
       desc: '',
       args: [],
@@ -2050,11 +2090,101 @@ class S {
     );
   }
 
-  /// `selectLanguage`
+  /// `languagepage`
+  String get languagepage {
+    return Intl.message(
+      'languagepage',
+      name: 'languagepage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `select Language`
   String get selectLanguage {
     return Intl.message(
-      'selectLanguage',
+      'select Language',
       name: 'selectLanguage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Theme`
+  String get Theme {
+    return Intl.message(
+      'Theme',
+      name: 'Theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get English {
+    return Intl.message(
+      'English',
+      name: 'English',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Arabic`
+  String get Arabic {
+    return Intl.message(
+      'Arabic',
+      name: 'Arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Theme`
+  String get SelectTheme {
+    return Intl.message(
+      'Select Theme',
+      name: 'SelectTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System Theme`
+  String get SystemTheme {
+    return Intl.message(
+      'System Theme',
+      name: 'SystemTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light Theme`
+  String get LightTheme {
+    return Intl.message(
+      'Light Theme',
+      name: 'LightTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark Theme`
+  String get DarkTheme {
+    return Intl.message(
+      'Dark Theme',
+      name: 'DarkTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `language/Theme`
+  String get Langtheme {
+    return Intl.message(
+      'language/Theme',
+      name: 'Langtheme',
       desc: '',
       args: [],
     );
