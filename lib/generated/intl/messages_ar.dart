@@ -49,8 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "ConfirmOrder": MessageLookupByLibrary.simpleMessage("تأكيد الطلب"),
         "ContactClient": MessageLookupByLibrary.simpleMessage("تواصل بالعميل"),
-        "ContactSeller":
-            MessageLookupByLibrary.simpleMessage("الاتصال بالبائع"),
+        "ContactSeller": MessageLookupByLibrary.simpleMessage("تواصل بالبائع"),
         "Delete": MessageLookupByLibrary.simpleMessage("حذف"),
         "Description": MessageLookupByLibrary.simpleMessage("الوصف"),
         "DiscountedPrice": MessageLookupByLibrary.simpleMessage("السعر المخفض"),
