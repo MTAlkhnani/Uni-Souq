@@ -186,7 +186,8 @@ class ResponseList extends StatelessWidget {
         if (snapshot.exists) {
           // If a rating exists, set it as the initial value of _rating
           Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-          if (data['clientId'] == clientId) {
+          if (data['clientId'] == clientId &&
+              data['itemId'] == selectedItemId) {
             _rating = data['rating'];
             _isRated = true;
           }
@@ -273,6 +274,7 @@ class ResponseList extends StatelessWidget {
                                         .set({
                                       'sellerId': sellerId,
                                       'clientId': clientId,
+                                      'itemId': selectedItemId,
                                       'rating': _rating,
                                       'timestamp': DateTime.now(),
                                     }).then((value) {
@@ -308,22 +310,25 @@ class ResponseList extends StatelessWidget {
                   ],
                 ),
                 actions: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final ChatService chatService = ChatService();
-                      // Generate product issue message
-                      String productIssueMessage = S.of(context).prodectissue;
-                      // Handle Product Issue button press
-                      chatService.contactSellerproblem(
-                        context,
-                        sellerId,
-                        productIssueMessage,
-                      );
-                    },
-                    icon: const Icon(Icons.report),
-                    label: Text(
-                      S.of(context).ProductIssue,
-                      style: TextStyle(color: Theme.of(context).hintColor),
+                  Visibility(
+                    visible: _isClient,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        final ChatService chatService = ChatService();
+                        // Generate product issue message
+                        String productIssueMessage = S.of(context).prodectissue;
+                        // Handle Product Issue button press
+                        chatService.contactSellerproblem(
+                          context,
+                          sellerId,
+                          productIssueMessage,
+                        );
+                      },
+                      icon: const Icon(Icons.report),
+                      label: Text(
+                        S.of(context).ProductIssue,
+                        style: TextStyle(color: Theme.of(context).hintColor),
+                      ),
                     ),
                   ),
                   ElevatedButton.icon(
