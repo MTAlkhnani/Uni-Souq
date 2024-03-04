@@ -172,7 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Selectrejection": MessageLookupByLibrary.simpleMessage(
             "Select or enter a reason for rejection"),
         "SellerID": MessageLookupByLibrary.simpleMessage(
-            "Seller ID: \$sellerID, \nTitle: \$title\'"),
+            "Seller ID: \$sellerID, \nTitle: \$title"),
         "SellerRating": MessageLookupByLibrary.simpleMessage("Seller Rating"),
         "SignIn": MessageLookupByLibrary.simpleMessage("Sign In"),
         "SignInRequired":

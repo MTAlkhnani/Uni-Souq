@@ -132,8 +132,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const LanguageSelectionPage()),
+              MaterialPageRoute(builder: (context) => LanguagePage()),
             );
           }),
           _buildDrawerListTile(Icons.help, S.of(context).HelpCenter, () {

@@ -65,7 +65,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        S.of(context).curr,
+                        "Current Price: ${widget.currentPrice.toStringAsFixed(2)} SAR",
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(height: 20),

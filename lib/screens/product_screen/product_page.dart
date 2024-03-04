@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
@@ -621,7 +622,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Theme.of(context).scaffoldBackgroundColor, // Text color
           padding: EdgeInsets.symmetric(
             vertical: 15.v,
-            horizontal: 90.h,
+            horizontal: isArabic() ? 110.h : 90.h,
           ), // Button padding
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), // Button border radius
@@ -644,5 +645,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       // Clear the text field
       _commentController.clear();
     }
+  }
+
+  bool isArabic() {
+    return Intl.getCurrentLocale() == 'ar';
   }
 }

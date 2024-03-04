@@ -139,7 +139,7 @@
         "MyOrders":"My Orders" ,
         "Nonotifications":"No notifications",
         "Product":"Product: $title",
-        "SellerID":"Seller ID: $sellerID, \nTitle: $title'",
+        "SellerID":"Seller ID: $sellerID, \nTitle: $title",
         "OrderDetails":"Order Details",
         "HideRating":"Hide Rating",
         "RateSeller":"Rate Seller",

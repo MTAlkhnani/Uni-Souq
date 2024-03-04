@@ -1260,10 +1260,10 @@ class S {
     );
   }
 
-  /// `Seller ID: $sellerID, \nTitle: $title'`
+  /// `Seller ID: $sellerID, \nTitle: $title`
   String get SellerID {
     return Intl.message(
-      'Seller ID: \$sellerID, \nTitle: \$title\'',
+      'Seller ID: \$sellerID, \nTitle: \$title',
       name: 'SellerID',
       desc: '',
       args: [],

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:intl/intl.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/payment_page/payment_card_add.dart';
@@ -172,5 +173,9 @@ class CardPaymentView extends StatelessWidget {
         },
       );
     }
+  }
+
+  bool isArabic() {
+    return Intl.getCurrentLocale() == 'ar';
   }
 }

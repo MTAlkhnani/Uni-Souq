@@ -100,7 +100,9 @@ class _OrderFormState extends State<OrderForm> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5.h),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: isArabic()
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               Text(widget.message),
               TextFormField(
@@ -209,7 +211,8 @@ class _OrderFormState extends State<OrderForm> {
   }
 
   void _confirmOrder(BuildContext context, String itemDetails) async {
-    final message = S.of(context).massageconf;
+    final message =
+        "Order confirmed: \nLocation: $location \nPickup Time: $pickupTime \nFinal Price: $finalPrice \n$itemDetails";
     _sendReceipt(context, message);
 
     // Fetch the document based on the productName
@@ -316,5 +319,9 @@ class _OrderFormState extends State<OrderForm> {
       print('Failed to send response: $e');
       throw e;
     }
+  }
+
+  bool isArabic() {
+    return Intl.getCurrentLocale() == 'ar';
   }
 }

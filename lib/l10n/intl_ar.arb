@@ -68,7 +68,7 @@
           "Request": "طلب",
           "ClientID": "معرف العميل: $clientId",
           "Reject": "رفض",
-          "ContactClient": "الاتصال بالعميل",
+          "ContactClient": "تواصل بالعميل",
           "Accepted": "تم قبوله",
           "Selectrejection": "حدد أو أدخل سبب الرفض",
           "Entercustomreason": "أدخل سببًا مخصصًا",
