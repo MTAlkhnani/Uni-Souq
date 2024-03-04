@@ -5,8 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:unisouq/app.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/screens/language_page/language_Screen.dart';
 import 'package:unisouq/screens/payment_page/cardpaymentview.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -111,13 +114,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             // Show nothing if user data or image URL is not available
           ),
-          _buildDrawerListTile(Icons.lock, 'Reset Password', () {
+          _buildDrawerListTile(Icons.lock, S.of(context).ResetPassword, () {
             // Implement navigation to reset password
           }),
-          _buildDrawerListTile(Icons.language, 'Language', () {
-            // Implement navigation to language settings
-          }),
-          _buildDrawerListTile(Icons.shopping_bag, 'My Collection', () {
+          _buildDrawerListTile(Icons.shopping_bag, S.of(context).MyCollectiond,
+              () {
             // Implement navigation to language settings
             if (isUserSignedIn()) {
               Navigator.pushNamed(context, AppRoutes.mycollrctionpage);
@@ -126,10 +127,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _showSignInRequiredPopup(context);
             }
           }),
-          _buildDrawerListTile(Icons.help, 'Help Center', () {
+          _buildDrawerListTile(Icons.language, S.of(context).Language, () {
+            // Implement navigation to langu  age settings
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LanguageSelectionPage()),
+            );
+          }),
+          _buildDrawerListTile(Icons.help, S.of(context).HelpCenter, () {
             // Implement navigation to help center
           }),
-          _buildDrawerListTile(Icons.payment, 'Payment', () async {
+          _buildDrawerListTile(Icons.payment, S.of(context).Payment, () async {
             // Check if user is signed in
             if (isUserSignedIn()) {
               // Get the current user ID
@@ -149,10 +159,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _showSignInRequiredPopup(context);
             }
           }),
-          _buildDrawerListTile(Icons.security, 'Security', () {
+          _buildDrawerListTile(Icons.security, S.of(context).Security, () {
             // Implement navigation to security settings
           }),
-          _buildDrawerListTile(Icons.exit_to_app, 'Sign Out', () {
+          _buildDrawerListTile(Icons.exit_to_app, S.of(context).SignOut, () {
             _showSignOutDialog(context);
           }),
         ],
@@ -166,22 +176,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: const Text("Sign Out"),
-            content: const Text("Are you sure you want to sign out?"),
+            title: Text(S.of(context).SignOut),
+            content: Text(S.of(context).SignOutb),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: const Text("Cancel"),
+                child: Text(S.of(context).Cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               CupertinoDialogAction(
-                child: const Text("Sign Out"),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
                   // Perform sign out action here
                 },
                 isDestructiveAction: true,
+                child: Text(S.of(context).SignOut),
               ),
             ],
           );
@@ -192,10 +202,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
         context: context,
         builder: (BuildContext context) {
           return MyDialog(
-            title: "Sign Out",
-            content: "Are you sure you want to sign out?",
-            cancelText: "Cancel",
-            signOutText: " Sign Out",
+            title: S.of(context).SignOut,
+            content: S.of(context).SignOutb,
+            cancelText: S.of(context).Cancel,
+            signOutText: S.of(context).SignOut,
             titleTextStyle:
                 const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             contentTextStyle: const TextStyle(fontSize: 16),

@@ -8,6 +8,7 @@ import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/constants/constants.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/global.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
@@ -85,14 +86,14 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('savedPassword', passwordController.text);
       }
       // Use Navigator to pushReplacementNamed
-      showSuccessMessage(context, "Login Succussfully");
-      Future.delayed(Duration(seconds: 1), () {
+      showSuccessMessage(context, S.of(context).loginsucc);
+      Future.delayed(const Duration(seconds: 1), () {
         Global.storageService
             .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
         Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
       });
     } on FirebaseAuthException catch (error) {
-      var message = 'An error occurred, please check your credentials!';
+      var message = S.of(context).massage;
       if (error.message != null) {
         message = error.message.toString();
       }
@@ -132,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'Transforming Campus Life',
+                      S.of(context).trans,
                       style:
                           Theme.of(context).textTheme.headlineLarge!.copyWith(
                                 fontSize: 35,
@@ -142,9 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                     ),
                     const SizedBox(height: 30),
-                    const Text(
-                      'Welcome back, you\'ve been missed!',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).welcome,
+                      style: const TextStyle(
                         fontSize: 17,
                       ),
                     ),
@@ -160,16 +161,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             MyTextField(
                               autovalidate: true,
                               controller: emailController,
-                              hintText: 'Email',
+                              hintText: S.of(context).email,
                               keyboardType: TextInputType.emailAddress,
                               prefixIcon: CupertinoIcons.mail_solid,
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (!RegExp(
                                         r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
                                     .hasMatch(val)) {
-                                  return 'Please enter a valid email';
+                                  return S.of(context).emailv;
                                 }
                                 return null;
                               },
@@ -180,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 10),
                             MyTextField(
                               controller: passwordController,
-                              hintText: 'Password',
+                              hintText: S.of(context).pass,
                               keyboardType: TextInputType.visiblePassword,
                               prefixIcon: CupertinoIcons.lock_fill,
                               suffixIcon: IconButton(
@@ -199,11 +200,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (!RegExp(
                                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
                                     .hasMatch(val)) {
-                                  return 'Please enter a valid password';
+                                  return S.of(context).passv;
                                 }
                                 return null;
                               },
@@ -236,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onChanged:
                                             _onRememberMeChanged, // Use your method here
                                       ),
-                                      const Text('Remember me'),
+                                      Text(S.of(context).REMMBER),
                                     ],
                                   ),
                                   TextButton(
@@ -244,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       onTapTxtForgotPassword(context);
                                     },
                                     child: Text(
-                                      "Forgot password?",
+                                      S.of(context).passforget,
                                       style: TextStyle(
                                           color:
                                               Theme.of(context).primaryColor),
@@ -258,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             if (!_isLogingIn)
                               RoundedButton(
-                                text: 'Login',
+                                text: S.of(context).login,
                                 color: Theme.of(context).primaryColor,
                                 press: _trySubmit,
                               ),
@@ -273,10 +274,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text('Not a member? '),
+                                          Text(S.of(context).notmember),
                                           TextButton(
                                             child: Text(
-                                              'Register now',
+                                              S.of(context).regsternow,
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .primaryColor,
@@ -293,10 +294,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text('Just browsing? '),
+                                          Text(S.of(context).Justbrowsing),
                                           TextButton(
                                             child: Text(
-                                              'Continue as a Guest',
+                                              S.of(context).Guest,
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .primaryColor,

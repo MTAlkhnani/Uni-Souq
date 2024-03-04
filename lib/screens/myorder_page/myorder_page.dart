@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -16,7 +17,7 @@ class MyOrderpage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
               appBar: AppBar(
-                title: const Text('My Orders'),
+                title: Text(S.of(context).MyOrders),
               ),
               body: Padding(
                 padding:
@@ -30,7 +31,7 @@ class MyOrderpage extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('My Orders'),
+              title: Text(S.of(context).MyOrders),
             ),
             body: Center(
               child: Text('Error: ${snapshot.error}'),
@@ -40,7 +41,7 @@ class MyOrderpage extends StatelessWidget {
           String? clientId = snapshot.data;
           return Scaffold(
             appBar: AppBar(
-              title: const Text('My Orders'),
+              title: Text(S.of(context).MyOrders),
             ),
             body: ResponseList(
               currentUserId: clientId,
@@ -81,7 +82,7 @@ class ResponseList extends StatelessWidget {
         List<DocumentSnapshot> responseDocs = snapshot.data!.docs;
 
         if (responseDocs.isEmpty) {
-          return const Center(child: Text('No notifications'));
+          return Center(child: Text(S.of(context).Nonotifications));
         }
 
         return ListView.builder(
@@ -141,9 +142,9 @@ class ResponseList extends StatelessWidget {
                         leading: imageURL.isNotEmpty
                             ? Image.network(imageURL)
                             : const SizedBox(), // Display imageURL if available
-                        title: Text('Product: $title'),
+                        title: Text("Product: $title"),
                         subtitle: Text(
-                            'Seller ID: $sellerID, \nTitle: $title'), // Display sellerID and title as the subtitle
+                            "Seller ID: $sellerID, \nTitle: $title "), // Display sellerID and title as the subtitle
                         trailing: const Icon(Icons.arrow_forward_ios),
                       ),
                     ),
@@ -212,7 +213,7 @@ class ResponseList extends StatelessWidget {
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return AlertDialog(
-                title: const Text('Order Details'),
+                title: Text(S.of(context).OrderDetails),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -226,7 +227,9 @@ class ResponseList extends StatelessWidget {
                             _isRated = !_isRated;
                           });
                         },
-                        child: Text(_isRated ? 'Hide Rating' : 'Rate Seller'),
+                        child: Text(_isRated
+                            ? S.of(context).HideRating
+                            : S.of(context).RateSeller),
                       ),
                     ),
                     // Rating bar (visible to everyone)
@@ -235,7 +238,7 @@ class ResponseList extends StatelessWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-                          const Text('Seller Rating'),
+                          Text(S.of(context).SellerRating),
                           RatingBar.builder(
                             initialRating: _rating, // Set initial rating
                             minRating: 1,
@@ -273,27 +276,30 @@ class ResponseList extends StatelessWidget {
                                       'rating': _rating,
                                       'timestamp': DateTime.now(),
                                     }).then((value) {
-                                      print('Rating submitted successfully');
+                                      print(S
+                                          .of(context)
+                                          .Ratingsubmittedsuccessfully);
                                       Navigator.pop(
                                           context); // Close the dialog
                                     }).catchError((error) {
-                                      print('Failed to submit rating: $error');
+                                      print("Failed to submit rating: $error");
                                       // Handle error if rating submission fails
                                     });
                                   } catch (error) {
-                                    print('Error submitting rating: $error');
+                                    print("Error submitting rating: $error");
                                   }
                                 } else {
                                   // Show an error message if the rating is not selected
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Please select a rating before submitting.'),
+                                    SnackBar(
+                                      content: Text(S
+                                          .of(context)
+                                          .Pleaseselectaratingbeforesubmitting),
                                     ),
                                   );
                                 }
                               },
-                              child: const Text('Submit'),
+                              child: Text(S.of(context).Submit),
                             ),
                           ),
                         ],
@@ -306,8 +312,7 @@ class ResponseList extends StatelessWidget {
                     onPressed: () {
                       final ChatService chatService = ChatService();
                       // Generate product issue message
-                      String productIssueMessage =
-                          'Hello, \nI have a problem with the product that I purchased from you';
+                      String productIssueMessage = S.of(context).prodectissue;
                       // Handle Product Issue button press
                       chatService.contactSellerproblem(
                         context,
@@ -317,7 +322,7 @@ class ResponseList extends StatelessWidget {
                     },
                     icon: const Icon(Icons.report),
                     label: Text(
-                      'Product Issue',
+                      S.of(context).ProductIssue,
                       style: TextStyle(color: Theme.of(context).hintColor),
                     ),
                   ),
@@ -354,7 +359,7 @@ class ResponseList extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Rejected Order Details'),
+          title: Text(S.of(context).RejectedOrderDetails),
           content: Text(responseMessage),
           actions: [
             TextButton.icon(
@@ -367,7 +372,7 @@ class ResponseList extends StatelessWidget {
                 color: Color.fromARGB(255, 184, 31, 20),
               ),
               label: Text(
-                'Close',
+                S.of(context).Close,
                 style: TextStyle(color: Theme.of(context).hintColor),
               ),
             ),
@@ -383,7 +388,7 @@ class ResponseList extends StatelessWidget {
                 color: Color.fromARGB(255, 43, 168, 48),
               ),
               label: Text(
-                'Contact Seller',
+                S.of(context).ContactSeller,
                 style: TextStyle(color: Theme.of(context).hintColor),
               ),
             ),

@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import 'package:unisouq/components/custom_drawer.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/Search_Screen/searchScreen.dart';
 import 'package:unisouq/screens/add_product/add_product.dart';
@@ -249,6 +251,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> categoryTranslations = {
+      'All Items': S.of(context).popularCategories1,
+      'Electronics': S.of(context).popularCategories2,
+      'Clothing': S.of(context).popularCategories3,
+      'Books': S.of(context).popularCategories4,
+      'Furniture': S.of(context).popularCategories5,
+      'Home': S.of(context).popularCategories6,
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Uni-Souq'),
@@ -333,7 +344,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
           // Filter items based on selected category
           List<DocumentSnapshot>? filteredItems;
-          if (selectedCategory != null && selectedCategory != 'All Items') {
+          if (selectedCategory != null &&
+              selectedCategory != 'All Items' &&
+              selectedCategory != 'جميع العناصر') {
             filteredItems = categoryMap[selectedCategory!] ?? [];
           } else {
             // If selectedCategory is null or 'All Items', show all items
@@ -345,11 +358,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Popular categories section
-              const Padding(
-                padding: EdgeInsets.only(left: 10, top: 5),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: isArabic() ? 0 : 10,
+                    top: 5,
+                    right: isArabic() ? 15 : 0),
                 child: Text(
-                  'Categories',
-                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                  S.of(context).Categories,
+                  style: const TextStyle(
+                      fontSize: 23, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -396,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             const SizedBox(
                                 height: 3), // Adjust spacing as needed
                             Text(
-                              category,
+                              categoryTranslations[category] ?? '',
                               style: TextStyle(
                                 color: isSelected
                                     ? Theme.of(context)
@@ -544,8 +561,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           );
                         },
                       )
-                    : const Center(
-                        child: Text('No items found.'),
+                    : Center(
+                        child: Text(S.of(context).Noitemsfound),
                       ),
               ),
             ],
@@ -580,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               child: Column(
                 children: [
                   Tooltip(
-                    message: 'search',
+                    message: S.of(context).search,
                     child: IconButton(
                       icon: const Icon(Icons.search),
                       color: currentIconIndex == 1
@@ -611,7 +628,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               child: Column(
                 children: [
                   Tooltip(
-                    message: 'Order',
+                    message: S.of(context).Order,
                     child: IconButton(
                         icon: const Icon(Icons.local_shipping),
                         color: currentIconIndex == 2
@@ -643,7 +660,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               child: Column(
                 children: [
                   Tooltip(
-                    message: 'Profile',
+                    message: S.of(context).Profile,
                     child: IconButton(
                       icon: const Icon(Icons.person),
                       color: currentIconIndex == 2
@@ -708,25 +725,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: const Text("Sign In Required"),
-            content:
-                const Text("Please sign in or sign up to access this feature."),
+            title: Text(S.of(context).SignInRequired),
+            content: Text(S.of(context).maslog),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: const Text("Cancel"),
+                child: Text(S.of(context).Cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               CupertinoDialogAction(
-                child: const Text("Sign In"),
+                child: Text(S.of(context).SignIn),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
                   Navigator.pushNamed(context, AppRoutes.signInScreen);
                 },
               ),
               CupertinoDialogAction(
-                child: const Text("Sign Up"),
+                child: Text(S.of(context).SignUp),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
                   Navigator.pushNamed(context, AppRoutes.signUpScreen);
@@ -741,25 +757,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Sign In Required"),
-            content:
-                const Text("Please sign in or sign up to access this feature."),
+            title: Text(S.of(context).SignInRequired),
+            content: Text(S.of(context).maslog),
             actions: <Widget>[
               TextButton(
-                child: const Text("Cancel"),
+                child: Text(S.of(context).Cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: const Text("Sign In"),
+                child: Text(S.of(context).SignIn),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
                   Navigator.pushNamed(context, AppRoutes.signInScreen);
                 },
               ),
               TextButton(
-                child: const Text("Sign Up"),
+                child: Text(S.of(context).SignUp),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
                   Navigator.pushNamed(context, AppRoutes.signUpScreen);
@@ -770,5 +785,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
       );
     }
+  }
+
+  bool isArabic() {
+    return Intl.getCurrentLocale() == 'ar';
   }
 }

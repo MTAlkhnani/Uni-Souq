@@ -6,6 +6,7 @@ import 'package:unisouq/components/item_card.dart';
 import 'package:unisouq/components/loading_button.dart';
 import 'package:unisouq/components/widgets.dart';
 import 'package:unisouq/constants/constants.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/intro_boarding/data/data.dart';
@@ -313,7 +314,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Just browsing? ",
+                              S.of(context).Justbrowsing,
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Theme.of(context).canvasColor,
@@ -339,7 +340,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 });
                               },
                               isLoading: _isLoading,
-                              text: 'Continue as a Guest',
+                              text: S.of(context).Guest,
                             )
                           ],
                         ),
@@ -362,7 +363,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             },
                             onLongPress: () {},
                             child: Text(
-                              "Skip",
+                              S.of(context).Skip,
                               textScaleFactor: 1.7,
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
@@ -416,7 +417,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                         context, AppRoutes.signInScreen);
                                   },
                                   child: Text(
-                                    "Get Started",
+                                    S.of(context).GetStarted,
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: Theme.of(context)

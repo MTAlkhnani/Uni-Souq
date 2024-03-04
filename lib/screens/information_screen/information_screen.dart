@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/my_text_field.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/models/profile.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -128,8 +129,8 @@ class _InformationScreenState extends State<InformationScreen> {
             SizedBox(
               height: 35.h,
             ),
-            const Text(
-              "Edit profile",
+            Text(
+              S.of(context).Editprofile,
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(
@@ -154,7 +155,7 @@ class _InformationScreenState extends State<InformationScreen> {
 
   Widget _buildCancelButton() {
     return RoundedButton(
-      text: "Cancel",
+      text: S.of(context).Cancel,
       press: () {
         if (ModalRoute.of(context)!.settings.name == AppRoutes.signUpScreen) {
           Navigator.of(context).pop();
@@ -230,14 +231,14 @@ class _InformationScreenState extends State<InformationScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.h),
-          child: const Text(
-            "Account Name",
+          child: Text(
+            S.of(context).AccountName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         SizedBox(height: 8.v),
         MyTextField(
-          hintText: "Full Name",
+          hintText: S.of(context).FullName,
           keyboardType: TextInputType.text,
           controller: _nameController,
         ),
@@ -251,8 +252,8 @@ class _InformationScreenState extends State<InformationScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.h),
-          child: const Text(
-            "Mobile Number",
+          child: Text(
+            S.of(context).MobileNumber,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
@@ -273,8 +274,8 @@ class _InformationScreenState extends State<InformationScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "University",
+          Text(
+            S.of(context).University,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 8.v),
@@ -283,7 +284,7 @@ class _InformationScreenState extends State<InformationScreen> {
             value: _universities.contains(_selectedUniversity)
                 ? _selectedUniversity
                 : null,
-            hint: Text("Select University"),
+            hint: Text(S.of(context).SelectUniversity),
             isExpanded: true,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
@@ -314,14 +315,14 @@ class _InformationScreenState extends State<InformationScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.h),
-          child: const Text(
-            "Address",
+          child: Text(
+            S.of(context).Address,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         SizedBox(height: 8.v),
         MyTextField(
-          hintText: "Address",
+          hintText: S.of(context).Address,
           keyboardType: TextInputType.text,
           controller: _addressController,
         ),
@@ -331,7 +332,7 @@ class _InformationScreenState extends State<InformationScreen> {
 
   Widget _buildCompleteButton() {
     return RoundedButton(
-      text: "Complete",
+      text: S.of(context).Complete,
       press: onTapCompleteButton,
       color: Theme.of(context).primaryColor,
     );
@@ -351,8 +352,8 @@ class _InformationScreenState extends State<InformationScreen> {
           shrinkWrap: true,
           padding: EdgeInsets.only(top: 30.v, bottom: 15.v),
           children: [
-            const Text(
-              'Pick Profile Picture',
+            Text(
+              S.of(context).PickProfilePicturec,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),

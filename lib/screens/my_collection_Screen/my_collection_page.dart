@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
@@ -36,11 +37,11 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('My Network'),
-          bottom: const TabBar(
+          title: Text(S.of(context).MyNetwork),
+          bottom: TabBar(
             tabs: [
-              Tab(text: 'My Collection'),
-              Tab(text: 'My Clients'),
+              Tab(text: S.of(context).MyCollection),
+              Tab(text: S.of(context).MyClients),
             ],
           ),
         ),
@@ -75,8 +76,8 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
         }
 
         if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Text('No items found in your collection.'),
+          return Center(
+            child: Text(S.of(context).Nofoundollection),
           );
         }
 
@@ -96,7 +97,7 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
               if (item != null && item is Map<String, dynamic>) {
                 return GestureDetector(
                   onTap: () {
-                    print('Item ID: ${item['itemID']}');
+                    print("Item ID: ${item['itemID']}");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -144,12 +145,13 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                               Flexible(
                                 child: ListTile(
                                   title: Text(
-                                    item['title'] ?? 'Item not available',
+                                    item['title'] ??
+                                        S.of(context).Itemnotavailable,
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                   subtitle: item['price'] != null
                                       ? Text(
-                                          'Price: ${item['price']} SAR',
+                                          "Price: ${item['price']} SAR",
                                           style: const TextStyle(fontSize: 12),
                                         )
                                       : null,
@@ -163,9 +165,9 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                   ),
                 );
               } else {
-                return const Card(
+                return Card(
                   child: ListTile(
-                    title: Text('Item not available'),
+                    title: Text(S.of(context).Itemnotavailable),
                   ),
                 );
               }

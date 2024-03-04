@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -52,9 +53,18 @@ class _AddProductState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> translatedCategories = [
+      S.of(context).popularCategories1,
+      S.of(context).popularCategories2,
+      S.of(context).popularCategories3,
+      S.of(context).popularCategories4,
+      S.of(context).popularCategories5,
+      S.of(context).popularCategories6,
+      // Add more categories as needed
+    ];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Product'),
+        title: Text(S.of(context).AddProduct),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -67,7 +77,7 @@ class _AddProductState extends State<AddProductScreen> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: _showBottomSheet,
-                    child: const Text('Add Pictures'),
+                    child: Text(S.of(context).AddPictures),
                   ),
                   _images.isNotEmpty
                       ? SizedBox(
@@ -103,10 +113,10 @@ class _AddProductState extends State<AddProductScreen> {
                   TextFormField(
                     controller: _nameController,
                     decoration:
-                        const InputDecoration(labelText: 'Product Name'),
+                        InputDecoration(labelText: S.of(context).ProductName),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the product name';
+                        return S.of(context).Pleaseentername;
                       }
                       return null;
                     },
@@ -114,27 +124,28 @@ class _AddProductState extends State<AddProductScreen> {
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCategory,
-                    hint: const Text('Select Category'),
+                    hint: Text(S.of(context).SelectCategory),
                     onChanged: (value) {
                       setState(() {
                         _selectedCategory = value;
                       });
                     },
-                    items: _categories
+                    items: translatedCategories
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
                       );
                     }).toList(),
-                    validator: (value) =>
-                        value == null ? 'Please select a category' : null,
+                    validator: (value) => value == null
+                        ? S.of(context).Pleaseselectacategory
+                        : null,
                     dropdownColor: Theme.of(context).secondaryHeaderColor,
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCondition,
-                    hint: const Text('Select Condition'),
+                    hint: Text(S.of(context).SelectCondition),
                     onChanged: (value) {
                       setState(() {
                         _selectedCondition = value;
@@ -147,18 +158,20 @@ class _AddProductState extends State<AddProductScreen> {
                         child: Text(value),
                       );
                     }).toList(),
-                    validator: (value) =>
-                        value == null ? 'Please select a condition' : null,
+                    validator: (value) => value == null
+                        ? S.of(context).Pleaseselectacondition
+                        : null,
                     dropdownColor: Theme.of(context).secondaryHeaderColor,
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: const InputDecoration(labelText: 'Description'),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).Description),
                     maxLines: 3,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a description';
+                        return S.of(context).Pleaseenteradescription;
                       }
                       return null;
                     },
@@ -166,7 +179,7 @@ class _AddProductState extends State<AddProductScreen> {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _priceController,
-                    decoration: const InputDecoration(labelText: 'Price'),
+                    decoration: InputDecoration(labelText: S.of(context).Price),
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
@@ -175,7 +188,7 @@ class _AddProductState extends State<AddProductScreen> {
                     ],
                     validator: (value) {
                       if (value == null || value.isEmpty && value == 0) {
-                        return 'Please enter the price';
+                        return S.of(context).Pleaseprice;
                       }
                       return null;
                     },
@@ -183,9 +196,10 @@ class _AddProductState extends State<AddProductScreen> {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _discountPriceController,
-                    decoration: const InputDecoration(
-                        labelText:
-                            'Discounted Price'), // Added discounted price field
+                    decoration: InputDecoration(
+                        labelText: S
+                            .of(context)
+                            .DiscountedPrice), // Added discounted price field
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
@@ -196,7 +210,7 @@ class _AddProductState extends State<AddProductScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitProduct,
-                    child: const Text('Submit Product'),
+                    child: Text(S.of(context).SubmitProduct),
                   ),
                 ],
               ),
@@ -308,7 +322,7 @@ class _AddProductState extends State<AddProductScreen> {
 
   String getCurrentUserUid() {
     final User? user = FirebaseAuth.instance.currentUser;
-    final String uid = user?.uid ?? "Not Signed In";
+    final String uid = user?.uid ?? S.of(context).NotSignedIn;
     return uid;
   }
 
@@ -340,11 +354,11 @@ class _AddProductState extends State<AddProductScreen> {
         });
 
         Navigator.of(context).pop();
-        showSuccessMessage(context, "Product added successfully");
+        showSuccessMessage(context, S.of(context).Productaddedsuccessfully);
         Navigator.of(context).pop();
       } catch (e) {
         Navigator.of(context).pop();
-        showErrorMessage(context, 'Some error happened: ${e.toString()}');
+        showErrorMessage(context, "Some error happened: ${e.toString()}");
       }
       setState(() => _isLoading = false);
     }
@@ -364,8 +378,8 @@ class _AddProductState extends State<AddProductScreen> {
           shrinkWrap: true,
           padding: EdgeInsets.only(top: 30.v, bottom: 15.v),
           children: [
-            const Text(
-              'Pick Profile Picture',
+            Text(
+              S.of(context).PickProfilePicture,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),

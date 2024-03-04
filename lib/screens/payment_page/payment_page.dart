@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -39,7 +40,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Enter Price and Payment Method'),
+        title: Text(S.of(context).method),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -64,15 +65,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Current Price: ${widget.currentPrice.toStringAsFixed(2)} SAR',
+                        S.of(context).curr,
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
-                        decoration: const InputDecoration(
-                          labelText: 'Enter New Listing Price',
+                        decoration: InputDecoration(
+                          labelText: S.of(context).listprice,
                         ),
                         onChanged: (value) {
                           if (value.isNotEmpty) {
@@ -82,8 +83,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         controller: _priceController,
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                        'Prefer Payment Method:',
+                      Text(
+                        S.of(context).prefcard,
                         style: TextStyle(fontSize: 18),
                       ),
                       const SizedBox(height: 10),
@@ -104,8 +105,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         dropdownColor: Theme.of(context)
                             .scaffoldBackgroundColor
                             .withOpacity(0.8),
-                        decoration: const InputDecoration(
-                          labelText: 'Payment Method',
+                        decoration: InputDecoration(
+                          labelText: S.of(context).PaymentMethod,
                         ),
                       ),
                       SizedBox(height: 130.h),
@@ -139,7 +140,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 _paymentMethod);
                           },
                           child: Text(
-                            'Submit the Request',
+                            S.of(context).SubmittheRequest,
                             style: TextStyle(
                                 fontSize: 18.h,
                                 color: Theme.of(context).bottomAppBarColor),
@@ -178,8 +179,8 @@ class _PaymentPageState extends State<PaymentPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Your request has been sent successfully.'),
+            title: Text(S.of(context).Success),
+            content: Text(S.of(context).suumassage),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -199,8 +200,7 @@ class _PaymentPageState extends State<PaymentPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Error'),
-            content:
-                const Text('Failed to send request. Please try again later.'),
+            content: Text(S.of(context).errormassagge),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

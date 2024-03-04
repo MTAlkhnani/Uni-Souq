@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 
@@ -87,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(S.of(context).Profile),
         actions: [
           if (currentUserId ==
               widget
@@ -121,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Phone: $phone',
+              "Phone: $phone",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(width: 20),
@@ -133,9 +134,9 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Rating: ',
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  S.of(context).Rating,
+                  style: const TextStyle(fontSize: 16),
                 ),
                 RatingBar.builder(
                   initialRating: sellerRating,
@@ -157,13 +158,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Number of Ratings: $numRatings',
+              " Number of Ratings: $numRatings",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Collection:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              S.of(context).Collection,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             StreamBuilder<QuerySnapshot>(
@@ -197,11 +198,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
+                                  // return const CircularProgressIndicator();
                                 }
                                 if (!snapshot.hasData ||
                                     snapshot.data == null) {
-                                  return Text('Document does not exist');
+                                  return const Text('Document does not exist');
                                 }
                                 final itemData = snapshot.data!.data()
                                     as Map<String, dynamic>;
@@ -232,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           subtitle: Text(itemData['discountedPrice'] == ""
                               ? 'Price: ${itemData['discountedPrice']} SAR'
                               : 'Price: ${itemData['price']} SAR'),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(Icons.arrow_forward_ios),
                         ),
                       ),
                     );

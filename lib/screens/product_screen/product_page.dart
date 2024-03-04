@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
@@ -161,7 +162,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Detail'),
+        title: Text(S.of(context).ProductDetail),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _productFuture,
@@ -173,7 +174,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(child: Text('Product not found'));
+            return Center(child: Text(S.of(context).Productnotfound));
           }
           // Extract product data
           final productData = snapshot.data!.data() as Map<String, dynamic>;
@@ -271,7 +272,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Now: ${discountedPrice.toStringAsFixed(0)} SAR',
+                                  "Now: ${discountedPrice.toStringAsFixed(0)} SAR",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -288,7 +289,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     final String productPrice =
                                         productData['price'].toString();
                                     final String shareContent =
-                                        "Check out this product: $productTitle for $productPrice SAR on Uni-Souq!";
+                                        S.of(context).check;
 
                                     // Using the share package to share the content
                                     Share.share(shareContent);
@@ -299,7 +300,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           // Display original price only if there is a discount
                           if (discountedPrice > 0)
                             Text(
-                              'Before: ${price.toStringAsFixed(2)} SAR',
+                              "Before: ${price.toStringAsFixed(2)} SAR",
                               style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -309,7 +310,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           const SizedBox(height: 8),
                           // Product condition
                           Text(
-                            'Condition: ${productData['condition']}',
+                            "Condition: ${productData['condition']}",
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 8),
@@ -319,7 +320,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             style: const TextStyle(fontSize: 16),
                           ),
                           Text(
-                            'Status : ${productData['status']}',
+                            "Status : ${productData['status']}",
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 16),
@@ -334,7 +335,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: Text(
-                    'Comments',
+                    S.of(context).Comments,
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -349,7 +350,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         child: TextField(
                           controller: _commentController,
                           decoration: InputDecoration(
-                            hintText: 'Write a comment...',
+                            hintText: S.of(context).write,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
@@ -426,9 +427,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           Icon(Icons.sell,
                               color: Theme.of(context).dividerColor), // Icon
                           SizedBox(width: 5.v), // SizedBox for spacing
-                          const Text(
-                            'You Are The Seller',
-                            style: TextStyle(
+                          Text(
+                            S.of(context).YouAreTheSeller,
+                            style: const TextStyle(
                               fontSize: 18,
                             ),
                           ),
@@ -456,7 +457,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               color: Theme.of(context).dividerColor), // Icon
                           SizedBox(width: 5.v), // SizedBox for spacing
                           Text(
-                            'This item is sold',
+                            S.of(context).Thisitemissold,
                             style: TextStyle(
                                 fontSize: 18.h,
                                 color: Theme.of(context).dividerColor),
@@ -490,10 +491,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         SizedBox(width: 5.v), // SizedBox for spacing
                         Text(
                           _sendingInProgress
-                              ? 'In Progress'
+                              ? S.of(context).InProgress
                               : _isRequestInProgress // Update button text based on request status
-                                  ? 'Request In Progress'
-                                  : 'Request To Buy',
+                                  ? S.of(context).RequestInProgress
+                                  : S.of(context).RequestToBuy,
                           style: TextStyle(
                               fontSize: 18.h,
                               color: Theme.of(context).hintColor),
@@ -559,18 +560,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Sign In Required"),
-          content:
-              const Text("Please sign in or sign up to access this feature."),
+          title: Text(S.of(context).SignInRequired),
+          content: Text(S.of(context).maslog),
           actions: <Widget>[
             TextButton(
-              child: const Text("Cancel"),
+              child: Text(S.of(context).Cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text("Sign In"),
+              child: Text(S.of(context).SignIn),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,
@@ -578,7 +578,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               },
             ),
             TextButton(
-              child: const Text("Sign Up"),
+              child: Text(S.of(context).SignUp),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog first
                 Navigator.pushNamed(context,
@@ -611,8 +611,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         },
         icon: Icon(Icons.person,
             color: Theme.of(context).hintColor), // Add icon here
-        label: const Text(
-          'View Seller Profile',
+        label: Text(
+          S.of(context).ViewSellerProfile,
           style: TextStyle(fontSize: 18),
         ),
         style: ElevatedButton.styleFrom(

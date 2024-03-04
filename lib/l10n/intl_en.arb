@@ -1,0 +1,299 @@
+
+{
+  "onboard page " : "onboarding_screen"  ,
+
+
+        "Justbrowsing" : "Just browsing?" ,
+
+        "Guest" :  "Continue as a Guest" ,
+
+        "Skip" : "Skip" ,
+
+        "GetStarted" : "Get Started" ,
+        
+  "sign-u"   : "sign-u_screen"   ,
+
+        "HelleThere" : "Hello There!" ,
+        "reg" : "Register below with your detail" , 
+        "hint" : "First Name" , 
+
+        "if1" : "Please fill in this field",
+        "if_else1" : "Name too long" , 
+        "if_else2" : "Name too short",
+
+        "hintL" :" Last Name" ,
+        "hintn" : "05xxxxxxxx",
+        "numv" : "Please enter a valid phone number.",
+        "email" : "Email",
+        "emailv" : "Please enter a valid phone number.",
+        "pass" : "Password" ,
+        "passv" : "Please enter a valid password",
+        "sginup" : "Sign Up",
+        "member" :"I am a member!",
+        "login" : "Login now",
+        "succmassage" : "Account Created Succussfully",
+        "massage":"An error occurred, please check your credentials!",
+"sign-on"   : "login_screen"  ,
+        "loginsucc" : "Login Succussfully",
+        "trans" : "Transforming Campus Life",
+        "welcome" : "Welcome back, you've been missed!",
+        "REMMBER" : "Remember me",
+        "passforget" : "Forgot password?",
+        "notmember" : "Not a member? ",
+        "regsternow" : "Register now",
+"home-s"   : "home_screen" , 
+
+        "popularCategories1": "All Items", 
+        "popularCategories2": "Electronics", 
+        "popularCategories3": "Clothing", 
+        "popularCategories4": "Books", 
+        "popularCategories5": "Furniture", 
+        "popularCategories6": "Home", 
+
+        "Categories" : "Categories",
+        "Noitemsfound" : "No items found.",
+        "search" : "search",
+        "Order" : "Order",
+        "Profile" : "Profile",
+        "SignInRequired" : "Sign In Required" , 
+        "maslog": "Please sign in or sign up to access this feature." ,
+        "Cancel" : "Cancel",
+        "SignIn" :"Sign In",
+        "SignUp" :"Sign Up",
+
+"information"   : "information_screen" , 
+        "Editprofile": "Edit profile" , 
+        "AccountName" :"Account Name",
+        "FullName" :"Full Name" ,
+        "MobileNumber" : "Mobile Number",
+        "University":"University",
+        "SelectUniversity":"Select University",
+        "Address":"Address",
+        "Complete" :"Complete",
+        "PickProfilePicturec":"Pick Profile Picture",
+
+"myprofile"   : "profile_screen" ,    
+        "Phone" :"Phone: $phone",
+        "Rating" :"Rating",
+        "NumberofRatings" :"Number of Ratings: $numRatings",
+        "Collection":"Collection",
+"request"   : "request_page" , 
+        "Accept":"Accept",
+        "Request":"Request",
+        "ClientID":"Client ID: $clientId",
+        "Reject":"Reject",
+        "ContactClient":"Contact Client",
+        "Accepted":"Accepted",
+        "Selectrejection":"Select or enter a reason for rejection",
+        "Entercustomreason":"Enter custom reason",
+        "Pleaselist":"Please enter a reason or select from the list.",
+        "Confirm":"Confirm",
+"AddProductScreen"   : "AddProductScreen" ,
+        
+        "AddProduct": "Add Product",
+        "AddPictures": "Add Pictures",
+        "ProductName":"Product Name",
+        "Pleaseentername":"Please enter the product name",
+        "SelectCategory":"Select Category",
+        "Pleaseselectacategory" : "Please select a category",
+        "SelectCondition": "Select Condition" ,
+        "Pleaseselectacondition": "Please select a condition" ,
+        "Description":"Description",
+        "Pleaseenteradescription" : "Please enter a description",
+        "Price":"Price",
+        "Pleaseprice":"Please enter the price",
+        "DiscountedPrice":"Discounted Price",
+        "SubmitProduct":"Submit Product",
+        "NotSignedIn":"Not Signed In",
+        "Productaddedsuccessfully":"Product added successfully",
+        "Someerrorhappened" :"Some error happened: ${e.toString()}",
+        "PickProfilePicture":"Pick Profile Picture",
+"EditProductscreen":"Edit Product_Screen",
+        "EditProduct":"Edit Product",
+        "addnewpictures":"add new pictures",
+        "SaveChanges" :"Save Changes",
+        "Productupdatedsuccessfully":"Product updated successfully",
+        "NoproductitemID":"No product found with the specified itemID.",
+        "Itemdeletedsuccessfully":"Item deleted successfully",
+"forgetscreen":"forgetscreen_Screen",  
+        "weneed":"We need your registration email to send you password reset code!",
+        "sendCode":"send Code" ,
+        "restemail":"Reset code has been sent to your email" ,
+"contentscreen":"fcontentscreen_Screen",   
+        "Nomessagesavailable":"No messages available",
+        "Noclientyou":"No clients are contacting you.",
+        "Usernotfound":"User not found",
+"massagescreen":"massagescreen_Screen",
+        "lastseen":"Last seen: Not available",
+        "Activenow":"Active now",
+        "TypeSomething":"Type Something...",
+"mycollection_screen":"mycollection_screen",
+        "MyNetwork":"My Network",
+        "MyCollection":"My Collection",
+        "MyClients":"My Clients",
+        "Nofoundollection":"No items found in your collection.",
+        "ItemID":"Item ID: ${item['itemID']}",
+        "Itemnotavailable":"Item not available",
+        "Price:":"Price: ${item['price']} SAR",
+"myorder_screen":"myorder_screen",
+        "MyOrders":"My Orders" ,
+        "Nonotifications":"No notifications",
+        "Product":"Product: $title",
+        "SellerID":"Seller ID: $sellerID, \nTitle: $title'",
+        "OrderDetails":"Order Details",
+        "HideRating":"Hide Rating",
+        "RateSeller":"Rate Seller",
+        "SellerRating":"Seller Rating",
+        "Ratingsubmittedsuccessfully":"Rating submitted successfully",
+        "Failedtosubmitrating":"Failed to submit rating: $error",
+        "Errorsubmittingrating":"Error submitting rating: $error",
+        "Pleaseselectaratingbeforesubmitting":"Please select a rating before submitting.",
+        "Submit":"Submit",
+        "prodectissue":"Hello, \nI have a problem with the product that I purchased from you",
+        "ProductIssue":"Product Issue",
+        "RejectedOrderDetails":"Rejected Order Details",
+        "Close":"Close",
+        "ContactSeller":"Contact Seller",
+"myordericonf_screen":"myorderconf_screen",
+        "OrderAccepted":"Order Accepted",
+        "Yourorderhasbeenaccepted":"Your order has been accepted!",
+        "Back":"Back",
+"myorderinfo_screen":"myorderinfo_screen",
+        "OrderInformation":"Order Information",
+        "Location":"Location",
+        "loc":"Please enter a location",
+        "PickupTime":"Pickup Time",
+        "selectpick":"Please select a pickup time",
+        "FinalPrice":"Final Price",
+        "procev":"Please enter a valid price"
+,        "ConfirmOrder":"Confirm Order",
+        "Receipt":"Receipt",
+        "OK":"OK",
+        "massageconf":"Order confirmed: \nLocation: $location \nPickup Time: $pickupTime \nFinal Price: $finalPrice \n$itemDetails",
+"CardPaymentView":"CardPaymentView",
+        "Paymentcards":"Payment cards",
+        "Nocardsadded":"No cards added",
+        "carddele":"Are you sure you want to delete this card?",
+        "Carddeleted":"Card deleted",
+        "Delete":"Delete",
+"AddPaymentCardScreen":"CardPaymentView",
+    
+        "payss":"Payment card details saved successfully!",
+        "errorpay":"Error saving payment card: $e",
+        "invalid":"invalid!",
+        "AddCard":"Add Card",
+        "SavetheCard":"Save the Card",
+"PaymentPage":"PaymentPage",
+        "method":"Enter Price and Payment Method",
+        "curr":"Current Price: ${widget.currentPrice.toStringAsFixed(2)} SAR",
+        "listprice":"Enter New Listing Price",
+        "prefcard":"Prefer Payment Method:",
+        "PaymentMethod":"Payment Method",
+        "SubmittheRequest":"Submit the Request",
+        "Success":"Success",
+        "suumassage":"Your request has been sent successfully.",
+        "Error":"Error",
+        "errormassagge":"Failed to send request. Please try again later.",
+"product_Detail":"product_Detail",
+        "ProductDetail":"Product Detail",
+        "Productnotfound":"Product not found",
+        "now":"Now: ${discountedPrice.toStringAsFixed(0)} SAR",
+        "check":"Check out this product: $productTitle for $productPrice SAR on Uni-Souq!",
+        "befoer":"Before: ${price.toStringAsFixed(2)} SAR",
+        "condtion":"Condition: ${productData['condition']}",
+        "state":"Status : ${productData['status']}",
+        "Comments":"Comments",
+        "write":"Write a comment...",
+        "YouAreTheSeller":"You Are The Seller",
+        "Thisitemissold":"This item is sold",
+        "InProgress":"In Progress",
+        "RequestInProgress":"Request In Progress",
+        "RequestToBuy":"Request To Buy",
+        "ViewSellerProfile":"View Seller Profile",
+"drawer":"drawer",
+        "ResetPassword": "Reset Password",
+        "Language" :"Language",
+        "MyCollectiond":"My Collection",
+        "HelpCenter":"Help Center",
+        "Payment":"Payment",
+        "Security":"Security",
+        "SignOut":"Sign Out",
+        "SignOutb":"Are you sure you want to sign out?",
+        "selectLanguage":"selectLanguage"
+        
+
+
+
+
+
+
+
+        
+
+
+        
+        
+
+
+
+
+
+        
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+}

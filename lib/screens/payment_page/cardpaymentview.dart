@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/payment_page/payment_card_add.dart';
 import 'package:unisouq/service/payment_service.dart';
 
@@ -21,7 +22,7 @@ class CardPaymentView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment cards'),
+        title: Text(S.of(context).Paymentcards),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
         future: paymentService.getPaymentCardsByUserId(userId),
@@ -78,9 +79,9 @@ class CardPaymentView extends StatelessWidget {
                   },
                 );
               } else {
-                return const Center(
+                return Center(
                   child: Text(
-                    'No cards added',
+                    S.of(context).Nocardsadded,
                     style: TextStyle(fontSize: 18),
                   ),
                 );
@@ -115,14 +116,14 @@ class CardPaymentView extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: const Text('Confirm'),
-            content: const Text('Are you sure you want to delete this card?'),
+            title: Text(S.of(context).Confirm),
+            content: Text(S.of(context).carddele),
             actions: <Widget>[
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },
-                child: const Text('Cancel'),
+                child: Text(S.of(context).Cancel),
               ),
               CupertinoDialogAction(
                 onPressed: () {
@@ -130,10 +131,10 @@ class CardPaymentView extends StatelessWidget {
                   // Remove the item from the data source.
                   paymentService.deletePaymentCard(cardData['cardId']);
                   // Show a snackbar.
-                  showSuccessMessage(context, 'Card deleted');
+                  showSuccessMessage(context, S.of(context).Carddeleted);
                 },
                 isDestructiveAction: true,
-                child: const Text('Delete'),
+                child: Text(S.of(context).Delete),
               ),
             ],
           );
@@ -144,15 +145,15 @@ class CardPaymentView extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Confirm'),
-            content: const Text('Are you sure you want to delete this card?'),
+            title: Text(S.of(context).Delete),
+            content: Text(S.of(context).carddele),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },
-                child: const Text(
-                  'Cancel',
+                child: Text(
+                  S.of(context).Cancel,
                   style: TextStyle(color: Colors.red),
                 ),
               ),
@@ -162,9 +163,9 @@ class CardPaymentView extends StatelessWidget {
                   // Remove the item from the data source.
                   paymentService.deletePaymentCard(cardData['cardId']);
                   // Show a snackbar.
-                  showSuccessMessage(context, 'Card deleted');
+                  showSuccessMessage(context, S.of(context).Carddeleted);
                 },
-                child: const Text('Delete'),
+                child: Text(S.of(context).Delete),
               ),
             ],
           );

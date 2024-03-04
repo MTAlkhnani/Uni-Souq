@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -24,7 +25,7 @@ class OrderInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Information'),
+        title: Text(S.of(context).OrderInformation),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -103,10 +104,10 @@ class _OrderFormState extends State<OrderForm> {
             children: [
               Text(widget.message),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Location'),
+                decoration: InputDecoration(labelText: S.of(context).Location),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
+                    return S.of(context).loc;
                   }
                   return null;
                 },
@@ -120,7 +121,8 @@ class _OrderFormState extends State<OrderForm> {
                 },
                 child: AbsorbPointer(
                   child: TextFormField(
-                    decoration: const InputDecoration(labelText: 'Pickup Time'),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).PickupTime),
                     controller: TextEditingController(
                       text: pickupTime == null
                           ? ''
@@ -128,7 +130,7 @@ class _OrderFormState extends State<OrderForm> {
                     ),
                     validator: (value) {
                       if (pickupTime == null) {
-                        return 'Please select a pickup time';
+                        return S.of(context).selectpick;
                       }
                       return null;
                     },
@@ -136,11 +138,12 @@ class _OrderFormState extends State<OrderForm> {
                 ),
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Final Price'),
+                decoration:
+                    InputDecoration(labelText: S.of(context).FinalPrice),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || double.tryParse(value) == null) {
-                    return 'Please enter a valid price';
+                    return S.of(context).procev;
                   }
                   return null;
                 },
@@ -160,7 +163,7 @@ class _OrderFormState extends State<OrderForm> {
                         _confirmOrder(context, widget.itemDetails);
                       }
                     },
-                    child: const Text('Confirm Order'),
+                    child: Text(S.of(context).ConfirmOrder),
                   ),
                 ),
               ),
@@ -190,14 +193,14 @@ class _OrderFormState extends State<OrderForm> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Receipt'),
+          title: Text(S.of(context).Receipt),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('OK'),
+              child: Text(S.of(context).OK),
             ),
           ],
         );
@@ -206,8 +209,7 @@ class _OrderFormState extends State<OrderForm> {
   }
 
   void _confirmOrder(BuildContext context, String itemDetails) async {
-    final message =
-        'Order confirmed: \nLocation: $location \nPickup Time: $pickupTime \nFinal Price: $finalPrice \n$itemDetails';
+    final message = S.of(context).massageconf;
     _sendReceipt(context, message);
 
     // Fetch the document based on the productName

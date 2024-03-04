@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 
 class ContactClientsPage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
       }
     }
 
-    return 'No messages available';
+    return S.of(context).Nomessagesavailable;
   }
 
   Future<int> getUnreadMessageCount(String chatRoomId) async {
@@ -91,7 +92,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _usersMap.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('chat_rooms')
@@ -111,7 +112,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
 
                 return chatRooms.isEmpty
                     ? Center(
-                        child: Text('No clients are contacting you.'),
+                        child: Text(S.of(context).Noclientyou),
                       )
                     : ListView.builder(
                         itemCount: chatRooms.length,
@@ -126,11 +127,11 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
 
                           if (otherUserId == null) {
                             // Handle the case where otherUserId is null
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
 
                           String userName = _usersMap[otherUserId]!['name'] ??
-                              'User not found';
+                              S.of(context).Usernotfound;
                           String chatRoomId = _getChatRoomId(otherUserId);
 
                           return FutureBuilder<int>(
@@ -140,9 +141,9 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                       ConnectionState.waiting ||
                                   !snapshot.hasData) {
                                 return ListTile(
-                                  leading: Icon(Icons.account_circle),
+                                  leading: const Icon(Icons.account_circle),
                                   title: Text(userName),
-                                  subtitle: Text('Loading...'),
+                                  subtitle: const Text('Loading...'),
                                 );
                               } else {
                                 int unreadMessages = snapshot.data!;
@@ -159,14 +160,14 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                           top: 0,
                                           right: 0,
                                           child: Container(
-                                            padding: EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Colors.red,
                                             ),
                                             child: Text(
                                               '$unreadMessages',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                               ),
@@ -182,7 +183,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                       if (snapshot.connectionState ==
                                               ConnectionState.waiting ||
                                           !snapshot.hasData) {
-                                        return Text('Loading...');
+                                        return const Text('Loading...');
                                       } else {
                                         String lastMessage = snapshot.data!;
                                         return Text(lastMessage);

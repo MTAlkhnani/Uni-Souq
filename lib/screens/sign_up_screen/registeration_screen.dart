@@ -7,6 +7,7 @@ import 'package:unisouq/components/My_text_field.dart';
 import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/fade_animationtest.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/information_Screen/information_screen.dart';
 
@@ -94,18 +95,19 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             context, AppRoutes.verificationCodeScreen);
       } else {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
-        showSuccessMessage(context, "Account Created Succussfully");
+        showSuccessMessage(context, S.of(context).succmassage);
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                InformationScreen(userId: userCredential.user!.uid,),
+            builder: (context) => InformationScreen(
+              userId: userCredential.user!.uid,
+            ),
           ),
         );
       }
     } on FirebaseAuthException catch (error) {
-      var message = 'An error occurred, please check your credentials!';
+      var message = S.of(context).massage;
       if (error.message != null) {
         message = error.message.toString();
         // ScaffoldMessenger.of(context)
@@ -167,7 +169,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   children: <Widget>[
                     const SizedBox(height: 100),
                     Text(
-                      'Hello There!',
+                      S.of(context).HelleThere,
                       style:
                           Theme.of(context).textTheme.headlineLarge!.copyWith(
                                 fontSize: 40,
@@ -178,9 +180,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                               ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Register below with your detail',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).reg,
+                      style: const TextStyle(
                         fontSize: 20,
                       ),
                     ),
@@ -195,16 +197,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             const SizedBox(height: 10),
                             MyTextField(
                               controller: firstnameController,
-                              hintText: 'First Name',
+                              hintText: S.of(context).hint,
                               keyboardType: TextInputType.name,
                               prefixIcon: Icons.person,
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (val.length > 30) {
-                                  return 'Name too long';
+                                  return S.of(context).if_else1;
                                 } else if (val.length < 2) {
-                                  return 'Name too short';
+                                  return S.of(context).if_else2;
                                 }
                                 return null;
                               },
@@ -216,16 +218,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                 height: 10), // Added consistent spacing
                             MyTextField(
                               controller: lastnameController,
-                              hintText: 'Last Name',
+                              hintText: S.of(context).hintL,
                               keyboardType: TextInputType.name,
                               prefixIcon: Icons.person,
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (val.length > 30) {
-                                  return 'Name too long';
+                                  return S.of(context).if_else1;
                                 } else if (val.length < 2) {
-                                  return 'Name too short';
+                                  return S.of(context).if_else2;
                                 }
                                 return null;
                               },
@@ -238,14 +240,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             MyTextField(
                               autovalidate: true,
                               controller: phoneController,
-                              hintText: '05xxxxxxxx',
+                              hintText: S.of(context).hintn,
                               keyboardType: TextInputType.phone,
                               prefixIcon: Icons.phone,
                               validator: (value) {
                                 if (value!.isEmpty ||
                                     value.length != 10 ||
                                     !value.startsWith('05')) {
-                                  return 'Please enter a valid phone number.';
+                                  return S.of(context).numv;
                                 }
 
                                 return null;
@@ -259,16 +261,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             MyTextField(
                               autovalidate: true,
                               controller: emailController,
-                              hintText: 'Email',
+                              hintText: S.of(context).email,
                               keyboardType: TextInputType.emailAddress,
                               prefixIcon: Icons.email,
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (!RegExp(
                                         r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
                                     .hasMatch(val)) {
-                                  return 'Please enter a valid email';
+                                  return S.of(context).emailv;
                                 }
                                 return null;
                               },
@@ -280,7 +282,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                 height: 10), // Added consistent spacing
                             MyTextField(
                               controller: passwordController,
-                              hintText: 'Password',
+                              hintText: S.of(context).pass,
                               keyboardType: TextInputType.visiblePassword,
                               prefixIcon: CupertinoIcons.lock_fill,
                               suffixIcon: IconButton(
@@ -348,11 +350,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                               },
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return 'Please fill in this field';
+                                  return S.of(context).if1;
                                 } else if (!RegExp(
                                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
                                     .hasMatch(val)) {
-                                  return 'Please enter a valid password';
+                                  return S.of(context).passv;
                                 }
                                 return null;
                               },
@@ -467,7 +469,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                   color: Color.fromRGBO(142, 108, 239, 1)),
                             if (!isSigningUp)
                               RoundedButton(
-                                text: 'Sign Up',
+                                text: S.of(context).sginup,
                                 color: Theme.of(context).primaryColor,
                                 press: _submit,
                               ),
@@ -485,10 +487,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text('I am a member!'),
+                                           Text(S.of(context).member),
                                           TextButton(
                                             child: Text(
-                                              'Login now',
+                                              S.of(context).login,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor),
@@ -504,10 +506,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text('Just browsing? '),
+                                           Text(S.of(context).Justbrowsing),
                                           TextButton(
                                             child: Text(
-                                              'Continue as a Guest',
+                                              S.of(context).Guest,
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .primaryColor,

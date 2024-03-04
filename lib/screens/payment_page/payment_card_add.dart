@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:unisouq/components/green_intro_widget.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:uuid/uuid.dart';
 
@@ -61,9 +62,9 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
           userId: currentUserId,
           cardId: cardId,
         );
-        print('Payment card details saved successfully!');
+        print(S.of(context).payss);
       } catch (e) {
-        print('Error saving payment card: $e');
+        print(S.of(context).errorpay);
         // Handle error
       }
     } else {
@@ -78,7 +79,8 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          IntroWidgetWithoutLogos(title: 'Add Card', context: context),
+          IntroWidgetWithoutLogos(
+              title: S.of(context).AddCard, context: context),
           Column(
             children: <Widget>[
               const SizedBox(
@@ -180,9 +182,9 @@ class AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                         },
                         child: Container(
                           margin: const EdgeInsets.all(12),
-                          child: const Text(
-                            'Save the Card',
-                            style: TextStyle(
+                          child: Text(
+                            S.of(context).SavetheCard,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontFamily: 'halter',
                               fontSize: 18,

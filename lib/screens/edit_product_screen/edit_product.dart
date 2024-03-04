@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:path/path.dart' as Path;
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Product'),
+        title: Text(S.of(context).EditProduct),
         actions: [
           // IconButton(
           //   icon: Icon(Icons.delete),
@@ -124,7 +125,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     : Container(),
                 ElevatedButton(
                   onPressed: _showBottomSheet,
-                  child: const Text('add new pictures'),
+                  child: Text(S.of(context).addnewpictures),
                 ),
                 _images.isNotEmpty
                     ? SizedBox(
@@ -159,10 +160,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     : Container(),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Product Name'),
+                  decoration:
+                      InputDecoration(labelText: S.of(context).ProductName),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter the product name';
+                      return S.of(context).Pleaseentername;
                     }
                     return null;
                   },
@@ -170,7 +172,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: _selectedCategory,
-                  hint: const Text('Select Category'),
+                  hint: Text(S.of(context).SelectCategory),
                   onChanged: (value) {
                     setState(() {
                       _selectedCategory = value;
@@ -183,14 +185,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       child: Text(value),
                     );
                   }).toList(),
-                  validator: (value) =>
-                      value == null ? 'Please select a category' : null,
+                  validator: (value) => value == null
+                      ? S.of(context).Pleaseselectacategory
+                      : null,
                   dropdownColor: Theme.of(context).secondaryHeaderColor,
                 ),
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: _selectedCondition,
-                  hint: const Text('Select Condition'),
+                  hint: Text(S.of(context).SelectCategory),
                   onChanged: (value) {
                     setState(() {
                       _selectedCondition = value;
@@ -203,18 +206,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       child: Text(value),
                     );
                   }).toList(),
-                  validator: (value) =>
-                      value == null ? 'Please select a condition' : null,
+                  validator: (value) => value == null
+                      ? S.of(context).Pleaseselectacondition
+                      : null,
                   dropdownColor: Theme.of(context).secondaryHeaderColor,
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration:
+                      InputDecoration(labelText: S.of(context).Description),
                   maxLines: 3,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a description';
+                      return S.of(context).Pleaseenteradescription;
                     }
                     return null;
                   },
@@ -222,7 +227,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _priceController,
-                  decoration: const InputDecoration(labelText: 'Price'),
+                  decoration: InputDecoration(labelText: S.of(context).Price),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
@@ -231,7 +236,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ],
                   validator: (value) {
                     if (value == null || value.isEmpty && value == 0) {
-                      return 'Please enter the price';
+                      return S.of(context).Pleaseprice;
                     }
                     return null;
                   },
@@ -240,7 +245,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 TextFormField(
                   controller: _discountPriceController,
                   decoration:
-                      const InputDecoration(labelText: 'Discounted Price'),
+                      InputDecoration(labelText: S.of(context).DiscountedPrice),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
@@ -251,7 +256,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => _updateProduct(),
-                  child: const Text('Save Changes'),
+                  child: Text(S.of(context).SaveChanges),
                 ),
               ],
             ),
@@ -304,12 +309,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
           await itemRef.update(updatedData);
 
           Navigator.of(context).pop();
-          showSuccessMessage(context, "Product updated successfully");
+          showSuccessMessage(context, S.of(context).Productupdatedsuccessfully);
         } else {
           // No document found with the given itemID
           Navigator.of(context).pop();
-          showErrorMessage(
-              context, 'No product found with the specified itemID.');
+          showErrorMessage(context, S.of(context).NoproductitemID);
         }
       } catch (error) {
         Navigator.of(context).pop();
@@ -325,7 +329,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       await FirebaseFirestore.instance.collection('Item').doc(itemId).delete();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Item deleted successfully'),
+          content: Text(S.of(context).Itemdeletedsuccessfully),
         ),
       );
     } catch (error) {

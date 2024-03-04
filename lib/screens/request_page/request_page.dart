@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/order_information/order_information.dart';
 import 'package:unisouq/utils/auth_utils.dart';
@@ -32,7 +33,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Request'),
+        title: Text(S.of(context).Request),
       ),
       body: FutureBuilder<String?>(
         future: clientId,
@@ -129,7 +130,7 @@ class _RequestPageState extends State<RequestPage> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Client ID: $clientId'),
+                            Text("Client ID: $clientId"),
                             if (!isItemSold)
                               Row(
                                 mainAxisAlignment:
@@ -143,16 +144,16 @@ class _RequestPageState extends State<RequestPage> {
                                           request['clientId'],
                                           request['sellerID']);
                                     },
-                                    child: const Text('Accept'),
+                                    child: Text(S.of(context).Accept),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
                                       _showRejectionReasonDialog(context,
                                           request); // Pass the DocumentSnapshot
                                     },
-                                    child: const Text(
-                                      'Reject',
-                                      style: TextStyle(
+                                    child: Text(
+                                      S.of(context).Reject,
+                                      style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 193, 45, 34)),
                                     ),
@@ -161,9 +162,9 @@ class _RequestPageState extends State<RequestPage> {
                                     onPressed: () {
                                       _contactClient(context, clientId);
                                     },
-                                    child: const Text(
-                                      'Contact Client',
-                                      style: TextStyle(
+                                    child: Text(
+                                      S.of(context).ContactClient,
+                                      style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 59, 186, 63)),
                                     ),
@@ -179,9 +180,9 @@ class _RequestPageState extends State<RequestPage> {
                                     onPressed: () {
                                       _contactClient(context, clientId);
                                     },
-                                    child: const Text(
-                                      'Contact Client',
-                                      style: TextStyle(
+                                    child: Text(
+                                      S.of(context).ContactClient,
+                                      style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 59, 186, 63)),
                                     ),
@@ -220,7 +221,7 @@ class _RequestPageState extends State<RequestPage> {
       SnackBar(
         content: Text(message),
         action: SnackBarAction(
-          label: 'Accepted',
+          label: S.of(context).Accepted,
           onPressed: () {
             // Handle accept action
             _handleAccept(context, message, clientId, sellerID);
@@ -239,7 +240,7 @@ class _RequestPageState extends State<RequestPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Select or enter a reason for rejection'),
+          title: Text(S.of(context).Selectrejection),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -259,8 +260,8 @@ class _RequestPageState extends State<RequestPage> {
               ListTile(
                 title: TextField(
                   controller: customReasonController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter custom reason',
+                  decoration: InputDecoration(
+                    hintText: S.of(context).Entercustomreason,
                   ),
                 ),
               ),
@@ -281,14 +282,13 @@ class _RequestPageState extends State<RequestPage> {
                       .delete();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                          'Please enter a reason or select from the list.'),
+                    SnackBar(
+                      content: Text(S.of(context).Pleaselist),
                     ),
                   );
                 }
               },
-              child: const Text('Confirm'),
+              child: Text(S.of(context).Confirm),
             ),
           ],
         );

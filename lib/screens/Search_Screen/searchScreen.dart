@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
@@ -67,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search', style: theme.textTheme.titleLarge),
+        title: Text(S.of(context).search, style: theme.textTheme.titleLarge),
         backgroundColor: theme.primaryColor,
         elevation: 0,
       ),
@@ -142,7 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 _searchFocusNode.hasFocus &&
                     _searchController.text.isNotEmpty &&
                     _searchResults.isEmpty)
-              const Center(child: Text('No items found.')),
+              Center(child: Text(S.of(context).Noitemsfound)),
             if ((_searchFocusNode.hasFocus &&
                     _searchController.text.isNotEmpty &&
                     _searchResults.isNotEmpty) ||
@@ -321,7 +322,7 @@ class SearchBar extends StatelessWidget {
         focusNode: focusNode,
         controller: controller,
         decoration: InputDecoration(
-          hintText: 'Search',
+          hintText: S.of(context).search,
           prefixIcon: Icon(Icons.search, color: theme.iconTheme.color),
           border: InputBorder.none,
           hintStyle: TextStyle(color: theme.hintColor),

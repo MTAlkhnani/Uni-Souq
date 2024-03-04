@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 class ConfirmationPage extends StatelessWidget {
@@ -9,7 +10,7 @@ class ConfirmationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Accepted'),
+        title: Text(S.of(context).OrderAccepted),
       ),
       body: Center(
         child: Column(
@@ -21,8 +22,8 @@ class ConfirmationPage extends StatelessWidget {
               size: 100,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Your order has been accepted!',
+            Text(
+              S.of(context).Yourorderhasbeenaccepted,
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),
@@ -31,7 +32,7 @@ class ConfirmationPage extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                     context, AppRoutes.homeScreen, (route) => false);
               },
-              child: const Text('Back'),
+              child: Text(S.of(context).Back),
             ),
           ],
         ),

@@ -7,6 +7,7 @@ import 'package:unisouq/components/Rounded_Button.dart';
 import 'package:unisouq/components/background.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
 import 'package:unisouq/components/my_text_field.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/notifier/forgot_password_notifier.dart';
@@ -79,7 +80,9 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                   child: SizedBox(
                                     width: 279.h,
                                     child: Text(
-                                      "We need your registration email to send you password reset code!", // this text is too long
+                                      S
+                                          .of(context)
+                                          .weneed, // this text is too long
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
@@ -114,7 +117,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                 SizedBox(height: 20.v),
                                 Center(
                                   child: RoundedButton(
-                                    text: 'send Code',
+                                    text: S.of(context).sendCode,
                                     color: Theme.of(context).primaryColor,
                                     press: () => onTapSendCode(context),
                                   ),
@@ -172,7 +175,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         Navigator.of(context).pop();
 
         // Show a SnackBar after successful email sending
-        showSuccessMessage(context, "Reset code has been sent to your email");
+        showSuccessMessage(context, S.of(context).restemail);
         // ScaffoldMessenger.of(context).showSnackBar(
         //   const SnackBar(
         //       content: Text('Reset code has been sent to your email.')),
@@ -188,7 +191,7 @@ class ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         //   SnackBar(content: Text('')),
 
         // );
-        showErrorMessage(context, "AFailed to send reset code: ${e.message}.");
+        showErrorMessage(context, "Failed to send reset code: ${e.message}.");
       }
     }
   }

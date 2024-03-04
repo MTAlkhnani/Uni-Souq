@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:unisouq/components/chat_babble.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
@@ -162,7 +163,7 @@ class _MessagingPageState extends State<MessagingPage> {
                 .get(),
             builder: (context, profileSnapshot) {
               if (profileSnapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                // return CircularProgressIndicator();
               }
               if (profileSnapshot.hasError) {
                 return Text('Error: ${profileSnapshot.error}');
@@ -217,10 +218,10 @@ class _MessagingPageState extends State<MessagingPage> {
                   builder: (context, activitySnapshot) {
                     if (activitySnapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return const Text(
-                        'Loading...',
-                        style: TextStyle(fontSize: 12),
-                      );
+                      // return const Text(
+                      //   'Loading...',
+                      //   style: TextStyle(fontSize: 12),
+                      // );
                     }
                     if (activitySnapshot.hasError) {
                       return Text(
@@ -230,8 +231,8 @@ class _MessagingPageState extends State<MessagingPage> {
                     }
                     if (!activitySnapshot.hasData ||
                         !activitySnapshot.data!.exists) {
-                      return const Text(
-                        'Last seen: Not available',
+                      return Text(
+                        S.of(context).lastseen,
                         style: TextStyle(fontSize: 12),
                       );
                     }
@@ -241,7 +242,7 @@ class _MessagingPageState extends State<MessagingPage> {
                     Timestamp lastSeen = activityData['lastSeen'];
                     String lastSeenTime;
                     if (isActive) {
-                      lastSeenTime = 'Active now';
+                      lastSeenTime = S.of(context).Activenow;
                     } else {
                       lastSeenTime =
                           DateFormat.yMd().add_jm().format(lastSeen.toDate());
@@ -489,7 +490,7 @@ class _MessagingPageState extends State<MessagingPage> {
                   if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
                 },
                 decoration: InputDecoration(
-                  hintText: 'Type Something...',
+                  hintText: S.of(context).TypeSomething,
                   hintStyle: TextStyle(color: Theme.of(context).hintColor),
                   border: InputBorder.none,
                 ),
