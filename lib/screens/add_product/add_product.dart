@@ -345,6 +345,8 @@ class _AddProductState extends State<AddProductScreen> {
         // Map the selected category to its English translation
         final String translatedCategory =
             _translateToEnglish(_selectedCategory);
+        final String translatedcondtion =
+            _translateToEnglishcondtion(_selectedCondition);
 
         DocumentReference docRef =
             FirebaseFirestore.instance.collection('Item').doc();
@@ -358,7 +360,7 @@ class _AddProductState extends State<AddProductScreen> {
           'description': _descriptionController.text,
           'sellerID': getCurrentUserUid(),
           'category': translatedCategory, // Use the translated category
-          'condition': _selectedCondition,
+          'condition': translatedcondtion,
           'user': "N/A",
           'itemID': itemId,
           'imageURLs': validImageUrls,
@@ -391,6 +393,23 @@ class _AddProductState extends State<AddProductScreen> {
       // Add more cases for other categories
       default:
         return category ??
+            ''; // Return the original category if translation not found
+    }
+  }
+
+  String _translateToEnglishcondtion(String? condtion) {
+    switch (condtion) {
+      case 'جديد':
+        return 'New'; // Translate the Arabic category to English
+      case 'مستعمل - كالجديد':
+        return 'Used - Like New';
+      case 'مستعمل - جيد':
+        return 'Used - Good';
+      case 'مستعمل - قابل للاستخدام':
+        return 'Used - Acceptable';
+      // Add more cases for other categories
+      default:
+        return condtion ??
             ''; // Return the original category if translation not found
     }
   }
