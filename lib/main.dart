@@ -58,6 +58,8 @@ void main() async {
       } else if (notificationType == 'request') {
         // Handle request notification
         navigaotorkey.currentState!.pushNamed(AppRoutes.requestpage);
+      } else if (notificationType == 'responses') {
+        navigaotorkey.currentState!.pushNamed(AppRoutes.myorderpage);
       }
     }
   });

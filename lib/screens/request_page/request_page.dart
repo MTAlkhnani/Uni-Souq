@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/order_information/order_information.dart';
+import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
@@ -14,8 +15,6 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-
-  
   List<String> rejectionReasons = [
     'Not available',
     'Price too low',
@@ -312,7 +311,15 @@ class _RequestPageState extends State<RequestPage> {
       'responseMessage': rejectionMessage,
       'status': status, // Use the string status
       'timestamp': Timestamp.now(),
-    }).then((value) {
+    }).then((value) async {
+      DocumentSnapshot snap = await FirebaseFirestore.instance
+          .collection("usertoken")
+          .doc(clientId)
+          .get();
+      String tokenresever = snap['token'];
+
+      sendPushMassage(
+          tokenresever, itemId, rejectionMessage, 'responses', sellerId);
       print('Rejection message sent successfully.');
     }).catchError((error) {
       print('Failed to send rejection message: $error');

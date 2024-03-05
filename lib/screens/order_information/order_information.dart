@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
+import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
@@ -315,6 +316,14 @@ class _OrderFormState extends State<OrderForm> {
         'status': state,
         'timestamp': Timestamp.now(),
       });
+      DocumentSnapshot snap = await FirebaseFirestore.instance
+          .collection("usertoken")
+          .doc(clientId)
+          .get();
+      String tokenresever = snap['token'];
+
+      sendPushMassage(
+          tokenresever, productName, responseMessage, 'responses', sellerID);
     } catch (e) {
       print('Failed to send response: $e');
       throw e;

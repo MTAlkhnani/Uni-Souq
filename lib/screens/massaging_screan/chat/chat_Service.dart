@@ -142,46 +142,6 @@ class ChatService extends ChangeNotifier {
     );
   }
 
-  void sendPushMassage(
-    String token,
-    String body,
-    String title,
-    String notificationType,
-    String receiverUserID,
-  ) async {
-    try {
-      await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization':
-              'key=AAAA_jPfHp8:APA91bGzw4DQxr32meVuQ08ybbRmdUIWxg0-4uuAtIQyfw40vZvCVdT6JH2FA_-oXRg36mwn5fMf84H0eUJA1WTFe0KHfj05knNz1lR0lZAAVxdCA06tAvQsmsl3mOezVvCEP62jDt82',
-        },
-        body: jsonEncode(
-          <String, dynamic>{
-            'priority': 'high',
-            'data': <String, dynamic>{
-              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'status': 'done',
-              'body': body,
-              'title': title,
-              'notificationType': notificationType,
-              'receiverUserID': receiverUserID,
-            },
-            'notification': <String, dynamic>{
-              'title': title,
-              'body': body,
-              'android_channel_id': 'dbfood'
-            },
-            'to': token,
-          },
-        ),
-      );
-    } catch (e) {
-      if (kDebugMode) print('error push massage');
-    }
-  }
-
   Future<void> sendRequest(
       String sellerID,
       String productName,
