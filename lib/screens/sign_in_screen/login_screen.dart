@@ -13,6 +13,7 @@ import 'package:unisouq/global.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
+import 'package:unisouq/service/notification_service.dart';
 
 import '../../components/background.dart';
 
@@ -87,9 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       // Use Navigator to pushReplacementNamed
       showSuccessMessage(context, S.of(context).loginsucc);
-      Future.delayed(const Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 2), () {
         Global.storageService
             .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
+        NotificationService.saveToken();
         Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
       });
     } on FirebaseAuthException catch (error) {

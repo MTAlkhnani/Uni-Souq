@@ -567,22 +567,5 @@ class _MessagingPageState extends State<MessagingPage> {
     }
   }
 
-  void _showNotification(String senderName, String message) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your channel id',
-      'your channel description',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'New Message from $senderName',
-      message,
-      platformChannelSpecifics,
-      payload: 'item x',
-    );
-  }
+ 
 }

@@ -46,8 +46,7 @@ class ChatBubble extends StatelessWidget {
 class ChatService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final NotificationService _notificationService =
-      NotificationService(); // Create an instance of NotificationService
+  
 
   // Send message
   Future<void> sendMessage(String receiverID, String message,
@@ -97,11 +96,8 @@ class ChatService extends ChangeNotifier {
           .collection('messages')
           .add(newMessage.toMap());
 
-      // Show notification
-      if (Platform.isAndroid || Platform.isIOS) {
-        String senderName = '$senderFirstName $senderLastName';
-        _notificationService.showNotification(senderName, message);
-      }
+      
+      
     } catch (e) {
       print('Failed to send message: $e');
     }

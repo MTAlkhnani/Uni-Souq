@@ -10,6 +10,7 @@ import 'package:unisouq/components/fade_animationtest.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/information_Screen/information_screen.dart';
+import 'package:unisouq/service/notification_service.dart';
 
 import '../../components/background.dart';
 // import '../customer_screen.dart';
@@ -82,6 +83,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         'userImage': null,
         'address': '',
       });
+
       // Dismiss any open dialogs or loading indicators
       Navigator.of(context).pop();
 
@@ -97,6 +99,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
         showSuccessMessage(context, S.of(context).succmassage);
 
+        Future.delayed(const Duration(seconds: 1), () {
+          NotificationService.saveToken();
+        });
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -487,7 +492,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                           Text(S.of(context).member),
+                                          Text(S.of(context).member),
                                           TextButton(
                                             child: Text(
                                               S.of(context).login,
@@ -506,7 +511,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                           Text(S.of(context).Justbrowsing),
+                                          Text(S.of(context).Justbrowsing),
                                           TextButton(
                                             child: Text(
                                               S.of(context).Guest,

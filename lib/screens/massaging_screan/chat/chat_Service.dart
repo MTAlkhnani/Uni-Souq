@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,11 +8,14 @@ import 'package:unisouq/models/massage.dart';
 import 'package:unisouq/screens/massaging_screan/contact_ciients_page.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
+import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
+import 'package:http/http.dart' as http;
 
 class ChatService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  NotificationService _notificationService = NotificationService();
 
   // Send message
   Future<void> sendMessage(String receiverID, String message,
@@ -75,6 +81,15 @@ class ChatService extends ChangeNotifier {
           .doc(chatRoomID)
           .collection('messages')
           .add(newMessage.toMap());
+
+      DocumentSnapshot snap = await FirebaseFirestore.instance
+          .collection("usertoken")
+          .doc(receiverID)
+          .get();
+      String tokenresever = snap['token'];
+
+      sendPushMassage(tokenresever, "$senderFirstName $senderLastName", message,
+          'message', currentUserID);
     } catch (e) {
       print('Failed to send message: $e');
     }
@@ -127,6 +142,46 @@ class ChatService extends ChangeNotifier {
     );
   }
 
+  void sendPushMassage(
+    String token,
+    String body,
+    String title,
+    String notificationType,
+    String receiverUserID,
+  ) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization':
+              'key=AAAA_jPfHp8:APA91bGzw4DQxr32meVuQ08ybbRmdUIWxg0-4uuAtIQyfw40vZvCVdT6JH2FA_-oXRg36mwn5fMf84H0eUJA1WTFe0KHfj05knNz1lR0lZAAVxdCA06tAvQsmsl3mOezVvCEP62jDt82',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'status': 'done',
+              'body': body,
+              'title': title,
+              'notificationType': notificationType,
+              'receiverUserID': receiverUserID,
+            },
+            'notification': <String, dynamic>{
+              'title': title,
+              'body': body,
+              'android_channel_id': 'dbfood'
+            },
+            'to': token,
+          },
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) print('error push massage');
+    }
+  }
+
   Future<void> sendRequest(
       String sellerID,
       String productName,
@@ -156,6 +211,13 @@ class ChatService extends ChangeNotifier {
         'timestamp': Timestamp.now(),
         'ItemId': productId,
       });
+      DocumentSnapshot snap = await FirebaseFirestore.instance
+          .collection("usertoken")
+          .doc(sellerID)
+          .get();
+      String tokenresever = snap['token'];
+
+      sendPushMassage(tokenresever, clientId, message, 'request', sellerID);
     } catch (e) {
       print('Failed to send request: $e');
       throw e;

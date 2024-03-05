@@ -15,6 +15,7 @@ import 'package:unisouq/screens/add_product/add_product.dart';
 
 import 'package:unisouq/screens/my_profile_page/my_profilepage.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
+import 'package:unisouq/screens/notification_page/notification.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
 
@@ -279,7 +280,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
+          IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                
+              }),
           IconButton(
               icon: const Icon(Icons.shopping_bag),
               onPressed: () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unisouq/generated/l10n.dart';
+import 'package:unisouq/main.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/theme/settings_controller.dart';
 import 'package:unisouq/utils/size_utils.dart';
@@ -77,6 +78,7 @@ class _UniSouqAppState extends State<UniSouqApp> {
 
         return Sizer(builder: (context, orientation, deviceType) {
           return MaterialApp(
+            navigatorKey: navigaotorkey,
             locale: Locale(currentLocale),
             localizationsDelegates: const [
               S.delegate,
