@@ -238,7 +238,14 @@
         "SystemTheme":"System Theme",
         "LightTheme":"Light Theme",
         "DarkTheme":"Dark Theme",
-        "Langtheme":"language/Theme"
+        "Langtheme":"language/Theme",
+
+        "howitwas":"How is your Product?",
+        "reviewd":"Add detailed review",
+        "enter":"Enter here",
+        "rev":"No review submitted by the client.",
+        "no":"No review submitted by the client."
+
 
         
 

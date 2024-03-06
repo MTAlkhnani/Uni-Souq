@@ -228,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
         "emailv": MessageLookupByLibrary.simpleMessage(
             "الرجاء إدخال بريد إلكتروني صحيح."),
+        "enter": MessageLookupByLibrary.simpleMessage("أدخل هنا"),
         "errormassagge": MessageLookupByLibrary.simpleMessage(
             "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى لاحقًا."),
         "errorpay":
@@ -236,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hint": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "hintL": MessageLookupByLibrary.simpleMessage("الاسم الأخير"),
         "hintn": MessageLookupByLibrary.simpleMessage("05xxxxxxxx"),
+        "howitwas": MessageLookupByLibrary.simpleMessage("كيف تقيم المنتج؟"),
         "if1": MessageLookupByLibrary.simpleMessage("يرجى ملء هذا الحقل"),
         "if_else1": MessageLookupByLibrary.simpleMessage("اسم طويل جدًا"),
         "if_else2": MessageLookupByLibrary.simpleMessage("اسم قصير جدًا"),
@@ -267,6 +269,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "myorderinfo_screen":
             MessageLookupByLibrary.simpleMessage("شاشة معلومات الطلب"),
         "myprofile": MessageLookupByLibrary.simpleMessage("شاشة الملف الشخصي"),
+        "no": MessageLookupByLibrary.simpleMessage(
+            "لم يتم تقديم أي مراجعة من قبل العميل."),
         "notmember": MessageLookupByLibrary.simpleMessage("ليس عضوا؟"),
         "now": MessageLookupByLibrary.simpleMessage(
             "الآن: \${discountedPrice.toStringAsFixed(0)} ريال"),
@@ -298,6 +302,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "request": MessageLookupByLibrary.simpleMessage("شاشة الطلب"),
         "restemail": MessageLookupByLibrary.simpleMessage(
             "تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني"),
+        "rev": MessageLookupByLibrary.simpleMessage(
+            "لم يتم تقديم أي مراجعة من قبل العميل"),
+        "reviewd":
+            MessageLookupByLibrary.simpleMessage("إضافة مراجعة التفاصيل"),
         "search": MessageLookupByLibrary.simpleMessage("بحث"),
         "selectLanguage": MessageLookupByLibrary.simpleMessage("اختراللغة"),
         "selectpick":

@@ -231,6 +231,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "emailv": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid phone number."),
+        "enter": MessageLookupByLibrary.simpleMessage("Enter here"),
         "errormassagge": MessageLookupByLibrary.simpleMessage(
             "Failed to send request. Please try again later."),
         "errorpay": MessageLookupByLibrary.simpleMessage(
@@ -240,6 +241,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hint": MessageLookupByLibrary.simpleMessage("First Name"),
         "hintL": MessageLookupByLibrary.simpleMessage(" Last Name"),
         "hintn": MessageLookupByLibrary.simpleMessage("05xxxxxxxx"),
+        "howitwas":
+            MessageLookupByLibrary.simpleMessage("How is your Product?"),
         "if1":
             MessageLookupByLibrary.simpleMessage("Please fill in this field"),
         "if_else1": MessageLookupByLibrary.simpleMessage("Name too long"),
@@ -275,6 +278,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "myorderinfo_screen":
             MessageLookupByLibrary.simpleMessage("myorderinfo_screen"),
         "myprofile": MessageLookupByLibrary.simpleMessage("profile_screen"),
+        "no": MessageLookupByLibrary.simpleMessage(
+            "No review submitted by the client."),
         "notmember": MessageLookupByLibrary.simpleMessage("Not a member? "),
         "now": MessageLookupByLibrary.simpleMessage(
             "Now: \${discountedPrice.toStringAsFixed(0)} SAR"),
@@ -307,6 +312,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "request": MessageLookupByLibrary.simpleMessage("request_page"),
         "restemail": MessageLookupByLibrary.simpleMessage(
             "Reset code has been sent to your email"),
+        "rev": MessageLookupByLibrary.simpleMessage(
+            "No review submitted by the client."),
+        "reviewd": MessageLookupByLibrary.simpleMessage("Add detailed review"),
         "search": MessageLookupByLibrary.simpleMessage("search"),
         "selectLanguage":
             MessageLookupByLibrary.simpleMessage("select Language"),

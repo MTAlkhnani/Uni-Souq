@@ -10,6 +10,7 @@ import 'package:unisouq/screens/my_collection_Screen/my_collection_page.dart';
 import 'package:unisouq/screens/myorder_page/myorder_page.dart';
 
 import 'package:unisouq/screens/order_information/confirmation_page.dart';
+import 'package:unisouq/screens/order_information/oreder_deatil.dart';
 import 'package:unisouq/screens/payment_page/payment_card_add.dart';
 import 'package:unisouq/screens/payment_page/payment_page.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
@@ -49,6 +50,7 @@ class AppRoutes {
   static const String paymentpage = '/payment_screen';
   static const String addpaymentcardpage = '/addpaymentcard_screen';
   static const String notificationpage = '/notification_screen';
+  static const String orderdeatial = '/orderdeatial_screen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -103,6 +105,12 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ContactClientsPage());
       case myorderpage:
         return MaterialPageRoute(builder: (_) => MyOrderpage());
+      case orderdeatial:
+        return MaterialPageRoute(
+            builder: (_) => OrderDetailsPage(
+                  responseMessage: '',
+                  itemId: '', imageURL: '', title: '', clientId: '', sellerId: '',
+                ));
       case requestpage:
         return MaterialPageRoute(builder: (_) => RequestPage());
       case mycollrctionpage:
@@ -118,7 +126,7 @@ class AppRoutes {
                   productId: '',
                   imageUrl: [],
                 ));
-      
+
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

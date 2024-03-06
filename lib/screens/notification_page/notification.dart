@@ -28,8 +28,8 @@ class NotificationPage extends StatelessWidget {
                 }
               });
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
                   Icon(Icons.clear_all),
@@ -62,7 +62,7 @@ class NotificationList extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -107,7 +107,7 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(Icons.notifications), // Add leading icon here
+        leading: const Icon(Icons.notifications), // Add leading icon here
         title: Text(title),
         subtitle: Text(body),
         onTap: () {

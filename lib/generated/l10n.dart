@@ -2189,6 +2189,56 @@ class S {
       args: [],
     );
   }
+
+  /// `How is your Product?`
+  String get howitwas {
+    return Intl.message(
+      'How is your Product?',
+      name: 'howitwas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add detailed review`
+  String get reviewd {
+    return Intl.message(
+      'Add detailed review',
+      name: 'reviewd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter here`
+  String get enter {
+    return Intl.message(
+      'Enter here',
+      name: 'enter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No review submitted by the client.`
+  String get rev {
+    return Intl.message(
+      'No review submitted by the client.',
+      name: 'rev',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No review submitted by the client.`
+  String get no {
+    return Intl.message(
+      'No review submitted by the client.',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
