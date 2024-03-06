@@ -88,8 +88,8 @@ class ChatService extends ChangeNotifier {
           .get();
       String tokenresever = snap['token'];
 
-      sendPushMassage(tokenresever, "$senderFirstName $senderLastName", message,
-          'message', currentUserID);
+      sendPushMessages(
+          tokenresever, currentUserID, message, 'message', receiverID);
     } catch (e) {
       print('Failed to send message: $e');
     }
@@ -177,7 +177,7 @@ class ChatService extends ChangeNotifier {
           .get();
       String tokenresever = snap['token'];
 
-      sendPushMassage(tokenresever, clientId, message, 'request', sellerID);
+      sendPushMessage(tokenresever, clientId, message, 'request', sellerID);
     } catch (e) {
       print('Failed to send request: $e');
       throw e;

@@ -318,8 +318,8 @@ class _RequestPageState extends State<RequestPage> {
           .get();
       String tokenresever = snap['token'];
 
-      sendPushMassage(
-          tokenresever, itemId, rejectionMessage, 'responses', sellerId);
+      sendPushMessage(
+          tokenresever, sellerId, rejectionMessage, 'responses', clientId);
       print('Rejection message sent successfully.');
     }).catchError((error) {
       print('Failed to send rejection message: $error');

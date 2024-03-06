@@ -20,6 +20,7 @@ import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String? selectedCategory;
   int currentIconIndex = 0;
   String? userId;
+  late String userID;
   // Add a variable to store the user ID
   @override
   void initState() {
@@ -122,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (user != null) {
       setState(() {
         userId = user.uid;
+        userID = user.uid;
       });
     }
   }
@@ -283,7 +286,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           IconButton(
               icon: const Icon(Icons.notifications),
               onPressed: () {
-                
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationPage(
+                      userId: userID,
+                    ), // Navigate to the ContactClientsPage
+                  ),
+                );
               }),
           IconButton(
               icon: const Icon(Icons.shopping_bag),

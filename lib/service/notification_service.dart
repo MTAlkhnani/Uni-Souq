@@ -1,4 +1,3 @@
-// Import the NotificationService class
 import 'dart:convert';
 import 'dart:math';
 
@@ -10,18 +9,24 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:unisouq/main.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
-import 'package:unisouq/utils/auth_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:unisouq/utils/auth_utils.dart';
+
+typedef NotificationTapCallback = void Function(
+    Map<String, dynamic> notificationData);
+
+NotificationTapCallback? _notificationTapCallback;
+void setNotificationTapCallback(NotificationTapCallback callback) {
+  _notificationTapCallback = callback;
+}
 
 class NotificationService {
-  static final _massaging = FirebaseMessaging.instance;
+  static final _messaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-// Assuming _massaging is an instance of some messaging service.
-
-  static Future<void> intt() async {
-    await _massaging.requestPermission(
+  static Future<void> init() async {
+    await _messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -33,59 +38,47 @@ class NotificationService {
   }
 
   static Future<void> saveToken() async {
-    final token = await _massaging.getToken();
+    final token = await _messaging.getToken();
 
-    // Check if the token already exists in the usertoken collection
     final tokenSnapshot = await FirebaseFirestore.instance
         .collection('usertoken')
         .where('token', isEqualTo: token)
         .get();
 
     if (tokenSnapshot.docs.isEmpty) {
-      // Token doesn't exist, retrieve UserId from the User collection
       final userId = await getUserId();
       final userSnapshot = await FirebaseFirestore.instance
           .collection('User')
-          .where('UserId',
-              isEqualTo: userId) // Assuming getUserId() gets the UserId
+          .where('UserId', isEqualTo: userId)
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
         final userId = userSnapshot.docs.first.id;
-        // Save the token in the usertoken collection under the corresponding UserId
         await FirebaseFirestore.instance
             .collection('usertoken')
             .doc(userId)
             .set({
           'token': token,
-          'UserId': userId
-          // Add other fields if needed
+          'UserId': userId,
         });
       }
     }
   }
 
-// Initialize local notifications
   static Future localNotiInit() async {
-    // Initialize Android initialization settings
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    // Initialize Darwin initialization settings
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) {
-        // Handle local notifications received while the app is in the foreground
-        // You can add custom logic here if needed
         return null;
       },
     );
 
-    // Initialize Linux initialization settings
     final LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
 
-    // Initialize initialization settings
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
@@ -93,100 +86,69 @@ class NotificationService {
       linux: initializationSettingsLinux,
     );
 
-    // Initialize Flutter local notifications plugin
     await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (payload) async {
-        // Handle tap on notification while the app is in the foreground or background
-        // Extract the payload and pass it to the appropriate method
         onNotificationTap(jsonDecode(payload as String));
       },
     );
   }
 
   static void onNotificationTap(Map<String, dynamic> notificationData) {
-    // Extract necessary data from the payload
-    final String? notificationType = notificationData['notificationType'];
-    final String? receiverUserID = notificationData['receiverUserID'];
-
-    // Determine the action based on notification type
-    if (notificationType == 'message' && receiverUserID != null) {
-      // Delay pushing the new route by 100 milliseconds
-      Future.delayed(Duration(milliseconds: 100), () {
-        // Navigate to MessagingPage with the receiverUserID
-        navigaotorkey.currentState!.push(
-          MaterialPageRoute(
-            builder: (_) => MessagingPage(
-              receiverUserID: receiverUserID,
-            ),
-          ),
-        );
-      });
-    }
-    if (notificationType == 'request') {
-      // Delay pushing the new route by 100 milliseconds
-      Future.delayed(Duration(milliseconds: 100), () {
-        // Handle other notification types or fallback to default behavior
-        navigaotorkey.currentState!.pushNamed(
-          AppRoutes.requestpage,
-          arguments: notificationData,
-        );
-      });
-    } else if (notificationType == 'responses') {
-      navigaotorkey.currentState!.pushNamed(AppRoutes.myorderpage);
-    } else {
-      navigaotorkey.currentState!.pushNamed(AppRoutes.homeScreen);
-    }
+    _notificationTapCallback?.call(notificationData);
   }
 
   static Future showSimpleNotification({
-    required String title,
-    required String body,
-    required String payload,
-    String? notificationType, // Additional data to include in the payload
-    String? receiverUserID, // Additional data to include in the payload
+    required int id,
+    required String? title,
+    required String? body,
+    required NotificationDetails? notificationDetails,
+    String? payload,
+    String? notificationType,
+    String? receiverUserID,
   }) async {
-    AndroidNotificationChannel channel = AndroidNotificationChannel(
-      Random.secure().nextInt(100000).toString(),
-      'high Important Notification',
-      importance: Importance.max,
-    );
-
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      channel.id.toString(),
-      channel.name.toString(),
-      channelDescription: 'your channel description',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-
-    NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-
-    // Construct payload with additional data
-    Map<String, dynamic> notificationData = {
-      'title': title,
-      'body': body,
-      'notificationType': notificationType,
-      'receiverUserID': receiverUserID,
-    };
-
+    if (kIsWeb) {
+      return;
+    }
     await _flutterLocalNotificationsPlugin.show(
-      0,
+      id,
       title,
       body,
       notificationDetails,
-      payload: jsonEncode(notificationData),
+      payload: payload,
     );
   }
 }
 
-void sendPushMassage(
-  String token,
-  String body,
+Future<void> handleNotificationTap(
+  String userId,
   String title,
+  String body,
+  String notificationType,
+) async {
+  try {
+    // Get a reference to the user's subcollection
+    CollectionReference userNotificationsCollection = FirebaseFirestore.instance
+        .collection('Notification')
+        .doc(userId)
+        .collection('UserNotifications');
+
+    // Add the notification data to the user's subcollection
+    await userNotificationsCollection.add({
+      'title': title,
+      'body': body,
+      'notificationType': notificationType,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  } catch (e) {
+    print('Error handling notification tap: $e');
+  }
+}
+
+void sendPushMessage(
+  String token,
+  String title,
+  String body,
   String notificationType,
   String receiverUserID,
 ) async {
@@ -212,13 +174,50 @@ void sendPushMassage(
           'notification': <String, dynamic>{
             'title': title,
             'body': body,
-            'android_channel_id': 'dbfood'
+            'android_channel_id': 'dbfood',
           },
           'to': token,
         },
       ),
     );
+    await handleNotificationTap(receiverUserID, title, body, notificationType);
   } catch (e) {
-    if (kDebugMode) print('error push massage');
+    if (kDebugMode) print('Error sending push message: $e');
+  }
+}
+
+void sendPushMessages(String token, String title, String body,
+    String notificationType, String receiverUserID) async {
+  try {
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'key=AAAA_jPfHp8:APA91bGzw4DQxr32meVuQ08ybbRmdUIWxg0-4uuAtIQyfw40vZvCVdT6JH2FA_-oXRg36mwn5fMf84H0eUJA1WTFe0KHfj05knNz1lR0lZAAVxdCA06tAvQsmsl3mOezVvCEP62jDt82',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'body': body,
+            'title': title,
+            'notificationType': notificationType,
+            'receiverUserID': receiverUserID,
+          },
+          'notification': <String, dynamic>{
+            'title': title,
+            'body': body,
+            'android_channel_id': 'dbfood',
+          },
+          'to': token,
+        },
+      ),
+    );
+    await handleNotificationTap(receiverUserID, title, body, notificationType);
+  } catch (e) {
+    if (kDebugMode) print('Error sending push message: $e');
   }
 }

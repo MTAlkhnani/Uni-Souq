@@ -10,7 +10,6 @@ import 'package:unisouq/global.dart';
 import 'package:unisouq/models/firebase_options.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
-import 'package:unisouq/screens/request_page/request_page.dart';
 import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/theme/settings_controller.dart';
 import 'package:unisouq/theme/settings_service.dart';
@@ -64,29 +63,32 @@ void main() async {
     }
   });
 
-  NotificationService.intt();
+  NotificationService.init();
   NotificationService.localNotiInit();
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // Parse the payload data from the message data
     Map<String, dynamic> payloadData = message.data;
-
-    // Extract receiverUserID from the payload data
     String receiverUserID = payloadData['receiverUserID'];
-
-    // Convert payload data to JSON
     String payloadJson = jsonEncode(payloadData);
 
-    print("Got a message in foreground");
+    print("Received a message in the foreground");
     if (message.notification != null) {
-      // Show notification with the receiverUserID included in the payload
       NotificationService.showSimpleNotification(
-        title: message.notification!.title!,
-        body: message.notification!.body!,
-        payload:
-            payloadJson, // Pass the JSON payload to the notification service
-        notificationType: payloadData['notificationType'], // Additional data
-        receiverUserID: receiverUserID, // Additional data
+        id: 0,
+        title: message.notification!.title,
+        body: message.notification!.body,
+        notificationDetails: const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'channel id',
+            'channel name',
+            channelDescription: 'channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+        ),
+        payload: payloadJson,
+        notificationType: payloadData['notificationType'],
+        receiverUserID: receiverUserID,
       );
     }
   });

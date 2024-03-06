@@ -32,18 +32,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Future<void> _fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      setState(() {
-        _user = user;
-      });
+      if (mounted) {
+        setState(() {
+          _user = user;
+        });
+      }
 
       final snapshot = await FirebaseFirestore.instance
           .collection('Profile')
           .doc(user.uid)
           .get();
 
-      setState(() {
-        _profileData = snapshot.data() as Map<String, dynamic>;
-      });
+      if (mounted) {
+        setState(() {
+          _profileData = snapshot.data() as Map<String, dynamic>;
+        });
+      }
     }
   }
 
