@@ -184,6 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     final itemData =
                         items[index].data() as Map<String, dynamic>;
                     return GestureDetector(
+                      // Inside the GestureDetector onTap callback
                       onTap: () {
                         Navigator.push(
                           context,
@@ -195,13 +196,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   .doc(items[index].id)
                                   .snapshots(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  // return const CircularProgressIndicator();
-                                }
                                 if (!snapshot.hasData ||
                                     snapshot.data == null) {
-                                  return const Text('Document does not exist');
+                                  return const Scaffold(
+                                    body: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ); // Return a loading indicator while data is being fetched
                                 }
                                 final itemData = snapshot.data!.data()
                                     as Map<String, dynamic>;
@@ -213,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         );
                       },
+
                       child: Card(
                         shadowColor: Theme.of(context).primaryColor,
                         color: Theme.of(context).scaffoldBackgroundColor,
