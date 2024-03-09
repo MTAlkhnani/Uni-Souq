@@ -592,119 +592,165 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Expanded(
-              child: Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.home),
-                    color: currentIconIndex == 0
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).cardColor.withOpacity(0.5),
-                    onPressed: () {
-                      setState(() {
-                        currentIconIndex = 0;
-                      });
-                    },
-                  ),
-                ],
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    currentIconIndex = 0;
+                  });
+                },
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                highlightColor: Colors.transparent,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.home,
+                      color: currentIconIndex == 0
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).cardColor.withOpacity(0.5),
+                      size: 24,
+                    ),
+                    Text(
+                      S.of(context).home,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: currentIconIndex == 0
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
-              child: Column(
-                children: [
-                  Tooltip(
-                    message: S.of(context).search,
-                    child: IconButton(
-                      icon: const Icon(Icons.search),
+              child: InkWell(
+                onTap: () async {
+                  final newIndex = await Navigator.push<int>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchScreen(),
+                    ),
+                  );
+                  if (newIndex != null) {
+                    setState(() {
+                      currentIconIndex = newIndex;
+                    });
+                  }
+                },
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                highlightColor: Colors.transparent,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.search,
                       color: currentIconIndex == 1
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor.withOpacity(0.5),
-                      onPressed: () async {
-                        // Add the navigation call here
-
-                        final newIndex = await Navigator.push<int>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SearchScreen(),
-                          ),
-                        );
-                        if (newIndex != null) {
-                          setState(() {
-                            currentIconIndex = newIndex;
-                          });
-                        }
-                      },
+                      size: 24,
                     ),
-                  ),
-                ],
+                    Text(
+                      S.of(context).search,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: currentIconIndex == 1
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 48),
             Expanded(
-              child: Column(
-                children: [
-                  Tooltip(
-                    message: S.of(context).Order,
-                    child: IconButton(
-                        icon: const Icon(Icons.local_shipping),
-                        color: currentIconIndex == 2
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).cardColor.withOpacity(0.5),
-                        onPressed: () async {
-                          if (isUserSignedIn()) {
-                            final newIndex = await Navigator.push<int>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyOrderpage(),
-                              ),
-                            );
-                            if (newIndex != null) {
-                              setState(() {
-                                currentIconIndex = newIndex;
-                              });
-                            }
-                          } else {
-                            // Show sign-in required pop-up if the user is not signed in
-                            _showSignInRequiredPopup(context);
-                          }
-                        }),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Tooltip(
-                    message: S.of(context).Profile,
-                    child: IconButton(
-                      icon: const Icon(Icons.person),
+              child: InkWell(
+                onTap: () async {
+                  if (isUserSignedIn()) {
+                    final newIndex = await Navigator.push<int>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyOrderpage(),
+                      ),
+                    );
+                    if (newIndex != null) {
+                      setState(() {
+                        currentIconIndex = newIndex;
+                      });
+                    }
+                  } else {
+                    _showSignInRequiredPopup(context);
+                  }
+                },
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                highlightColor: Colors.transparent,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.local_shipping,
                       color: currentIconIndex == 2
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor.withOpacity(0.5),
-                      onPressed: () async {
-                        if (isUserSignedIn()) {
-                          // Proceed with the original logic if the user is signed in
-                          final newIndex = await Navigator.push<int>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfilePage(
-                                  userId:
-                                      FirebaseAuth.instance.currentUser!.uid),
-                            ),
-                          );
-                          if (newIndex != null) {
-                            setState(() {
-                              currentIconIndex = newIndex;
-                            });
-                          }
-                        } else {
-                          // Show sign-in required pop-up if the user is not signed in
-                          _showSignInRequiredPopup(context);
-                        }
-                      },
+                      size: 24,
                     ),
-                  ),
-                ],
+                    Text(
+                      S.of(context).order,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: currentIconIndex == 2
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () async {
+                  if (isUserSignedIn()) {
+                    final newIndex = await Navigator.push<int>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                            userId: FirebaseAuth.instance.currentUser!.uid),
+                      ),
+                    );
+                    if (newIndex != null) {
+                      setState(() {
+                        currentIconIndex = newIndex;
+                      });
+                    }
+                  } else {
+                    _showSignInRequiredPopup(context);
+                  }
+                },
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                highlightColor: Colors.transparent,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: currentIconIndex == 3
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).cardColor.withOpacity(0.5),
+                      size: 24,
+                    ),
+                    Text(
+                      S.of(context).profile,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: currentIconIndex == 3
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

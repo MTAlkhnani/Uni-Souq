@@ -241,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hint": MessageLookupByLibrary.simpleMessage("First Name"),
         "hintL": MessageLookupByLibrary.simpleMessage(" Last Name"),
         "hintn": MessageLookupByLibrary.simpleMessage("05xxxxxxxx"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
         "howitwas":
             MessageLookupByLibrary.simpleMessage("How is your Product?"),
         "if1":
@@ -285,6 +286,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Now: \${discountedPrice.toStringAsFixed(0)} SAR"),
         "numv": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid phone number."),
+        "order": MessageLookupByLibrary.simpleMessage("Order"),
         "pass": MessageLookupByLibrary.simpleMessage("Password"),
         "passforget": MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "passv": MessageLookupByLibrary.simpleMessage(
@@ -306,6 +308,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Hello, \nI have a problem with the product that I purchased from you"),
         "product_Detail":
             MessageLookupByLibrary.simpleMessage("product_Detail"),
+        "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "reg": MessageLookupByLibrary.simpleMessage(
             "Register below with your detail"),
         "regsternow": MessageLookupByLibrary.simpleMessage("Register now"),

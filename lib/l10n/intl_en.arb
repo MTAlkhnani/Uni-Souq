@@ -42,6 +42,11 @@
         "notmember" : "Not a member? ",
         "regsternow" : "Register now",
 "home-s"   : "home_screen" , 
+        "home":"Home",
+        "profile":"Profile",
+        "order":"Order",
+
+
 
         "popularCategories1": "All Items", 
         "popularCategories2": "Electronics", 

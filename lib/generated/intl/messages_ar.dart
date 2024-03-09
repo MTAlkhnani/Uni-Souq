@@ -237,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hint": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "hintL": MessageLookupByLibrary.simpleMessage("الاسم الأخير"),
         "hintn": MessageLookupByLibrary.simpleMessage("05xxxxxxxx"),
+        "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
         "howitwas": MessageLookupByLibrary.simpleMessage("كيف تقيم المنتج؟"),
         "if1": MessageLookupByLibrary.simpleMessage("يرجى ملء هذا الحقل"),
         "if_else1": MessageLookupByLibrary.simpleMessage("اسم طويل جدًا"),
@@ -276,6 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "الآن: \${discountedPrice.toStringAsFixed(0)} ريال"),
         "numv":
             MessageLookupByLibrary.simpleMessage("الرجاء إدخال رقم هاتف صحيح."),
+        "order": MessageLookupByLibrary.simpleMessage("طلباتي"),
         "pass": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "passforget":
             MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
@@ -296,6 +298,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "prodectissue": MessageLookupByLibrary.simpleMessage(
             "مرحبًا، \nلدي مشكلة مع المنتج الذي اشتريته منك"),
         "product_Detail": MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
+        "profile": MessageLookupByLibrary.simpleMessage("حساب"),
         "reg":
             MessageLookupByLibrary.simpleMessage("سجل أدناه باستخدام تفاصيلك"),
         "regsternow": MessageLookupByLibrary.simpleMessage("سجل الآن"),

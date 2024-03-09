@@ -32,6 +32,10 @@
           "notmember": "ليس عضوا؟",
           "regsternow": "سجل الآن",
     "home-s": "شاشة الرئيسية",
+
+            "home":"الرئيسية",
+            "profile":"حساب",
+            "order":"طلباتي",
           "popularCategories1": "جميع العناصر",
           "popularCategories2": "الإلكترونيات",
           "popularCategories3": "الملابس",
