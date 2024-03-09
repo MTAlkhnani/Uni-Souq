@@ -307,7 +307,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         S.of(context).Submit,
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: 18,
                             fontWeight:
                                 FontWeight.bold), // Adjust text color here
                       ),
@@ -335,7 +335,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     Icon(
                       Icons.close,
                       color: Theme.of(context).primaryColor,
-                      size: 25,
+                      size: 23,
                     ),
                     SizedBox(
                       width: 5.h,
@@ -344,7 +344,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       S.of(context).Cancel,
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontSize: 19,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
