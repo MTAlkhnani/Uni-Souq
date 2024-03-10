@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:unisouq/components/custom_drawer.dart';
+import 'package:unisouq/components/shimmer_loading.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/Search_Screen/searchScreen.dart';
@@ -333,15 +334,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
-              child: const SizedBox(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  strokeWidth: 4.0,
-                ),
-              ),
-            );
+            return ShimmerLoading();
           }
 
           // Group items by category

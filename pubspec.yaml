@@ -73,6 +73,7 @@ dependencies:
   country_flags: ^2.2.0
   firebase_messaging: ^14.7.17
   firebase_core: ^2.25.5
+  shimmer: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
