@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/generated/l10n.dart';
-import 'package:unisouq/screens/home_screen/home_screen.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
@@ -34,8 +33,6 @@ class _PaymentPageState extends State<PaymentPage> {
   late double enteredPrice = widget.currentPrice;
   TextEditingController _priceController = TextEditingController();
 
-  late List<String> imageUrlList = List<String>.from(widget.imageUrl);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +50,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 // Display item image at the top
                 Center(
                   child: Image.network(
-                    imageUrlList.isNotEmpty ? imageUrlList[0] : '',
+                    widget.imageUrl.isNotEmpty ? widget.imageUrl[0] : '',
                     fit: BoxFit.cover,
                     height: 250.h,
                     // Adjust the height as needed
@@ -109,7 +106,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           labelText: S.of(context).PaymentMethod,
                         ),
                       ),
-                      SizedBox(height: 130.h),
+                      const SizedBox(height: 20),
                       Center(
                         child: ElevatedButton(
                           clipBehavior: Clip.antiAlias,
