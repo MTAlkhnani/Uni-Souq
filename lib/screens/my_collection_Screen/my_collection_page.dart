@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/components/custom_snackbar.dart';
+
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/edit_product_screen/edit_product.dart';
 
@@ -69,11 +71,7 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
           );
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        if (snapshot.connectionState == ConnectionState.waiting) {}
 
         if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
           return Center(
@@ -131,7 +129,10 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                                           [0], // Use the first image URL
                                       fit: BoxFit.cover,
                                       placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
+                                          const SpinKitWave(
+                                        color: Colors.white,
+                                        size: 50.0,
+                                      ),
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                     )

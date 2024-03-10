@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 import 'package:unisouq/screens/order_information/order_information.dart';
@@ -40,13 +41,9 @@ class _RequestPageState extends State<RequestPage> {
         future: clientId,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
-              child: const SizedBox(
-                child: CircularProgressIndicator(
-                  strokeWidth: 4.0,
-                ),
-              ),
+            return const SpinKitWave(
+              color: Colors.white,
+              size: 50.0,
             );
           }
 
@@ -73,13 +70,9 @@ class _RequestPageState extends State<RequestPage> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
-            child: const SizedBox(
-              child: CircularProgressIndicator(
-                strokeWidth: 4.0,
-              ),
-            ),
+          return const SpinKitWave(
+            color: Colors.white,
+            size: 50.0,
           );
         }
 
@@ -99,7 +92,12 @@ class _RequestPageState extends State<RequestPage> {
                   .doc(itemId)
                   .get(),
               builder: (context, itemSnapshot) {
-                if (itemSnapshot.connectionState == ConnectionState.waiting) {}
+                if (itemSnapshot.connectionState == ConnectionState.waiting) {
+                  const SpinKitWave(
+                    color: Colors.white,
+                    size: 50.0,
+                  );
+                }
 
                 if (itemSnapshot.hasError) {
                   return Text('Error: ${itemSnapshot.error}');

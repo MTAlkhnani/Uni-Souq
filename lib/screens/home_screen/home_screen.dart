@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:unisouq/components/custom_drawer.dart';
 import 'package:unisouq/components/shimmer_loading.dart';
@@ -506,7 +507,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                     0], // Use the first image URL
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
+                                                    const SpinKitWave(
+                                                  color: Colors.white,
+                                                  size: 50.0,
+                                                ),
                                                 errorWidget:
                                                     (context, url, error) =>
                                                         const Icon(Icons.error),
@@ -591,7 +595,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     currentIconIndex = 0;
                   });
                 },
-                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
                 highlightColor: Colors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -631,7 +634,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     });
                   }
                 },
-                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
                 highlightColor: Colors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -676,7 +678,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     _showSignInRequiredPopup(context);
                   }
                 },
-                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
                 highlightColor: Colors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -721,7 +722,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     _showSignInRequiredPopup(context);
                   }
                 },
-                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
                 highlightColor: Colors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

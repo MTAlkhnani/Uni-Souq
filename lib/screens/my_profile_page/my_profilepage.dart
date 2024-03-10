@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:unisouq/components/shimmer_Deatil.dart';
+
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/information_screen/information_screen.dart';
 import 'package:unisouq/screens/product_screen/product_page.dart';
@@ -173,7 +176,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const SpinKitWave(
+                    color: Colors.white,
+                    size: 50.0,
+                  );
                 }
                 final List<DocumentSnapshot> items = snapshot.data!.docs;
                 return ListView.builder(
@@ -198,11 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData ||
                                     snapshot.data == null) {
-                                  return const Scaffold(
-                                    body: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ); // Return a loading indicator while data is being fetched
+                                  return Shimmerload();
                                 }
                                 final itemData = snapshot.data!.data()
                                     as Map<String, dynamic>;
@@ -257,7 +259,10 @@ class _ProfilePageState extends State<ProfilePage> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
-          return const CircularProgressIndicator(); // Show loading indicator if data is not yet available
+          return const SpinKitWave(
+            color: Colors.white,
+            size: 50.0,
+          ); // Show loading indicator if data is not yet available
         }
         final userData = snapshot.data!.data() as Map<String, dynamic>;
         final defaultImage = userData['userImage'];

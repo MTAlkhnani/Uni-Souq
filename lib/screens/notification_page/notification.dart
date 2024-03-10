@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 
@@ -62,8 +63,9 @@ class NotificationList extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return const SpinKitWave(
+            color: Colors.white,
+            size: 50.0,
           );
         }
 

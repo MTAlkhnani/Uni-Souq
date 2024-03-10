@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:unisouq/components/chat_babble.dart';
@@ -122,12 +123,10 @@ class _MessagingPageState extends State<MessagingPage> {
               child: _buildMessageInput(),
             ),
             if (_isImageUploading)
-              const Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                      child: CircularProgressIndicator(strokeWidth: 2))),
+              const SpinKitWave(
+                color: Colors.grey,
+                size: 20.0,
+              ),
             if (_showEmoji)
               SizedBox(
                 height: .35.h,
@@ -282,7 +281,7 @@ class _MessagingPageState extends State<MessagingPage> {
               return Text("Error: ${snapshot.error}");
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return SizedBox();
             }
 
             List<DocumentSnapshot> messageDocs = snapshot.data!.docs;
@@ -474,6 +473,7 @@ class _MessagingPageState extends State<MessagingPage> {
   Widget _buildMessageInput() {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 0,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 3.v),
         child: Row(
@@ -481,41 +481,51 @@ class _MessagingPageState extends State<MessagingPage> {
             SizedBox(width: 5.v),
             SizedBox(width: 8.v),
             Flexible(
-              child: TextField(
-                controller: _controller,
-                keyboardType: TextInputType.multiline,
-                maxLines: null, // Allow the TextField to expand vertically
-                obscureText: false,
-                onTap: () {
-                  if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
-                },
-                decoration: InputDecoration(
-                  hintText: S.of(context).TypeSomething,
-                  hintStyle: TextStyle(color: Theme.of(context).hintColor),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor,
-              radius: 20,
-              child: IconButton(
-                icon: const Icon(Icons.flip_camera_ios, color: Colors.white),
-                onPressed: _getImageFromGallery,
-              ),
-            ),
-            IconButton(
-              onPressed: sendMessage,
-              icon: Icon(
-                color: Theme.of(context).primaryColor,
-                Icons.arrow_forward_ios,
-                size: 30,
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      controller: _controller,
+                      keyboardType: TextInputType.multiline,
+                      maxLines:
+                          null, // Allow the TextField to expand vertically
+                      obscureText: false,
+                      onTap: () {
+                        if (_showEmoji)
+                          setState(() => _showEmoji = !_showEmoji);
+                      },
+                      decoration: InputDecoration(
+                        hintText: S.of(context).TypeSomething,
+                        hintStyle:
+                            TextStyle(color: Theme.of(context).hintColor),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    radius: 20,
+                    child: IconButton(
+                      icon: const Icon(Icons.flip_camera_ios,
+                          color: Colors.white),
+                      onPressed: _getImageFromGallery,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: sendMessage,
+                    icon: Icon(
+                      color: Theme.of(context).primaryColor,
+                      Icons.arrow_forward_ios,
+                      size: 30,
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(width: 10.v),
           ],
         ),
-      ),
+      ), // Added elevation to prevent overlapping with the next widgets
     );
   }
 
@@ -566,6 +576,4 @@ class _MessagingPageState extends State<MessagingPage> {
       });
     }
   }
-
- 
 }

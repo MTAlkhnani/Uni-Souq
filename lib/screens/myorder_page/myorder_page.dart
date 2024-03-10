@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/screens/order_information/oreder_deatil.dart';
@@ -17,13 +18,13 @@ class MyOrderpage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text(S.of(context).MyOrders),
-            ),
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+              appBar: AppBar(
+                title: Text(S.of(context).MyOrders),
+              ),
+              body: const SpinKitWave(
+                color: Colors.white,
+                size: 50.0,
+              ));
         } else if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(
@@ -61,13 +62,9 @@ class ResponseList extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('responses').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 170.h, vertical: 10.v),
-            child: const SizedBox(
-              child: CircularProgressIndicator(
-                strokeWidth: 4.0,
-              ),
-            ),
+          return const SpinKitWave(
+            color: Colors.white,
+            size: 50.0,
           );
         }
 
@@ -104,8 +101,12 @@ class ResponseList extends StatelessWidget {
                     .doc(itemId)
                     .get(),
                 builder: (context, itemSnapshot) {
-                  if (itemSnapshot.connectionState ==
-                      ConnectionState.waiting) {}
+                  if (itemSnapshot.connectionState == ConnectionState.waiting) {
+                    const SpinKitWave(
+                      color: Colors.white,
+                      size: 50.0,
+                    );
+                  }
                   if (itemSnapshot.hasError || !itemSnapshot.hasData) {
                     return const SizedBox(); // Return empty SizedBox if item snapshot has error or no data
                   }

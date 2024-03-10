@@ -1,12 +1,14 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:unisouq/components/shimmer_deatil.dart';
+
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
@@ -169,7 +171,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         future: _productFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Shimmerload();
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -200,8 +202,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         child: CachedNetworkImage(
                           imageUrl: imageURLs[index],
                           fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: SpinKitWave(
+                              color: Theme.of(context).primaryColor,
+                              size: 50.0,
+                            ),
+                          ),
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
                         ),
@@ -387,7 +395,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     .doc(widget.productId)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {}
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    const SpinKitWave(
+                      color: Colors.white,
+                      size: 50.0,
+                    );
+                  }
                   if (!snapshot.hasData || snapshot.data == null) {
                     return ElevatedButton(
                       onPressed: null,

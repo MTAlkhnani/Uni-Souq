@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 
@@ -32,8 +33,25 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
           var data = userSnapshot.data() as Map<String, dynamic>?;
           var firstName = data?['FirstName'];
           var lastName = data?['LastName'];
+
           if (firstName != null && lastName != null) {
-            _usersMap[userSnapshot.id] = {'name': '$firstName $lastName'};
+            String fullName = '$firstName $lastName';
+
+            // Fetch user image from the profile collection
+            FirebaseFirestore.instance
+                .collection('profile')
+                .doc(userSnapshot.id)
+                .get()
+                .then((profileDoc) {
+              var userImage = profileDoc.data()?['userImage'];
+
+              setState(() {
+                _usersMap[userSnapshot.id] = {
+                  'name': fullName,
+                  'userImage': userImage,
+                };
+              });
+            });
           }
         }
       });
@@ -92,7 +110,10 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _usersMap.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? SpinKitWave(
+              color: Theme.of(context).hintColor,
+              size: 20.0,
+            )
           : StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('chat_rooms')
@@ -105,7 +126,10 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return SpinKitWave(
+                    color: Theme.of(context).hintColor,
+                    size: 20.0,
+                  );
                 }
 
                 List<QueryDocumentSnapshot> chatRooms = snapshot.data!.docs;
@@ -130,7 +154,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                             return const SizedBox.shrink();
                           }
 
-                          String userName = _usersMap[otherUserId]!['name'] ??
+                          String userName = _usersMap[otherUserId]?['name'] ??
                               S.of(context).Usernotfound;
                           String chatRoomId = _getChatRoomId(otherUserId);
 
@@ -141,20 +165,42 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                       ConnectionState.waiting ||
                                   !snapshot.hasData) {
                                 return ListTile(
-                                  leading: const Icon(Icons.account_circle),
+                                  leading: const CircleAvatar(
+                                    child: Icon(Icons.person),
+                                  ),
                                   title: Text(userName),
-                                  subtitle: const Text('Loading...'),
+                                  subtitle: const SpinKitThreeBounce(
+                                    color: Colors.grey,
+                                    size: 20.0,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                // Handle error case
+                                return ListTile(
+                                  title: Text('Error: ${snapshot.error}'),
                                 );
                               } else {
                                 int unreadMessages = snapshot.data!;
                                 IconData messageIcon = unreadMessages > 0
-                                    ? Icons.mail
-                                    : Icons.mail_outline;
+                                    ? Icons.person
+                                    : Icons.person;
 
                                 return ListTile(
                                   leading: Stack(
                                     children: [
-                                      Icon(messageIcon),
+                                      CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage: _usersMap[otherUserId]
+                                                    ?['userImage'] !=
+                                                null
+                                            ? NetworkImage(
+                                                _usersMap[otherUserId]
+                                                    ?['userImage']!)
+                                            : const AssetImage(
+                                                    'assets/default_avatar.png')
+                                                as ImageProvider,
+                                        child: Icon(messageIcon),
+                                      ),
                                       if (unreadMessages > 0)
                                         Positioned(
                                           top: 0,
@@ -183,7 +229,10 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                       if (snapshot.connectionState ==
                                               ConnectionState.waiting ||
                                           !snapshot.hasData) {
-                                        return const Text('Loading...');
+                                        return const SpinKitThreeBounce(
+                                          color: Colors.grey,
+                                          size: 1.0,
+                                        );
                                       } else {
                                         String lastMessage = snapshot.data!;
                                         return Text(lastMessage);

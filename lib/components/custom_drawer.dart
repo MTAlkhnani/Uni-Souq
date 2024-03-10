@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:unisouq/app.dart';
 import 'package:unisouq/components/adavtive_dailog.dart';
 import 'package:unisouq/generated/l10n.dart';
@@ -85,7 +86,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             radius: 70,
                           ),
                           placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
+                              const SpinKitChasingDots(
+                            color: Colors.white,
+                            size: 50.0,
+                          ),
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
                         ),
