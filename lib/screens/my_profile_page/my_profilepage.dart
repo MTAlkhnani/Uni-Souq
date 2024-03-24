@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       userName = userDoc['fName'] + " " + userDoc['lName'];
-      imageUrl = userDoc['userImage'];
+      imageUrl = userDoc['userImage'] ?? '';
       phone = userDoc['phone'];
       university = userDoc['university'];
     });
@@ -265,17 +265,20 @@ class _ProfilePageState extends State<ProfilePage> {
           ); // Show loading indicator if data is not yet available
         }
         final userData = snapshot.data!.data() as Map<String, dynamic>;
-        final defaultImage = userData['userImage'];
-        if (defaultImage != null && defaultImage.isNotEmpty) {
+        final imageUrl = userData['userImage'];
+
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          // If imageUrl is available, display the user's profile image
           return CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(defaultImage),
+            backgroundImage: CachedNetworkImageProvider(imageUrl),
             radius: 50,
           );
         } else {
+          // If imageUrl is not available, display the default person icon
           return const CircleAvatar(
             child: Icon(Icons.person),
             radius: 50,
-          ); // Use person icon if defaultImage is not available
+          );
         }
       },
     );
