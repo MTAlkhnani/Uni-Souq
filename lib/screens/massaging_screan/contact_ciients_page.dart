@@ -40,7 +40,8 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
             // Fetch user image from the profile collection
             FirebaseFirestore.instance
                 .collection('profile')
-                .doc(userSnapshot.id)
+                .doc(userSnapshot
+                    .id) // Assuming user ID is the same in both collections
                 .get()
                 .then((profileDoc) {
               var userImage = profileDoc.data()?['userImage'];
@@ -197,7 +198,7 @@ class _ContactClientsPageState extends State<ContactClientsPage> {
                                                 _usersMap[otherUserId]
                                                     ?['userImage']!)
                                             : const AssetImage(
-                                                    'assets/default_avatar.png')
+                                                    'assets/images/profile_Defulat.jpg')
                                                 as ImageProvider,
                                         child: Icon(messageIcon),
                                       ),
