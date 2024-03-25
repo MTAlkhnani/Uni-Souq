@@ -64,7 +64,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_carousel_slider: ^1.1.0
   dots_indicator: ^3.0.0
-  google_fonts: ^6.2.0
+  google_fonts: 6.1.0
   flutter_credit_card: ^3.0.4
   cryptography: ^2.7.0
   uuid: ^4.3.3
