@@ -137,23 +137,35 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     if (isValid) {
       _formKey.currentState!.save();
 
-      // Check if the email is already in use
-      final existingUser = await FirebaseFirestore.instance
-          .collection('User')
-          .where('Email', isEqualTo: emailController.text.trim())
-          .get();
+      // Extracting the domain from the email
+      final email = emailController.text.trim();
+      final emailDomain =
+          email.split('@').length > 1 ? email.split('@')[1] : '';
 
-      if (existingUser.docs.isNotEmpty) {
-        // Email is already in use
-        showErrorMessage(context, 'Email is already in use!');
+      // Check if the email domain contains 'unisouq'
+      if (emailDomain.toLowerCase().contains('unisouq')) {
+        // If the domain contains 'unisouq', show an error message
+        showErrorMessage(
+            context, 'Registration with "unisouq" domain is not allowed.');
       } else {
-        // Email is not in use, proceed with registration
-        _submiteForm(
-            emailController.text.trim(),
-            passwordController.text.trim(),
-            firstnameController.text.trim(),
-            lastnameController.text.trim(),
-            phoneController.text.trim());
+        // Proceed with checking if the email is already in use
+        final existingUser = await FirebaseFirestore.instance
+            .collection('User')
+            .where('Email', isEqualTo: email)
+            .get();
+
+        if (existingUser.docs.isNotEmpty) {
+          // Email is already in use
+          showErrorMessage(context, 'Email is already in use!');
+        } else {
+          // Email is not in use, proceed with registration
+          _submiteForm(
+              email,
+              passwordController.text.trim(),
+              firstnameController.text.trim(),
+              lastnameController.text.trim(),
+              phoneController.text.trim());
+        }
       }
     }
   }

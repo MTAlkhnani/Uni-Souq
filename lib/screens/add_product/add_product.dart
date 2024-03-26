@@ -333,6 +333,40 @@ class _AddProductState extends State<AddProductScreen> {
     return uid;
   }
 
+  Future<String> getCurrentUserEmailByUserId() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is signed in
+      final String uid = user.uid;
+      try {
+        // Query the "User" collection for documents where "UserId" matches the current user's UID
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .where('UserId', isEqualTo: uid)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          // Assuming the first document found is the correct one
+          final documentSnapshot = querySnapshot.docs.first;
+          if (documentSnapshot.exists &&
+              documentSnapshot.data().containsKey('Email')) {
+            return documentSnapshot.get('Email'); // Return the user's email
+          } else {
+            return 'Email not found'; // Email field does not exist in the document
+          }
+        } else {
+          return 'No user document matches the current UserID';
+        }
+      } catch (e) {
+        // Handle errors (e.g., insufficient permissions, network issues)
+        return 'Error retrieving user email: $e';
+      }
+    } else {
+      // User is not signed in
+      return 'User not signed in';
+    }
+  }
+
   Future<void> _submitProduct() async {
     if (_formKey.currentState!.validate() && _images.isNotEmpty) {
       setState(() => _isLoading = true);
@@ -347,6 +381,7 @@ class _AddProductState extends State<AddProductScreen> {
             _translateToEnglish(_selectedCategory);
         final String translatedcondtion =
             _translateToEnglishcondtion(_selectedCondition);
+        String userEmail = await getCurrentUserEmailByUserId();
 
         DocumentReference docRef =
             FirebaseFirestore.instance.collection('Item').doc();
@@ -361,10 +396,11 @@ class _AddProductState extends State<AddProductScreen> {
           'sellerID': getCurrentUserUid(),
           'category': translatedCategory, // Use the translated category
           'condition': translatedcondtion,
-          'user': "N/A",
+          'user': userEmail,
           'itemID': itemId,
           'imageURLs': validImageUrls,
           'status': 'available', // Add item status
+          'timestamp': Timestamp.now(),
         });
 
         Navigator.of(context).pop();
