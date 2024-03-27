@@ -41,7 +41,7 @@
         "passforget" : "Forgot password?",
         "notmember" : "Not a member? ",
         "regsternow" : "Register now",
-        "bannedMessage": "Your account has been banned. Contact support for more information."
+        "bannedMessage": "Your account has been banned. Contact support for more information.",
 "home-s"   : "home_screen" , 
         "home":"Home",
         "profile":"Profile",

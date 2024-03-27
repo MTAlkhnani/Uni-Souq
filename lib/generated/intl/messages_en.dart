@@ -211,6 +211,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your order has been accepted!"),
         "addnewpictures":
             MessageLookupByLibrary.simpleMessage("add new pictures"),
+        "bannedMessage": MessageLookupByLibrary.simpleMessage(
+            "Your account has been banned. Contact support for more information."),
         "befoer": MessageLookupByLibrary.simpleMessage(
             "Before: \${price.toStringAsFixed(2)} SAR"),
         "c1": MessageLookupByLibrary.simpleMessage("New"),

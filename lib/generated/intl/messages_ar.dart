@@ -212,6 +212,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
         "addnewpictures":
             MessageLookupByLibrary.simpleMessage("إضافة صور جديدة"),
+        "bannedMessage": MessageLookupByLibrary.simpleMessage(
+            "تم حظر حسابك. يرجى الاتصال بالدعم لمزيد من المعلومات."),
         "befoer": MessageLookupByLibrary.simpleMessage(
             "قبل: \${price.toStringAsFixed(2)} ريال"),
         "c1": MessageLookupByLibrary.simpleMessage("جديد"),

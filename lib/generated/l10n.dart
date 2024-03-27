@@ -346,6 +346,16 @@ class S {
     );
   }
 
+  /// `Your account has been banned. Contact support for more information.`
+  String get bannedMessage {
+    return Intl.message(
+      'Your account has been banned. Contact support for more information.',
+      name: 'bannedMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   // skipped getter for the 'home-s' key
 
   /// `Home`

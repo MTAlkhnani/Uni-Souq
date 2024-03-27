@@ -80,15 +80,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Attempt to sign in the user with the provided credentials.
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       String userId = userCredential.user!.uid;
 
       // Check if the user is in the banned_users collection.
-      DocumentSnapshot bannedUserSnapshot = await FirebaseFirestore.instance.collection('banned_users').doc(userId).get();
+      DocumentSnapshot bannedUserSnapshot = await FirebaseFirestore.instance
+          .collection('banned_users')
+          .doc(userId)
+          .get();
 
       if (bannedUserSnapshot.exists) {
         // If the user is banned, show a message and do not proceed further.
-        showErrorMessage(context, "Your account has been banned. Contact support for more information.");
+        showErrorMessage(context, S.of(context).bannedMessage);
       } else {
         // If the user is not banned, proceed with the login process.
         if (_rememberMe) {
@@ -101,7 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
         // Use Navigator to pushReplacementNamed.
         showSuccessMessage(context, S.of(context).loginsucc);
         Future.delayed(const Duration(seconds: 2), () {
-          Global.storageService.setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
+          Global.storageService
+              .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
           NotificationService.saveTokenOnAuthChange();
           Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
         });
@@ -120,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLogingIn = false;
     });
   }
-
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
