@@ -47,6 +47,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _sendingInProgress = false; // State variable to track sending progress
   late bool _isRequestInProgress = false;
   List<Comment> comments = [];
+  late User? _user;
+  late Map<String, dynamic> _profileData = {};
 
   @override
   void initState() {
@@ -55,6 +57,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     _checkItemStatus();
     _checkRequestStatus(); // Call method to check request status
     _loadComments();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (mounted) {
+        setState(() {
+          _user = user;
+        });
+      }
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(user.uid)
+          .get();
+
+      if (mounted) {
+        setState(() {
+          _profileData = snapshot.data() as Map<String, dynamic>;
+        });
+      }
+    }
   }
 
   String getSellerUserID() {
@@ -683,7 +708,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       // Post the comment to Firestore
       await FirebaseFirestore.instance.collection('comments').add({
         'productId': widget.productId,
-        'userName': _userName,
+        'userName':
+            '${_profileData['fName'] ?? ''} ${_profileData['lName'] ?? ''}',
         'comment': _commentController.text.trim(),
         'timestamp': FieldValue.serverTimestamp(),
       });
