@@ -14,6 +14,7 @@ import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
 import 'package:unisouq/screens/payment_page/payment_page.dart';
+import 'package:unisouq/screens/product_screen/comment.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -45,6 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   bool _sendingInProgress = false; // State variable to track sending progress
   late bool _isRequestInProgress = false;
+  List<Comment> comments = [];
 
   @override
   void initState() {
@@ -52,6 +54,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     _fetchProductAndUser();
     _checkItemStatus();
     _checkRequestStatus(); // Call method to check request status
+    _loadComments();
   }
 
   String getSellerUserID() {
@@ -370,13 +373,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         icon: const Icon(Icons.send),
                         onPressed: () {
                           if (isUserSignedIn()) {
-                            //_postComment();
+                            _postComment();
                           } else {
                             _showSignInRequiredPopup(context);
                           }
                         },
                       ),
                     ],
+                  ),
+                ),
+                // Display comments
+                Container(
+                  height: MediaQuery.of(context).size.height *
+                      0.4, // Adjust the height as needed
+                  child: ListView.builder(
+                    itemCount: comments.length,
+                    itemBuilder: (context, index) {
+                      // Convert Firestore Timestamp to DateTime
+                      DateTime dateTime = comments[index].timestamp.toDate();
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          child: Icon(
+                            comments[index].avatar,
+                            size: 40, // Adjust the icon size as needed
+                          ),
+                        ),
+                        title: Text(comments[index].name),
+                        subtitle: Text(comments[index].content),
+                        trailing: Text(
+                          // Format the DateTime object
+                          DateFormat('yyyy-MM-dd').format(dateTime),
+                          style: TextStyle(
+                            fontSize: 12.h,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -645,10 +678,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  void _postComment() {
+  void _postComment() async {
     if (_commentController.text.trim().isNotEmpty) {
       // Post the comment to Firestore
-      FirebaseFirestore.instance.collection('comments').add({
+      await FirebaseFirestore.instance.collection('comments').add({
         'productId': widget.productId,
         'userName': _userName,
         'comment': _commentController.text.trim(),
@@ -657,7 +690,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
       // Clear the text field
       _commentController.clear();
+
+      // Reload comments after posting
+      _loadComments();
     }
+  }
+
+  void _loadComments() {
+    FirebaseFirestore.instance
+        .collection('comments')
+        .where('productId', isEqualTo: widget.productId)
+        .get()
+        .then((querySnapshot) {
+      setState(() {
+        comments = querySnapshot.docs.map((doc) {
+          return Comment(
+              avatar: Icons.person,
+              name: doc['userName'],
+              content: doc['comment'],
+              timestamp: doc['timestamp']);
+        }).toList();
+      });
+    }).catchError((error) {
+      // Handle error
+      print("Error loading comments: $error");
+    });
   }
 
   bool isArabic() {
