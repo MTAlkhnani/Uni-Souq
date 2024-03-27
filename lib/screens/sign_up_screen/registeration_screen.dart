@@ -100,7 +100,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         showSuccessMessage(context, S.of(context).succmassage);
 
         Future.delayed(const Duration(seconds: 1), () {
-          NotificationService.saveToken();
+          NotificationService.saveTokenOnAuthChange();
         });
         Navigator.push(
           context,

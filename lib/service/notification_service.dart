@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,36 @@ class NotificationService {
       provisional: false,
       sound: true,
     );
+  }
+
+  static Future<void> saveTokenOnAuthChange() async {
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
+      if (user != null) {
+        // User is signed in
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await saveTokenToFirestore(token, user.uid);
+        } else {
+          // Handle missing token case (optional)
+          print('Failed to retrieve token');
+        }
+      }
+    });
+  }
+
+  static Future<void> saveTokenToFirestore(String token, String userId) async {
+    final existingTokenSnapshot = await FirebaseFirestore.instance
+        .collection('usertoken')
+        .where('token', isEqualTo: token)
+        .where('UserId', isEqualTo: userId)
+        .get();
+
+    if (existingTokenSnapshot.docs.isEmpty) {
+      await FirebaseFirestore.instance.collection('usertoken').doc(userId).set({
+        'token': token,
+        'UserId': userId, // Consider using user.uid instead for consistency
+      });
+    }
   }
 
   static Future<void> saveToken() async {
