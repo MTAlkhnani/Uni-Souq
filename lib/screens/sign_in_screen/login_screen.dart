@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -78,37 +79,48 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      if (_rememberMe) {
-        // Save the "Remember me" state and/or user credentials as needed
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('savedEmail', emailController.text);
-        await prefs.setString('savedPassword', passwordController.text);
+      // Attempt to sign in the user with the provided credentials.
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      String userId = userCredential.user!.uid;
+
+      // Check if the user is in the banned_users collection.
+      DocumentSnapshot bannedUserSnapshot = await FirebaseFirestore.instance.collection('banned_users').doc(userId).get();
+
+      if (bannedUserSnapshot.exists) {
+        // If the user is banned, show a message and do not proceed further.
+        showErrorMessage(context, "Your account has been banned. Contact support for more information.");
+      } else {
+        // If the user is not banned, proceed with the login process.
+        if (_rememberMe) {
+          // Save the "Remember me" state and/or user credentials as needed.
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
+          await prefs.setString('savedEmail', emailController.text);
+          await prefs.setString('savedPassword', passwordController.text);
+        }
+        // Use Navigator to pushReplacementNamed.
+        showSuccessMessage(context, S.of(context).loginsucc);
+        Future.delayed(const Duration(seconds: 2), () {
+          Global.storageService.setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
+          NotificationService.saveTokenOnAuthChange();
+          Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+        });
       }
-      // Use Navigator to pushReplacementNamed
-      showSuccessMessage(context, S.of(context).loginsucc);
-      Future.delayed(const Duration(seconds: 2), () {
-        Global.storageService
-            .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
-        NotificationService.saveTokenOnAuthChange();
-        Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
-      });
     } on FirebaseAuthException catch (error) {
       var message = S.of(context).massage;
       if (error.message != null) {
         message = error.message.toString();
       }
-
       showErrorMessage(context, message);
     } catch (error) {
-      print(error); // Consider handling this error in user-friendly way
+      print(error); // Consider handling this error in a user-friendly way.
     }
 
     setState(() {
       _isLogingIn = false;
     });
   }
+
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();

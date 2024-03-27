@@ -136,17 +136,27 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
 
     if (isValid) {
       _formKey.currentState!.save();
+      final email = emailController.text.trim();
+
+      // First, check if the email is banned
+      final bannedUserSnapshot = await FirebaseFirestore.instance
+          .collection('banned_users')
+          .where('Email', isEqualTo: email)
+          .get();
+
+      if (bannedUserSnapshot.docs.isNotEmpty) {
+        // The email is banned, show an error message
+        showErrorMessage(context, "Your Email has been banned. Contact support for more information.");
+        return; // Stop the registration process
+      }
 
       // Extracting the domain from the email
-      final email = emailController.text.trim();
-      final emailDomain =
-          email.split('@').length > 1 ? email.split('@')[1] : '';
+      final emailDomain = email.split('@').length > 1 ? email.split('@')[1] : '';
 
       // Check if the email domain contains 'unisouq'
       if (emailDomain.toLowerCase().contains('unisouq')) {
         // If the domain contains 'unisouq', show an error message
-        showErrorMessage(
-            context, 'Registration with "unisouq" domain is not allowed.');
+        showErrorMessage(context, 'Registration with "unisouq" domain is not allowed.');
       } else {
         // Proceed with checking if the email is already in use
         final existingUser = await FirebaseFirestore.instance
@@ -169,6 +179,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
