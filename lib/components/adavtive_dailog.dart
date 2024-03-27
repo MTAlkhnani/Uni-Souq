@@ -24,6 +24,7 @@ class MyDialog extends StatelessWidget {
     required this.titleTextStyle,
     required this.contentTextStyle,
     required this.buttonTextStyle,
+    required void Function() onSignOutPressed,
   });
 
   @override

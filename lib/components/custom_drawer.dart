@@ -195,7 +195,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog first
-                  // Perform sign out action here
+                  _performSignOut(); // Perform sign-out action
                 },
                 isDestructiveAction: true,
                 child: Text(S.of(context).SignOut),
@@ -218,10 +218,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
             contentTextStyle: const TextStyle(fontSize: 16),
             buttonTextStyle: const TextStyle(
                 fontSize: 18, color: Color.fromARGB(255, 165, 53, 46)),
+            onSignOutPressed: _performSignOut, // Perform sign-out action
           );
         },
       );
     }
+  }
+
+  void _performSignOut() {
+    FirebaseAuth.instance.signOut();
   }
 
   // Method to create a ListTile for the Drawer

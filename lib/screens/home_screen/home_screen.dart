@@ -363,6 +363,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           }
 
           // Return a ListView to display categories and their items
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -443,139 +444,152 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
               // Items section
               Expanded(
-                child: filteredItems != null && filteredItems.isNotEmpty
-                    ? GridView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.fromLTRB(
-                          8,
-                          8,
-                          8,
-                          MediaQuery.of(context).size.height *
-                              0.05, // Adjust the bottom padding using MediaQuery
-                        ),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.8,
-                        ),
-                        itemCount: filteredItems.length,
-                        // Inside the GridView.builder itemBuilder method, update the UI of each item card
-                        itemBuilder: (context, index) {
-                          final item = filteredItems![index].data()
-                              as Map<String, dynamic>;
-
-                          // Calculate the discounted price if available
-                          double price = double.parse(item['price'] ?? '0');
-                          double discountedPrice =
-                              double.parse(item['discountedPrice'] ?? "0.0");
-                          double displayPrice =
-                              discountedPrice > 0 ? discountedPrice : price;
-
-                          return GestureDetector(
-                            onTap: () {
-                              // Navigate to the product detail screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductDetailPage(
-                                    productId: filteredItems![index].id,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    filteredItems != null && filteredItems.isNotEmpty
+                        ? Expanded(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.fromLTRB(
+                                8,
+                                8,
+                                8,
+                                MediaQuery.of(context).size.height * 0.05,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AspectRatio(
-                                    aspectRatio: 16 / 14,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Container(
-                                        color: Theme.of(context).hoverColor,
-                                        child: item['imageURLs'] != null &&
-                                                item['imageURLs'].isNotEmpty
-                                            ? CachedNetworkImage(
-                                                imageUrl: item['imageURLs'][
-                                                    0], // Use the first image URL
-                                                fit: BoxFit.cover,
-                                                placeholder: (context, url) =>
-                                                    const SpinKitWave(
-                                                  color: Colors.white,
-                                                  size: 50.0,
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
-                                              )
-                                            : Container(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 0.8,
+                              ),
+                              itemCount: filteredItems.length,
+                              itemBuilder: (context, index) {
+                                final item = filteredItems![index].data()
+                                    as Map<String, dynamic>;
+
+                                double price =
+                                    double.parse(item['price'] ?? '0');
+                                double discountedPrice = double.parse(
+                                    item['discountedPrice'] ?? "0.0");
+                                double displayPrice = discountedPrice > 0
+                                    ? discountedPrice
+                                    : price;
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProductDetailPage(
+                                          productId: filteredItems![index].id,
+                                        ),
                                       ),
+                                    );
+                                  },
+                                  child: Card(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          item['title'] ?? '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '${displayPrice.toStringAsFixed(0)} SAR',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: discountedPrice > 0
-                                                    ? Theme.of(context)
-                                                        .hintColor
-                                                        .withOpacity(
-                                                            0.7) // If discounted price is available, display it in red
-                                                    : null, // Otherwise, use the default text color
-                                              ),
+                                        AspectRatio(
+                                          aspectRatio: 16 / 14,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Container(
+                                              color:
+                                                  Theme.of(context).hoverColor,
+                                              child: item['imageURLs'] !=
+                                                          null &&
+                                                      item['imageURLs']
+                                                          .isNotEmpty
+                                                  ? CachedNetworkImage(
+                                                      imageUrl:
+                                                          item['imageURLs'][0],
+                                                      fit: BoxFit.cover,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              const SpinKitWave(
+                                                        color: Colors.white,
+                                                        size: 50.0,
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                    )
+                                                  : Container(),
                                             ),
-                                            if (discountedPrice >
-                                                0) // Display the original price if discounted price is available
-                                              const SizedBox(width: 8),
-                                            if (discountedPrice > 0)
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
                                               Text(
-                                                '${price.toStringAsFixed(0)} SAR',
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  decoration: TextDecoration
-                                                      .lineThrough,
-                                                  color: Colors.red,
-                                                ),
+                                                item['title'] ?? '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                          ],
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    '${displayPrice.toStringAsFixed(0)} SAR',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: discountedPrice > 0
+                                                          ? Theme.of(context)
+                                                              .hintColor
+                                                              .withOpacity(0.7)
+                                                          : null,
+                                                    ),
+                                                  ),
+                                                  if (discountedPrice > 0)
+                                                    const SizedBox(width: 8),
+                                                  if (discountedPrice > 0)
+                                                    Text(
+                                                      '${price.toStringAsFixed(0)} SAR',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text(S.of(context).Noitemsfound),
-                      ),
+                          )
+                        : Center(
+                            child: Text(S.of(context).Noitemsfound),
+                          ),
+                  ],
+                ),
               ),
             ],
           );
