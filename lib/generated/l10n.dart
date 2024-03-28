@@ -1450,6 +1450,16 @@ class S {
     );
   }
 
+  /// `Track order`
+  String get trackorder {
+    return Intl.message(
+      'Track order',
+      name: 'trackorder',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `myorderconf_screen`
   String get myordericonf_screen {
     return Intl.message(

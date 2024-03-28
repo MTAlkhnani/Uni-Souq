@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Future.delayed(const Duration(seconds: 2), () {
           Global.storageService
               .setBool(AppConstrants.STORAGE_DEVICE_SING_IN_KEY, true);
-          NotificationService.saveTokenOnAuthChange();
+
           Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
         });
       }

@@ -333,6 +333,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Account Created Succussfully"),
         "suumassage": MessageLookupByLibrary.simpleMessage(
             "Your request has been sent successfully."),
+        "trackorder": MessageLookupByLibrary.simpleMessage("Track order"),
         "trans":
             MessageLookupByLibrary.simpleMessage("Transforming Campus Life"),
         "welcome": MessageLookupByLibrary.simpleMessage(

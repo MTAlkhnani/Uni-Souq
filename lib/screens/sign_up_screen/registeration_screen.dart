@@ -99,9 +99,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         // If two-factor authentication is not enabled, proceed to the CustomerScreen
         showSuccessMessage(context, S.of(context).succmassage);
 
-        Future.delayed(const Duration(seconds: 1), () {
-          NotificationService.saveTokenOnAuthChange();
-        });
+       
         Navigator.push(
           context,
           MaterialPageRoute(

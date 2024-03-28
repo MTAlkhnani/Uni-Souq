@@ -160,6 +160,7 @@
         "RejectedOrderDetails":"Rejected Order Details",
         "Close":"Close",
         "ContactSeller":"Contact Seller",
+        "trackorder":"Track order",
 "myordericonf_screen":"myorderconf_screen",
         "OrderAccepted":"Order Accepted",
         "Yourorderhasbeenaccepted":"Your order has been accepted!",

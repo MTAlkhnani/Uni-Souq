@@ -22,6 +22,7 @@ import 'package:unisouq/screens/product_screen/product_page.dart';
 import 'package:unisouq/screens/request_page/request_page.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
@@ -46,6 +47,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _getCurrentUserId();
     _createUserActivityCollection();
     itemsStream = FirebaseFirestore.instance.collection('Item').snapshots();
+    Future.delayed(const Duration(seconds: 1), () {
+      NotificationService.saveTokenOnAuthChange();
+    });
   }
 
   @override

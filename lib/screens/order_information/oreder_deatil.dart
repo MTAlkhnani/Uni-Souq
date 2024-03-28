@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
+import 'package:unisouq/screens/track_order-screen/track_order.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class OrderDetailsPage extends StatefulWidget {
@@ -30,8 +31,8 @@ class OrderDetailsPage extends StatefulWidget {
 }
 
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
-  bool _isClient = false;
-  bool _isRated = false;
+  late bool _isClient = false;
+  late bool _isRated = false;
   double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
 
@@ -50,7 +51,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       }
 
       if (widget.clientId == getCurrentUserUid()) {
-        _isClient = true;
+        setState(() {
+          _isClient = true;
+        });
         var snapshot = await FirebaseFirestore.instance
             .collection('Rating')
             .doc(widget.sellerId)
@@ -61,9 +64,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           if (data['clientId'] == widget.clientId &&
               data['itemId'] == widget.itemId) {
             _rating = data['rating'];
-            _isRated = true;
+
             // Fetch and set the review if it exists
             _reviewController.text = data['review'] ?? '';
+            setState(() {
+              _isClient = true;
+              _isRated = true;
+            });
           }
         }
       } else {
@@ -76,16 +83,16 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           Map<String, dynamic> sellerData =
               sellerSnapshot.data() as Map<String, dynamic>;
           _rating = sellerData['rating'];
-          _isRated = true;
+
           // Fetch and set the review if it exists
           _reviewController.text = sellerData['review'] ?? '';
+          setState(() {
+            _isRated = true;
+          });
         }
       }
     } catch (e) {
       print('Error showing order details: $e');
-    }
-    if (mounted) {
-      setState(() {});
     }
   }
 
@@ -93,7 +100,6 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.h),
           child: Text(S.of(context).OrderDetails),
@@ -161,7 +167,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  if (_isClient)
+                  if (_isClient == true)
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
@@ -201,7 +207,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       ],
                     ),
                   ),
-                  if (_isClient && _isRated)
+                  if (_isClient == true)
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0.v),
                       child: TextField(
@@ -256,7 +262,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (_isClient)
+            if (_isClient == true)
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -268,7 +274,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     ),
                   ),
                   onPressed: () {
-                    if (_rating > 0) {
+                    if (_rating >= 0) {
                       try {
                         FirebaseFirestore.instance
                             .collection('Rating')
@@ -308,7 +314,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         S.of(context).Submit,
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 19,
                             fontWeight:
                                 FontWeight.bold), // Adjust text color here
                       ),
@@ -328,24 +334,31 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OrderTrackerDemo(
+                        title: 'Order Tracker',
+                      ),
+                    ),
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.close,
+                      Icons.track_changes,
                       color: Theme.of(context).primaryColor,
-                      size: 23,
+                      size: 25,
                     ),
                     SizedBox(
                       width: 5.h,
                     ),
                     Text(
-                      S.of(context).Cancel,
+                      S.of(context).trackorder,
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontSize: 18,
+                          fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
                   ],

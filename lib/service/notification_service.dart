@@ -96,6 +96,26 @@ class NotificationService {
     }
   }
 
+  static Future<void> deleteTokenOnSignOut() async {
+    // Listen to sign-out events
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user == null) {
+        // User signed out, delete usertoken field
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          // Find and delete the token from Firestore
+          QuerySnapshot tokenSnapshot = await FirebaseFirestore.instance
+              .collection('usertoken')
+              .where('token', isEqualTo: token)
+              .get();
+          tokenSnapshot.docs.forEach((doc) async {
+            await doc.reference.delete();
+          });
+        }
+      }
+    });
+  }
+
   static Future localNotiInit() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');

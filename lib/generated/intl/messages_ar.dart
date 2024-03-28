@@ -329,6 +329,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم إنشاء الحساب بنجاح"),
         "suumassage":
             MessageLookupByLibrary.simpleMessage("تم إرسال طلبك بنجاح."),
+        "trackorder": MessageLookupByLibrary.simpleMessage("متابعة الطلب"),
         "trans":
             MessageLookupByLibrary.simpleMessage("تحول حياة الحرم الجامعي"),
         "welcome": MessageLookupByLibrary.simpleMessage(

@@ -15,6 +15,8 @@ import 'package:unisouq/screens/payment_page/cardpaymentview.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../service/notification_service.dart';
+
 class CustomDrawer extends StatefulWidget {
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
@@ -227,6 +229,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void _performSignOut() {
     FirebaseAuth.instance.signOut();
+    Future.delayed(const Duration(seconds: 1), () {
+      NotificationService.deleteTokenOnSignOut();
+    });
   }
 
   // Method to create a ListTile for the Drawer
