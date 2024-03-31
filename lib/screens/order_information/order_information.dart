@@ -7,6 +7,7 @@ import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/service/notification_service.dart';
 import 'package:unisouq/utils/auth_utils.dart';
 import 'package:unisouq/utils/size_utils.dart';
+import 'dart:math';
 
 class OrderInformationScreen extends StatelessWidget {
   final String message;
@@ -256,6 +257,8 @@ class _OrderFormState extends State<OrderForm> {
             .doc(itemId)
             .update({'status': 'Sold'});
 
+// Update the order status in the orders collection
+        await _updateOrderStatusInOrdersCollection(itemId, "order");
         // Navigate to the confirmation page
         Navigator.push(
           context,
@@ -332,5 +335,21 @@ class _OrderFormState extends State<OrderForm> {
 
   bool isArabic() {
     return Intl.getCurrentLocale() == 'ar';
+  }
+
+  Future<void> _updateOrderStatusInOrdersCollection(
+      String orderId, String status) async {
+    try {
+      // Add a new document to the orders collection with the provided orderId and status
+      await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
+        'itemid': orderId,
+        'status': status,
+      });
+
+      print('Order status added successfully.');
+    } catch (error) {
+      print('Error adding order status to orders collection: $error');
+      // Handle error as needed
+    }
   }
 }

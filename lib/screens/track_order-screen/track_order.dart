@@ -1,35 +1,63 @@
 import 'package:flutter/material.dart';
-
 import 'package:order_tracker/order_tracker.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class OrderTrackerDemo extends StatefulWidget {
   const OrderTrackerDemo({
-    super.key,
+    Key? key,
     required this.title,
-  });
+    required this.orderStatus,
+  }) : super(key: key);
+
   final String title;
+  final String orderStatus;
 
   @override
   State<OrderTrackerDemo> createState() => _OrderTrackerDemoState();
 }
 
 class _OrderTrackerDemoState extends State<OrderTrackerDemo> {
-  List<TextDto> InitialOrderDataList = [
-    TextDto("Your order has been inprogress", ""),
-  ];
+  late List<TextDto> orderTitleAndDateList;
+  late final Status ordeStatus;
+  @override
+  void initState() {
+    super.initState();
+    _updateOrderStatusList();
+  }
 
-  List<TextDto> OrderShippedDataList = [
-    TextDto("Your order has been accepted", ""),
-  ];
-
-  List<TextDto> OrderOutOfDeliveryDataList = [
-    TextDto("Your order is shipped", ""),
-  ];
-
-  List<TextDto> OrderDeviveredDataList = [
-    TextDto("Your order has been delivered", ""),
-  ];
+  void _updateOrderStatusList() {
+    switch (widget.orderStatus) {
+      case 'order':
+        ordeStatus = Status.order;
+        orderTitleAndDateList = [
+          TextDto("Your order has been in progress", ""),
+        ];
+        break;
+      case 'shipped':
+        ordeStatus = Status.shipped;
+        orderTitleAndDateList = [
+          TextDto("Your order has been accepted", ""),
+        ];
+        break;
+      case 'outOfDelivery':
+        ordeStatus = Status.outOfDelivery;
+        orderTitleAndDateList = [
+          TextDto("Your order is shipped", ""),
+        ];
+        break;
+      case 'delivered':
+        ordeStatus = Status.delivered;
+        orderTitleAndDateList = [
+          TextDto("Your order has been delivered", ""),
+        ];
+        break;
+      default:
+        ordeStatus = Status.order;
+        orderTitleAndDateList = [
+          TextDto("Your order has no status", ""),
+        ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +73,10 @@ class _OrderTrackerDemoState extends State<OrderTrackerDemo> {
             Padding(
               padding: const EdgeInsets.all(30),
               child: OrderTracker(
-                status: Status.shipped,
+                status: ordeStatus,
                 activeColor: Theme.of(context).primaryColor,
                 inActiveColor: Theme.of(context).cardColor.withOpacity(0.1),
-                orderTitleAndDateList: InitialOrderDataList,
-                shippedTitleAndDateList: OrderShippedDataList,
-                outOfDeliveryTitleAndDateList: OrderOutOfDeliveryDataList,
-                deliveredTitleAndDateList: OrderDeviveredDataList,
+                orderTitleAndDateList: orderTitleAndDateList,
               ),
             ),
           ],

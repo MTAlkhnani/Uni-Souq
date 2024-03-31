@@ -52,7 +52,7 @@ class MyOrderpage extends StatelessWidget {
 
 class ResponseList extends StatelessWidget {
   final String? currentUserId;
-  String? selectedItemId;
+  late String? selectedItemId;
 
   ResponseList({required this.currentUserId});
 
@@ -133,7 +133,7 @@ class ResponseList extends StatelessWidget {
                               response['responseMessage'],
                               sellerID,
                               clientId,
-                              selectedItemId,
+                              itemId,
                               imageURL,
                               title);
                         } else if (status == 'rejected') {
@@ -168,7 +168,7 @@ class ResponseList extends StatelessWidget {
     String responseMessage,
     String sellerId,
     String clientId,
-    String? selectedItemId,
+    String itemId, // Pass itemId directly
     String imageURL,
     String title,
   ) async {
@@ -178,7 +178,7 @@ class ResponseList extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => OrderDetailsPage(
             responseMessage: responseMessage,
-            itemId: selectedItemId,
+            itemId: itemId, // Use the passed itemId
             imageURL: imageURL,
             title: title,
             clientId: clientId,
