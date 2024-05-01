@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/auth_utils.dart';
 
 // Define the User class
 class User {
@@ -25,25 +28,34 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   void initState() {
     super.initState();
     // Fetch user details when the chat room screen is first loaded
-    _fetchUserDetails('support@unisoq.com');
+    _fetchUserDetails();
     // Bot sends the first message
     _sendFirstMessage();
   }
 
-  // Method to fetch user details based on email
-  void _fetchUserDetails(String email) async {
-    final user = await fetchUserDetails(email);
-    setState(() {
-      _user = user;
-    });
+  // Method to fetch user details using Firebase Authentication
+  void _fetchUserDetails() async {
+    String? userId = await getUserId();
+    if (userId != null) {
+      // Get the user document from Firestore
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection('User').doc(userId).get();
+      // Extract user data from the document
+      var userData = userSnapshot.data() as Map<String, dynamic>;
+      String name = userData['FirstName'] + " " + userData['LastName'];
+      String email = userData['Email'];
+      // Create a User object
+      setState(() {
+        _user = User(name: name, email: email);
+      });
+    }
   }
 
   void _sendFirstMessage() {
     // Simulate bot initiating the conversation with a question
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
-        _messages
-            .add('${_user?.name ?? 'Bot'}: Hello! How can I assist you today?');
+        _messages.add('${'Bot'}: Hello! How can I assist you today?');
         _askedInitialQuestion =
             true; // Set flag to true after asking the initial question
       });
@@ -54,7 +66,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customer Support'),
+        title: const Text('Customer Support'),
       ),
       body: Column(
         children: [
@@ -69,7 +81,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
@@ -80,16 +92,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 12,
                         horizontal: 16,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     _sendMessage(_messageController.text);
                   },
@@ -109,7 +121,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         isUserMessage ? Theme.of(context).primaryColor : Colors.blueGrey;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment:
             isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -122,10 +134,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 color: color,
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Text(
                 message,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 10,
               ),
@@ -152,7 +164,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   void _respondToUserMessage(String message) {
     // Simulate bot responses
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       String botResponse;
       if (message.toLowerCase().contains('hi') ||
           message.toLowerCase().contains('hello')) {
@@ -191,19 +203,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 }
 
-// Method to fetch user details based on email (placeholder implementation)
-Future<User?> fetchUserDetails(String email) async {
-  // Simulate fetching user details from a database or API
-  await Future.delayed(Duration(seconds: 1)); // Placeholder delay
-  if (email == 'support@unisoq.com') {
-    return User(name: 'Support Team', email: 'support@unisoq.com');
-  } else {
-    return null; // Return null if user details not found
-  }
-}
-
-// Placeholder method to save message and user details to Firestore
+// Method to save message and user details to Firestore
 void saveMessageToSupportCollection(String message, User user) {
-  // Simulate saving message and user details to Firestore
-  print('Message saved to Firestore: $message, User: ${user.name}');
+  // Add the message document to the "support" collection
+  FirebaseFirestore.instance.collection('support').add({
+    'message': message,
+    'user_name': user.name,
+    'user_email': user.email,
+    'timestamp': FieldValue.serverTimestamp(),
+  }).then((value) {
+    print('Message saved to Firestore: $message, User: ${user.name}');
+  }).catchError((error) {
+    print('Failed to save message: $error');
+  });
 }
