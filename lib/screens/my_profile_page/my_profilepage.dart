@@ -54,8 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       userName = userDoc['fName'] + " " + userDoc['lName'];
-      imageUrl = userDoc['userImage'] ?? '';
-      phone = userDoc['phone'];
+      imageUrl = userDoc['userImage'] ?? 'null';
+      phone = userDoc['phone'] as int;
       university = userDoc['university'];
     });
   }
