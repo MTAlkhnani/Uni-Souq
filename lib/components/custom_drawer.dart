@@ -15,6 +15,7 @@ import 'package:unisouq/screens/payment_page/cardpaymentview.dart';
 import 'package:unisouq/utils/size_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../screens/help_center_screen/help_center.dart';
 import '../service/notification_service.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -147,6 +148,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
           }),
           _buildDrawerListTile(Icons.help, S.of(context).HelpCenter, () {
             // Implement navigation to help center
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpCenterPage()),
+            );
           }),
           _buildDrawerListTile(Icons.payment, S.of(context).Payment, () async {
             // Check if user is signed in
