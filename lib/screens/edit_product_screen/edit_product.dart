@@ -29,25 +29,39 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _discountPriceController =
       TextEditingController();
+  late List<String> _categories;
+  late List<String> _conditions;
   String? _selectedCategory;
   String? _selectedCondition;
   List<String> _imageUrls = [];
   bool _isLoading = false;
 
-  final List<String> _categories = [
-    'Electronics',
-    'Books',
-    'Clothing',
-    'Home',
-    'Toys'
-  ];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _categories = initializeCategories(context);
+    _conditions = initializeConditions(context);
+  }
 
-  final List<String> _conditions = [
-    'New',
-    'Used - Like New',
-    'Used - Good',
-    'Used - Acceptable'
-  ];
+  List<String> initializeCategories(BuildContext context) {
+    return [
+      S.of(context).popularCategories2,
+      S.of(context).popularCategories3,
+      S.of(context).popularCategories4,
+      S.of(context).popularCategories6,
+      S.of(context).popularCategories5,
+    ];
+  }
+
+  List<String> initializeConditions(BuildContext context) {
+    return [
+      S.of(context).c1,
+      S.of(context).c2,
+      S.of(context).c3,
+      S.of(context).c4,
+    ];
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -74,7 +88,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditProduct),
-        actions: [
+        actions: const [
           // IconButton(
           //   icon: Icon(Icons.delete),
           //   onPressed: () {
@@ -178,8 +192,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       _selectedCategory = value;
                     });
                   },
-                  items:
-                      _categories.map<DropdownMenuItem<String>>((String value) {
+                  items: _categories
+                      .toSet() // Convert to set to remove duplicates
+                      .toList() // Convert back to list
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -272,9 +288,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _showLoadingDialog();
 
       try {
+        // Filter out URLs from _imageUrls
+        List<File> files = _imageUrls
+            .where((item) => item is File)
+            .map<File>((item) => item as File)
+            .toList();
+
         // Upload images
-        final List<String?> downloadUrls =
-            await _uploadImagesUpdate(_imageUrls);
+        final List<String?> downloadUrls = await _uploadImagesUpdate(files);
 
         final List<String> validImageUrls = downloadUrls
             .where((url) => url != null)

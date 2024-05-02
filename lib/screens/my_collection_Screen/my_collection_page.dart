@@ -131,7 +131,7 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                                       placeholder: (context, url) =>
                                           const SpinKitWave(
                                         color: Colors.white,
-                                        size: 55.0,
+                                        size: 50.0,
                                       ),
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
@@ -148,12 +148,12 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
                                   title: Text(
                                     item['title'] ??
                                         S.of(context).Itemnotavailable,
-                                    style: const TextStyle(fontSize: 10),
+                                    style: const TextStyle(fontSize: 8),
                                   ),
                                   subtitle: item['price'] != null
                                       ? Text(
                                           "Price: ${item['price']} SAR",
-                                          style: const TextStyle(fontSize: 12),
+                                          style: const TextStyle(fontSize: 10),
                                         )
                                       : null,
                                 ),
