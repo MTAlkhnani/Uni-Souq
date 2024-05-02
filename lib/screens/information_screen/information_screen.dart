@@ -439,11 +439,11 @@ class _InformationScreenState extends State<InformationScreen> {
       final profile = Profile(
         fName: _nameController.text.split(' ')[0], // Extract first name
         lName: _nameController.text.split(' ')[1], // Extract last name
-        phone: int.parse(_mobileNumberController.text),
+        phone: _mobileNumberController.text,
         userID: widget.userId,
         university: _selectedUniversity,
         address: _addressController.text,
-        userImage: _image,
+        userImage: _image ?? "",
       );
 
       await saveProfileData(profile);
@@ -470,7 +470,7 @@ class _InformationScreenState extends State<InformationScreen> {
         address: profile.address,
         phone: profile.phone,
         university: profile.university,
-        userImage: profile.userImage,
+        userImage: profile.userImage ?? "",
       );
     } catch (e) {
       print('Error saving profile data: $e');

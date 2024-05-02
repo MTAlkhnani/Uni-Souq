@@ -28,6 +28,9 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
+
+
 dependencies:
   flutter:
     sdk: flutter
@@ -76,9 +79,11 @@ dependencies:
   shimmer: ^2.0.0
   flutter_spinkit: ^5.2.0
   order_tracker: ^0.0.2
+  connectivity: ^3.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
  
     
 

@@ -22,7 +22,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late String userName = '';
   late String imageUrl = '';
-  late int phone = 0;
+  late String phone = "";
   late String university = '';
   double sellerRating = 0.0; // Variable to store seller's rating
   int numRatings = 0; // Variable to store the number of ratings
@@ -54,8 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       userName = userDoc['fName'] + " " + userDoc['lName'];
-      imageUrl = userDoc['userImage'] ?? 'null';
-      phone = userDoc['phone'] as int;
+      imageUrl = userDoc['userImage'] ?? '';
+      phone = userDoc['phone'];
       university = userDoc['university'];
     });
   }
@@ -265,7 +265,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ); // Show loading indicator if data is not yet available
         }
         final userData = snapshot.data!.data() as Map<String, dynamic>;
-        final imageUrl = userData['userImage'];
+        final imageUrl = userData['userImage'] ?? '';
 
         if (imageUrl != null && imageUrl.isNotEmpty) {
           // If imageUrl is available, display the user's profile image

@@ -16,6 +16,8 @@ import 'package:unisouq/theme/settings_service.dart';
 import 'package:unisouq/utils/pref_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'components/internet_check_wrapper.dart';
+
 Future _firebasemassaging(RemoteMessage message) async {
   if (message.notification != null) {
     print(" the massaging work");
@@ -123,7 +125,9 @@ void main() async {
     // Run the app
     runApp(
       ProviderScope(
-        child: UniSouqApp(settingsController: settingsController),
+        child: InternetCheckWrapper(
+          child: UniSouqApp(settingsController: settingsController),
+        ),
       ),
     );
   } catch (e) {

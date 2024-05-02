@@ -7,7 +7,7 @@ class Profile {
   final String fName;
   final String lName;
   final String? address;
-  final int phone;
+  final String phone;
   final String? university;
   final String userID;
   final String? userImage;
@@ -30,7 +30,7 @@ class Profile {
       'phone': phone,
       'university': university,
       'userID': userID,
-      'userImage': userImage
+      'userImage': userImage ?? "null"
     };
   }
 }
@@ -47,7 +47,7 @@ class DatabaseService {
     required String fName,
     required String lName,
     String? address,
-    required int phone,
+    required String phone,
     String? university,
     String? userImage,
   }) async {
@@ -67,7 +67,7 @@ class DatabaseService {
         'phone': phone,
         'university': university,
         'userID': userID,
-        'userImage': userImage,
+        'userImage': userImage ?? "null",
       });
     } catch (e) {
       print('Error updating user and saving profile: $e');
