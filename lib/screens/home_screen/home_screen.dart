@@ -292,14 +292,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           IconButton(
               icon: const Icon(Icons.notifications),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NotificationPage(
-                      userId: userID,
-                    ), // Navigate to the ContactClientsPage
-                  ),
-                );
+                if (!isUserSignedIn()) {
+                  // If user is not signed in, show the sign-in required pop-up
+                  _showSignInRequiredPopup(context);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationPage(
+                        userId: userID,
+                      ), // Navigate to the ContactClientsPage
+                    ),
+                  );
+                }
               }),
           IconButton(
               icon: const Icon(Icons.shopping_bag),

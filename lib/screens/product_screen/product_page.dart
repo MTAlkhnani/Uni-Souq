@@ -545,8 +545,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             _isRequestInProgress // Check if request is in progress
                         ? null
                         : () {
-                            _showPriceInputDialog();
+                            if (!isUserSignedIn()) {
+                              // If user is not signed in, show the sign-in required pop-up
+                              _showSignInRequiredPopup(context);
+                            } else {
+                              _showPriceInputDialog();
+                            }
                           },
+                    // if (!isUserSignedIn()) {
+                    //   // If user is not signed in, show the sign-in required pop-up
+                    //   _showSignInRequiredPopup(context);
+                    // } else {
+                    //   // If user is signed in, proceed to the AddProductScreen
+                    //   Navigator.push(
+                    //     context,
+                    //     CupertinoPageRoute(builder: (context) => AddProductScreen()),
+                    //   );
+                    // }
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                       padding: EdgeInsets.symmetric(vertical: 10.v),

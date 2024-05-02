@@ -125,9 +125,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             // Show nothing if user data or image URL is not available
           ),
-          _buildDrawerListTile(Icons.lock, S.of(context).ResetPassword, () {
-            // Implement navigation to reset password
-          }),
+          // _buildDrawerListTile(Icons.lock, S.of(context).ResetPassword, () {
+          //   // Implement navigation to reset password
+          // }),
           _buildDrawerListTile(Icons.shopping_bag, S.of(context).MyCollectiond,
               () {
             // Implement navigation to language settings
@@ -173,9 +173,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _showSignInRequiredPopup(context);
             }
           }),
-          _buildDrawerListTile(Icons.security, S.of(context).Security, () {
-            // Implement navigation to security settings
-          }),
+          // _buildDrawerListTile(Icons.security, S.of(context).Security, () {
+          //   // Implement navigation to security settings
+          // }),
           _buildDrawerListTile(Icons.exit_to_app, S.of(context).SignOut, () {
             _showSignOutDialog(context);
           }),
