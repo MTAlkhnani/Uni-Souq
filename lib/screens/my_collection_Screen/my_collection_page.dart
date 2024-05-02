@@ -83,99 +83,96 @@ class _MyCollectionPageState extends State<MyCollectionPage> {
           onRefresh: () async {
             setState(() {});
           },
-          child: SingleChildScrollView(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final item = snapshot.data!.docs[index].data();
-                if (item != null && item is Map<String, dynamic>) {
-                  return GestureDetector(
-                    onTap: () {
-                      print("Item ID: ${item['itemID']}");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditProductScreen(
-                            productData: item,
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              final item = snapshot.data!.docs[index].data();
+              if (item != null && item is Map<String, dynamic>) {
+                return GestureDetector(
+                  onTap: () {
+                    print("Item ID: ${item['itemID']}");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProductScreen(
+                          productData: item,
+                        ),
+                      ),
+                    ).then((value) {
+                      if (value == true) {
+                        setState(() {});
+                      }
+                    });
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 10,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              color: Theme.of(context).hoverColor,
+                              child: item['imageURLs'] != null &&
+                                      item['imageURLs'].isNotEmpty
+                                  ? CachedNetworkImage(
+                                      imageUrl: item['imageURLs']
+                                          [0], // Use the first image URL
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          const SpinKitWave(
+                                        color: Colors.white,
+                                        size: 55.0,
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    )
+                                  : Container(),
+                            ),
                           ),
                         ),
-                      ).then((value) {
-                        if (value == true) {
-                          setState(() {});
-                        }
-                      });
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 16 / 10,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                color: Theme.of(context).hoverColor,
-                                child: item['imageURLs'] != null &&
-                                        item['imageURLs'].isNotEmpty
-                                    ? CachedNetworkImage(
-                                        imageUrl: item['imageURLs']
-                                            [0], // Use the first image URL
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            const SpinKitWave(
-                                          color: Colors.white,
-                                          size: 50.0,
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                      )
-                                    : Container(),
-                              ),
-                            ),
-                          ),
-                          SingleChildScrollView(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: ListTile(
-                                    title: Text(
-                                      item['title'] ??
-                                          S.of(context).Itemnotavailable,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    subtitle: item['price'] != null
-                                        ? Text(
-                                            "Price: ${item['price']} SAR",
-                                            style:
-                                                const TextStyle(fontSize: 12),
-                                          )
-                                        : null,
+                        SingleChildScrollView(
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: ListTile(
+                                  title: Text(
+                                    item['title'] ??
+                                        S.of(context).Itemnotavailable,
+                                    style: const TextStyle(fontSize: 10),
                                   ),
+                                  subtitle: item['price'] != null
+                                      ? Text(
+                                          "Price: ${item['price']} SAR",
+                                          style: const TextStyle(fontSize: 12),
+                                        )
+                                      : null,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                } else {
-                  return Card(
-                    child: ListTile(
-                      title: Text(S.of(context).Itemnotavailable),
-                    ),
-                  );
-                }
-              },
-            ),
+                  ),
+                );
+              } else {
+                return Card(
+                  child: ListTile(
+                    title: Text(S.of(context).Itemnotavailable),
+                  ),
+                );
+              }
+            },
           ),
         );
       },
