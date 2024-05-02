@@ -34,7 +34,7 @@ class OrderDetailsPage extends StatefulWidget {
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
   late bool _isClient = false;
   late bool _isRated = false;
-  double _rating = 0;
+  late double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
   // Define a list of status options
   List<String> statusOptions = [
@@ -134,6 +134,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         });
         print('No order found with itemId: $itemId');
       }
+      await _fetchData();
     } catch (e) {
       print('Error fetching order status: $e');
     }
@@ -187,7 +188,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -225,7 +226,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (_isRated) ...[
+                      if (_isRated || !_isRated) ...[
                         SizedBox(height: 10.v),
                         Text(
                           S.of(context).howitwas,
