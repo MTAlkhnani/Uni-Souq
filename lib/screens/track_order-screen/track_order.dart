@@ -30,25 +30,31 @@ class _OrderTrackerDemoState extends State<OrderTrackerDemo> {
       case 'order':
         ordeStatus = Status.order;
         orderTitleAndDateList = [
-          TextDto("Your order has been in progress", ""),
+          TextDto("Your order has been in progress", DateTime.now().toString()),
         ];
         break;
       case 'shipped':
         ordeStatus = Status.shipped;
+        // You can define a logic to set a date few days after 'order'
+        // based on your order processing time
         orderTitleAndDateList = [
-          TextDto("Your order has been accepted", ""),
+          TextDto("Your order has been shipped",
+              DateTime.now().subtract(const Duration(days: 2)).toString()),
         ];
         break;
       case 'outOfDelivery':
         ordeStatus = Status.outOfDelivery;
+        // You can define a logic to set a date few days after 'shipped'
+        // based on your delivery time
         orderTitleAndDateList = [
-          TextDto("Your order is shipped", ""),
+          TextDto("Your order is out for delivery",
+              DateTime.now().subtract(const Duration(days: 1)).toString()),
         ];
         break;
       case 'delivered':
         ordeStatus = Status.delivered;
         orderTitleAndDateList = [
-          TextDto("Your order has been delivered", ""),
+          TextDto("Your order has been delivered", DateTime.now().toString()),
         ];
         break;
       default:

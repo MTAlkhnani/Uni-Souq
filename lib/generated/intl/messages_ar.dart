@@ -114,7 +114,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("عدد التقييمات: \$numRatings"),
         "OK": MessageLookupByLibrary.simpleMessage("موافق"),
         "Order": MessageLookupByLibrary.simpleMessage("طلب"),
-        "OrderAccepted": MessageLookupByLibrary.simpleMessage("تم قبول الطلب"),
+        "OrderDecision": MessageLookupByLibrary.simpleMessage("قرار الطلب"),
         "OrderDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الطلب"),
         "OrderInformation":
             MessageLookupByLibrary.simpleMessage("معلومات الطلب"),

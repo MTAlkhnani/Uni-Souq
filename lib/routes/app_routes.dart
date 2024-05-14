@@ -71,7 +71,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
 
       case confirmationpage:
-        return MaterialPageRoute(builder: (_) => ConfirmationPage());
+        return MaterialPageRoute(builder: (_) => ConfirmationPage(confirmationType: ConfirmationType.order,));
       case searchScreen:
         return MaterialPageRoute(builder: (_) => const SearchScreen());
       case onboardingScreen:

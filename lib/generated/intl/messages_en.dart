@@ -110,7 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Number of Ratings: \$numRatings"),
         "OK": MessageLookupByLibrary.simpleMessage("OK"),
         "Order": MessageLookupByLibrary.simpleMessage("Order"),
-        "OrderAccepted": MessageLookupByLibrary.simpleMessage("Order Accepted"),
+        "OrderDecision":
+            MessageLookupByLibrary.simpleMessage("Order Decision "),
         "OrderDetails": MessageLookupByLibrary.simpleMessage("Order Details"),
         "OrderInformation":
             MessageLookupByLibrary.simpleMessage("Order Information"),
@@ -209,6 +210,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You Are The Seller"),
         "Yourorderhasbeenaccepted": MessageLookupByLibrary.simpleMessage(
             "Your order has been accepted!"),
+        "Yourpurchasehasbeenconfirmed":
+            MessageLookupByLibrary.simpleMessage("Your request has been sent"),
         "addnewpictures":
             MessageLookupByLibrary.simpleMessage("add new pictures"),
         "bannedMessage": MessageLookupByLibrary.simpleMessage(

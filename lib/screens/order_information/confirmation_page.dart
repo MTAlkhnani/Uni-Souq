@@ -2,15 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 
+enum ConfirmationType {
+  order,
+  request,
+  // Add more confirmation types as needed
+}
+
 class ConfirmationPage extends StatelessWidget {
   static const String id = 'confirmation_page';
 
-  const ConfirmationPage({super.key});
+  final ConfirmationType confirmationType;
+
+  const ConfirmationPage({
+    Key? key,
+    required this.confirmationType,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    String title;
+    String confirmationMessage;
+
+    // Set title and confirmation message based on the confirmation type
+    switch (confirmationType) {
+      case ConfirmationType.order:
+        title = S.of(context).OrderDecision;
+        confirmationMessage = S.of(context).Yourorderhasbeenaccepted;
+        break;
+      case ConfirmationType.request:
+        title = S.of(context).OrderDecision;
+        confirmationMessage = S.of(context).suumassage;
+        break;
+      // Add more cases for additional confirmation types
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).OrderAccepted),
+        automaticallyImplyLeading: false, // Hide the back button
+        title: Center(child: Text(title)),
       ),
       body: Center(
         child: Column(
@@ -23,18 +52,43 @@ class ConfirmationPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              S.of(context).Yourorderhasbeenaccepted,
+              confirmationMessage,
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.homeScreen, (route) => false);
-              },
-              child: Text(S.of(context).Back),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.homeScreen, (route) => false);
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+                Colors.green), // Change color as needed
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    11.0), // Adjust borderRadius as needed
+              ),
+            ),
+            padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                vertical: 16.0)), // Adjust padding as needed
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                S.of(context).Back,
+                style: TextStyle(
+                    color: ThemeData()
+                        .scaffoldBackgroundColor), // Change text color as needed
+              ),
+            ],
+          ),
         ),
       ),
     );

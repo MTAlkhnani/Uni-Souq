@@ -1470,11 +1470,11 @@ class S {
     );
   }
 
-  /// `Order Accepted`
-  String get OrderAccepted {
+  /// `Order Decision `
+  String get OrderDecision {
     return Intl.message(
-      'Order Accepted',
-      name: 'OrderAccepted',
+      'Order Decision ',
+      name: 'OrderDecision',
       desc: '',
       args: [],
     );
@@ -1485,6 +1485,16 @@ class S {
     return Intl.message(
       'Your order has been accepted!',
       name: 'Yourorderhasbeenaccepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your request has been sent`
+  String get Yourpurchasehasbeenconfirmed {
+    return Intl.message(
+      'Your request has been sent',
+      name: 'Yourpurchasehasbeenconfirmed',
       desc: '',
       args: [],
     );

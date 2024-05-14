@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/screens/massaging_screan/chat/chat_Service.dart';
+import 'package:unisouq/screens/order_information/confirmation_page.dart';
 import 'package:unisouq/utils/size_utils.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -172,23 +173,12 @@ class _PaymentPageState extends State<PaymentPage> {
             listingPrice, productId, paymentmothed)
         .then((_) {
       // Request sent successfully, show a confirmation dialog or perform other actions
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(S.of(context).Success),
-            content: Text(S.of(context).suumassage),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const ConfirmationPage(
+                  confirmationType: ConfirmationType.request,
+                )),
       );
     }).catchError((error) {
       // Handle errors if request sending fails

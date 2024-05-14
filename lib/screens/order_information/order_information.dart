@@ -262,7 +262,10 @@ class _OrderFormState extends State<OrderForm> {
         // Navigate to the confirmation page
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ConfirmationPage()),
+          MaterialPageRoute(
+              builder: (context) => const ConfirmationPage(
+                    confirmationType: ConfirmationType.order,
+                  )),
         );
       } else {
         // Handle the case where the document does not exist
