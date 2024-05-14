@@ -185,7 +185,7 @@ class NotificationService {
 
 Future<void> handleNotificationTap(
   String userId,
-  String title,
+  String? title,
   String body,
   String notificationType,
 ) async {
@@ -211,7 +211,7 @@ Future<void> handleNotificationTap(
 
 void sendPushMessage(
   String token,
-  String title,
+  String? title,
   String body,
   String notificationType,
   String receiverUserID,
@@ -250,7 +250,7 @@ void sendPushMessage(
   }
 }
 
-void sendPushMessages(String token, String title, String body,
+void sendPushMessages(String token, String? title, String body,
     String notificationType, String receiverUserID) async {
   try {
     await http.post(

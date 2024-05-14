@@ -325,8 +325,9 @@ class _OrderFormState extends State<OrderForm> {
           .get();
       String tokenresever = snap['token'];
 
+      String? fullname = await retrieveFullName(sellerID);
       sendPushMessage(
-          tokenresever, sellerID, responseMessage, 'responses', clientId);
+          tokenresever, fullname, responseMessage, 'responses', clientId);
     } catch (e) {
       print('Failed to send response: $e');
       throw e;

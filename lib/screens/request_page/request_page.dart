@@ -315,9 +315,10 @@ class _RequestPageState extends State<RequestPage> {
           .doc(clientId)
           .get();
       String tokenresever = snap['token'];
+      String? fullname = await retrieveFullName(sellerId);
 
       sendPushMessage(
-          tokenresever, sellerId, rejectionMessage, 'responses', clientId);
+          tokenresever, fullname, rejectionMessage, 'responses', clientId);
       print('Rejection message sent successfully.');
     }).catchError((error) {
       print('Failed to send rejection message: $error');
