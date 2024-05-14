@@ -38,6 +38,18 @@ class NotificationService {
     );
   }
 
+  Future<int> getUnreadNotificationCount(String userId) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection('Notification')
+            .doc(userId)
+            .collection('UserNotifications')
+            .where('read', isEqualTo: false) // Query only unread notifications
+            .get();
+
+    return snapshot.size;
+  }
+
   static Future<void> saveTokenOnAuthChange() async {
     FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user != null) {
@@ -189,6 +201,7 @@ Future<void> handleNotificationTap(
       'title': title,
       'body': body,
       'notificationType': notificationType,
+      'read': false,
       'timestamp': FieldValue.serverTimestamp(),
     });
   } catch (e) {

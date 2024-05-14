@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -23,8 +24,6 @@ import 'package:unisouq/screens/request_page/request_page.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:unisouq/service/notification_service.dart';
-import 'package:unisouq/utils/auth_utils.dart';
-import 'package:unisouq/utils/size_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'customer_screen';
@@ -38,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int currentIconIndex = 0;
   String? userId;
   late String userID;
-  // Add a variable to store the user ID
+  late int unreadNotificationCount = 0; // Add this variable to store the count
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _createUserActivityCollection();
     itemsStream = FirebaseFirestore.instance.collection('Item').snapshots();
     Future.delayed(const Duration(seconds: 1), () {
+      _fetchUnreadNotificationCount();
       NotificationService.saveTokenOnAuthChange();
     });
   }
@@ -72,6 +73,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         break;
       default:
         break;
+    }
+  }
+
+  Future<void> _fetchUnreadNotificationCount() async {
+    try {
+      if (userId != null) {
+        int count =
+            await NotificationService().getUnreadNotificationCount(userId!);
+        setState(() {
+          unreadNotificationCount = count;
+        });
+      } else {
+        print('User ID is null.');
+      }
+    } catch (error) {
+      print('Error fetching unread notification count: $error');
     }
   }
 
@@ -261,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    _fetchUnreadNotificationCount();
     final Map<String, String> categoryTranslations = {
       'All Items': S.of(context).popularCategories1,
       'Electronics': S.of(context).popularCategories2,
@@ -289,23 +307,54 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
         ),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                if (!isUserSignedIn()) {
-                  // If user is not signed in, show the sign-in required pop-up
-                  _showSignInRequiredPopup(context);
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationPage(
-                        userId: userID,
-                      ), // Navigate to the ContactClientsPage
+          Stack(
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  if (!isUserSignedIn()) {
+                    // If user is not signed in, show the sign-in required pop-up
+                    _showSignInRequiredPopup(context);
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NotificationPage(
+                          userId: userID,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+              if (unreadNotificationCount >
+                  0) // Check if there are unread notifications
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red, // Color for the notification badge
+                      shape: BoxShape.circle,
                     ),
-                  );
-                }
-              }),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '$unreadNotificationCount', // actual count of unread notifications
+                      style: TextStyle(
+                        color: Colors.white, // Text color of the badge
+                        fontSize: 10,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+
           IconButton(
               icon: const Icon(Icons.shopping_bag),
               onPressed: () {

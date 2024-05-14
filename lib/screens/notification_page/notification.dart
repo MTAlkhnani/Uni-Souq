@@ -11,6 +11,18 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mark all notifications as read
+    FirebaseFirestore.instance
+        .collection('Notification')
+        .doc(userId)
+        .collection('UserNotifications')
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.update({'read': true});
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifications'),
