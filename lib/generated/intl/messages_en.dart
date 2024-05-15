@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("CardPaymentView"),
         "Carddeleted": MessageLookupByLibrary.simpleMessage("Card deleted"),
         "Categories": MessageLookupByLibrary.simpleMessage("Categories"),
+        "ClearAll": MessageLookupByLibrary.simpleMessage("Clear All"),
         "ClientID":
             MessageLookupByLibrary.simpleMessage("Client ID: \$clientId"),
         "Close": MessageLookupByLibrary.simpleMessage("Close"),
@@ -84,7 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Item not available"),
         "Justbrowsing": MessageLookupByLibrary.simpleMessage("Just browsing?"),
         "Langtheme": MessageLookupByLibrary.simpleMessage("language/Theme"),
-        "Language": MessageLookupByLibrary.simpleMessage("Language/Theme"),
+        "Language": MessageLookupByLibrary.simpleMessage("Settings"),
         "LightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
         "Location": MessageLookupByLibrary.simpleMessage("Location"),
         "MobileNumber": MessageLookupByLibrary.simpleMessage("Mobile Number"),
@@ -106,6 +107,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "NoproductitemID": MessageLookupByLibrary.simpleMessage(
             "No product found with the specified itemID."),
         "NotSignedIn": MessageLookupByLibrary.simpleMessage("Not Signed In"),
+        "Notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "Notificationspage":
+            MessageLookupByLibrary.simpleMessage("Notifications"),
         "NumberofRatings": MessageLookupByLibrary.simpleMessage(
             "Number of Ratings: \$numRatings"),
         "OK": MessageLookupByLibrary.simpleMessage("OK"),

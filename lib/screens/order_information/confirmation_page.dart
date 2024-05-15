@@ -51,9 +51,11 @@ class ConfirmationPage extends StatelessWidget {
               size: 100,
             ),
             const SizedBox(height: 20),
-            Text(
-              confirmationMessage,
-              style: TextStyle(fontSize: 20),
+            Center(
+              child: Text(
+                confirmationMessage,
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             const SizedBox(height: 20),
           ],

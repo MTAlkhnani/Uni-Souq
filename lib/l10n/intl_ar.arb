@@ -210,7 +210,7 @@
 
 "drawer":"drawer",
       "ResetPassword": "إعادة تعيين كلمة المرور",
-      "Language": "اللغة-السمه",
+      "Language": "إعدادات",
       "MyCollectiond": "مجموعتي",
       "HelpCenter": "مركز المساعدة",
       "Payment": "الدفع",
@@ -232,9 +232,10 @@
       "reviewd":"إضافة مراجعة التفاصيل",
       "enter":"أدخل هنا",
       "rev":"لم يتم تقديم أي مراجعة من قبل العميل",
-      "no":"لم يتم تقديم أي مراجعة من قبل العميل."
-
-      
+      "no":"لم يتم تقديم أي مراجعة من قبل العميل.",
+"Notificationspage":"Notifications",
+      "Notifications":"إشعارات" , 
+      "ClearAll":"امسح الكل"   
             
 
   }

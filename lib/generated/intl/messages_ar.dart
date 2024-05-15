@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("صفحة الدفع بالبطاقة"),
         "Carddeleted": MessageLookupByLibrary.simpleMessage("تم حذف البطاقة"),
         "Categories": MessageLookupByLibrary.simpleMessage("الفئات"),
+        "ClearAll": MessageLookupByLibrary.simpleMessage("امسح الكل"),
         "ClientID":
             MessageLookupByLibrary.simpleMessage("معرف العميل: \$clientId"),
         "Close": MessageLookupByLibrary.simpleMessage("إغلاق"),
@@ -86,7 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("العنصر غير متاح"),
         "Justbrowsing": MessageLookupByLibrary.simpleMessage("هل تتصفح فقط؟"),
         "Langtheme": MessageLookupByLibrary.simpleMessage("اللغة-المظهر"),
-        "Language": MessageLookupByLibrary.simpleMessage("اللغة-السمه"),
+        "Language": MessageLookupByLibrary.simpleMessage("إعدادات"),
         "LightTheme": MessageLookupByLibrary.simpleMessage("السمة الفاتحة"),
         "Location": MessageLookupByLibrary.simpleMessage("الموقع"),
         "MobileNumber": MessageLookupByLibrary.simpleMessage("رقم الجوال"),
@@ -110,6 +111,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "NoproductitemID": MessageLookupByLibrary.simpleMessage(
             "لم يتم العثور على المنتج بالمعرف المحدد."),
         "NotSignedIn": MessageLookupByLibrary.simpleMessage("غير مسجل الدخول"),
+        "Notifications": MessageLookupByLibrary.simpleMessage("إشعارات"),
+        "Notificationspage":
+            MessageLookupByLibrary.simpleMessage("Notifications"),
         "NumberofRatings":
             MessageLookupByLibrary.simpleMessage("عدد التقييمات: \$numRatings"),
         "OK": MessageLookupByLibrary.simpleMessage("موافق"),

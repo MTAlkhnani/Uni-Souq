@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
 import 'package:unisouq/screens/massaging_screan/massage_page.dart';
 
@@ -25,7 +26,7 @@ class NotificationPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(S.of(context).Notifications),
         actions: [
           GestureDetector(
             onTap: () {
@@ -41,13 +42,13 @@ class NotificationPage extends StatelessWidget {
                 }
               });
             },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  Icon(Icons.clear_all),
-                  SizedBox(width: 4),
-                  Text('Clear All'),
+                  const Icon(Icons.clear_all),
+                  const SizedBox(width: 4),
+                  Text(S.of(context).ClearAll),
                 ],
               ),
             ),

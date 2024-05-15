@@ -85,6 +85,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> _translatedCategories =
+        _categories.map((category) => _translateToEnglish(category)).toList();
+    List<String> _translatedConditions = _conditions
+        .map((condition) => _translateToEnglishcondtion(condition))
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditProduct),
@@ -192,7 +197,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       _selectedCategory = value;
                     });
                   },
-                  items: _categories
+                  items: _translatedCategories
                       .toSet() // Convert to set to remove duplicates
                       .toList() // Convert back to list
                       .map<DropdownMenuItem<String>>((String value) {
@@ -215,8 +220,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       _selectedCondition = value;
                     });
                   },
-                  items:
-                      _conditions.map<DropdownMenuItem<String>>((String value) {
+                  items: _translatedConditions
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -501,6 +506,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
         final List<String?> imageUrls = await _uploadImages(_images);
         final List<String> validImageUrls =
             imageUrls.where((url) => url != null).map((url) => url!).toList();
+
+        // Map the selected category to its English translation
+        final String translatedCategory =
+            _translateToEnglish(_selectedCategory);
+        final String translatedcondtion =
+            _translateToEnglishcondtion(_selectedCondition);
+        String userEmail = await getCurrentUserEmailByUserId();
+
         DocumentReference docRef =
             FirebaseFirestore.instance.collection('Item').doc();
         String itemId = docRef.id;
@@ -512,21 +525,93 @@ class _EditProductScreenState extends State<EditProductScreen> {
               _discountPriceController.text, // Added discounted price field
           'description': _descriptionController.text,
           'sellerID': getCurrentUserUid(),
-          'category': _selectedCategory,
-          'condition': _selectedCondition,
-          'user': "N/A",
+          'category': translatedCategory, // Use the translated category
+          'condition': translatedcondtion,
+          'user': userEmail,
           'itemID': itemId,
           'imageURLs': validImageUrls,
+          'status': 'available', // Add item status
+          'timestamp': Timestamp.now(),
         });
 
         Navigator.of(context).pop();
-        showSuccessMessage(context, "Product added successfully");
+        showSuccessMessage(context, S.of(context).Productaddedsuccessfully);
         Navigator.of(context).pop();
       } catch (e) {
         Navigator.of(context).pop();
-        showErrorMessage(context, 'Some error happened: ${e.toString()}');
+        showErrorMessage(context, "Some error happened: ${e.toString()}");
       }
       setState(() => _isLoading = false);
+    }
+  }
+
+  Future<String> getCurrentUserEmailByUserId() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is signed in
+      final String uid = user.uid;
+      try {
+        // Query the "User" collection for documents where "UserId" matches the current user's UID
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .where('UserId', isEqualTo: uid)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          // Assuming the first document found is the correct one
+          final documentSnapshot = querySnapshot.docs.first;
+          if (documentSnapshot.exists &&
+              documentSnapshot.data().containsKey('Email')) {
+            return documentSnapshot.get('Email'); // Return the user's email
+          } else {
+            return 'Email not found'; // Email field does not exist in the document
+          }
+        } else {
+          return 'No user document matches the current UserID';
+        }
+      } catch (e) {
+        // Handle errors (e.g., insufficient permissions, network issues)
+        return 'Error retrieving user email: $e';
+      }
+    } else {
+      // User is not signed in
+      return 'User not signed in';
+    }
+  }
+
+  String _translateToEnglish(String? category) {
+    switch (category) {
+      case 'الإلكترونيات':
+        return 'Electronics'; // Translate the Arabic category to English
+      case 'الملابس':
+        return 'Clothing';
+      case 'الكتب':
+        return 'Books';
+      case 'الأثاث':
+        return 'Furniture';
+      case 'المنزل':
+        return 'Home';
+      // Add more cases for other categories
+      default:
+        return category ??
+            ''; // Return the original category if translation not found
+    }
+  }
+
+  String _translateToEnglishcondtion(String? condtion) {
+    switch (condtion) {
+      case 'جديد':
+        return 'New'; // Translate the Arabic category to English
+      case 'مستعمل - كالجديد':
+        return 'Used - Like New';
+      case 'مستعمل - جيد':
+        return 'Used - Good';
+      case 'مستعمل - قابل للاستخدام':
+        return 'Used - Acceptable';
+      // Add more cases for other categories
+      default:
+        return condtion ??
+            ''; // Return the original category if translation not found
     }
   }
 

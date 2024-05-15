@@ -29,35 +29,37 @@ class OrderInformationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(S.of(context).OrderInformation),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('requests')
-            .where('clientId', isEqualTo: clientId)
-            .where('sellerID', isEqualTo: sellerID)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            var data = snapshot.data!.docs;
-            if (data.isNotEmpty) {
-              var document = data.first;
-              String clientId = document['clientId'];
-              String sellerID = document['sellerID'];
-              return OrderForm(
-                message: message,
-                clientId: clientId,
-                sellerID: sellerID,
-                productName: document['productName'],
-                itemDetails: document['message'],
-                orderId: document.id, // Pass the order ID
-                state: state,
-              );
+      body: SingleChildScrollView(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('requests')
+              .where('clientId', isEqualTo: clientId)
+              .where('sellerID', isEqualTo: sellerID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              var data = snapshot.data!.docs;
+              if (data.isNotEmpty) {
+                var document = data.first;
+                String clientId = document['clientId'];
+                String sellerID = document['sellerID'];
+                return OrderForm(
+                  message: message,
+                  clientId: clientId,
+                  sellerID: sellerID,
+                  productName: document['productName'],
+                  itemDetails: document['message'],
+                  orderId: document.id, // Pass the order ID
+                  state: state,
+                );
+              }
             }
-          }
-          // You can return a loading indicator or error message here if needed
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            // You can return a loading indicator or error message here if needed
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
     );
   }

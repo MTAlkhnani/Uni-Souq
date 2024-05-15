@@ -232,7 +232,7 @@
         "ViewSellerProfile":"View Seller Profile",
 "drawer":"drawer",
         "ResetPassword": "Reset Password",
-        "Language" :"Language/Theme",
+        "Language" :"Settings",
         "MyCollectiond":"My Collection",
         "HelpCenter":"Help Center",
         "Payment":"Payment",
@@ -254,7 +254,10 @@
         "reviewd":"Add detailed review",
         "enter":"Enter here",
         "rev":"No review submitted by the client.",
-        "no":"No review submitted by the client."
+        "no":"No review submitted by the client.",
+"Notificationspage":"Notifications",
+        "Notifications":"Notifications",
+        "ClearAll":"Clear All"     
 
 
         

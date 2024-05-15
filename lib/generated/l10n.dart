@@ -2100,10 +2100,10 @@ class S {
     );
   }
 
-  /// `Language/Theme`
+  /// `Settings`
   String get Language {
     return Intl.message(
-      'Language/Theme',
+      'Settings',
       name: 'Language',
       desc: '',
       args: [],
@@ -2315,6 +2315,36 @@ class S {
     return Intl.message(
       'No review submitted by the client.',
       name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get Notificationspage {
+    return Intl.message(
+      'Notifications',
+      name: 'Notificationspage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get Notifications {
+    return Intl.message(
+      'Notifications',
+      name: 'Notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear All`
+  String get ClearAll {
+    return Intl.message(
+      'Clear All',
+      name: 'ClearAll',
       desc: '',
       args: [],
     );
