@@ -93,7 +93,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditProduct),
-        actions: const [
+        actions: [
           // IconButton(
           //   icon: Icon(Icons.delete),
           //   onPressed: () {
@@ -333,6 +333,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
           Navigator.of(context).pop();
           showSuccessMessage(context, S.of(context).Productupdatedsuccessfully);
+          Navigator.pop(context, true);
         } else {
           // No document found with the given itemID
           Navigator.of(context).pop();
@@ -348,19 +349,68 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _deleteItem(String itemId) async {
-    try {
-      await FirebaseFirestore.instance.collection('Item').doc(itemId).delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).Itemdeletedsuccessfully),
-        ),
-      );
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error deleting item: ${error.toString()}'),
-        ),
-      );
+    final shouldDelete = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Delete'),
+        content: Text('Are you sure you want to delete this item?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete ?? false) {
+      // Proceed with deletion only if confirmed
+      try {
+        await FirebaseFirestore.instance
+            .collection('Item')
+            .doc(itemId)
+            .delete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context).Itemdeletedsuccessfully),
+          ),
+        );
+        Navigator.pop(context, true);
+      } catch (error) {
+        if (error is FirebaseException) {
+          if (error.code == 'permission-denied') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error: Permission denied to delete item'),
+              ),
+            );
+          } else if (error.code == 'not-found') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error: Item with ID $itemId not found'),
+              ),
+            );
+          } else {
+            // Handle other Firebase errors
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error deleting item: ${error.toString()}'),
+              ),
+            );
+          }
+        } else {
+          // Handle other non-Firebase errors
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error deleting item: ${error.toString()}'),
+            ),
+          );
+        }
+      }
     }
   }
 
