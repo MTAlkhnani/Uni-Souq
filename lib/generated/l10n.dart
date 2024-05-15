@@ -848,6 +848,16 @@ class S {
     );
   }
 
+  /// `Add an image for the product`
+  String get addanimagefortheproduct {
+    return Intl.message(
+      'Add an image for the product',
+      name: 'addanimagefortheproduct',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter the product name`
   String get Pleaseentername {
     return Intl.message(
@@ -933,6 +943,16 @@ class S {
     return Intl.message(
       'Please enter the price',
       name: 'Pleaseprice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter 0 if there is no discount `
+  String get Pleasepricediscount {
+    return Intl.message(
+      'Please enter 0 if there is no discount ',
+      name: 'Pleasepricediscount',
       desc: '',
       args: [],
     );

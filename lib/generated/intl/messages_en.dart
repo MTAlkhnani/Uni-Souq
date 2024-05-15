@@ -133,6 +133,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter a reason or select from the list."),
         "Pleaseprice":
             MessageLookupByLibrary.simpleMessage("Please enter the price"),
+        "Pleasepricediscount": MessageLookupByLibrary.simpleMessage(
+            "Please enter 0 if there is no discount "),
         "Pleaseselectacategory":
             MessageLookupByLibrary.simpleMessage("Please select a category"),
         "Pleaseselectacondition":
@@ -212,6 +214,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your order has been accepted!"),
         "Yourpurchasehasbeenconfirmed":
             MessageLookupByLibrary.simpleMessage("Your request has been sent"),
+        "addanimagefortheproduct": MessageLookupByLibrary.simpleMessage(
+            "Add an image for the product"),
         "addnewpictures":
             MessageLookupByLibrary.simpleMessage("add new pictures"),
         "bannedMessage": MessageLookupByLibrary.simpleMessage(

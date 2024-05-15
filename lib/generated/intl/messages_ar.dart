@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Pleaselist": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال سبب أو اختياره من القائمة."),
         "Pleaseprice": MessageLookupByLibrary.simpleMessage("يرجى إدخال السعر"),
+        "Pleasepricediscount": MessageLookupByLibrary.simpleMessage(
+            "الرجاء إدخال 0 إذا لم يكن هناك خصم "),
         "Pleaseselectacategory":
             MessageLookupByLibrary.simpleMessage("يرجى تحديد فئة"),
         "Pleaseselectacondition":
@@ -210,6 +212,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "YouAreTheSeller": MessageLookupByLibrary.simpleMessage("أنت البائع"),
         "Yourorderhasbeenaccepted":
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
+        "addanimagefortheproduct":
+            MessageLookupByLibrary.simpleMessage("إضافة صورة للمنتج"),
         "addnewpictures":
             MessageLookupByLibrary.simpleMessage("إضافة صور جديدة"),
         "bannedMessage": MessageLookupByLibrary.simpleMessage(

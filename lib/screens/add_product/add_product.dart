@@ -116,7 +116,13 @@ class _AddProductState extends State<AddProductScreen> {
                             },
                           ),
                         )
-                      : Container(),
+                      : Center(
+                          child: Text(
+                            S.of(context).addanimagefortheproduct,
+                            style: TextStyle(
+                                fontSize: 15, color: ThemeData().dividerColor),
+                          ),
+                        ),
                   TextFormField(
                     controller: _nameController,
                     decoration:
@@ -194,7 +200,7 @@ class _AddProductState extends State<AddProductScreen> {
                           RegExp(r'^\d+\.?\d{0,2}')),
                     ],
                     validator: (value) {
-                      if (value == null || value.isEmpty && value == 0) {
+                      if (value == null || value.isEmpty || value == 0) {
                         return S.of(context).Pleaseprice;
                       }
                       return null;
@@ -213,6 +219,12 @@ class _AddProductState extends State<AddProductScreen> {
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^\d+\.?\d{0,2}')),
                     ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return S.of(context).Pleasepricediscount;
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
