@@ -140,7 +140,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           child: Text(
                             S.of(context).SubmittheRequest,
                             style: TextStyle(
-                                fontSize: 18.h,
+                                fontSize: 15.h,
                                 color: Theme.of(context).bottomAppBarColor),
                           ),
                         ),

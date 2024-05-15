@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unisouq/generated/l10n.dart';
 import 'package:unisouq/routes/app_routes.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 enum ConfirmationType {
   order,
@@ -51,10 +52,11 @@ class ConfirmationPage extends StatelessWidget {
               size: 100,
             ),
             const SizedBox(height: 20),
-            Center(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.v),
               child: Text(
                 confirmationMessage,
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 14),
               ),
             ),
             const SizedBox(height: 20),
