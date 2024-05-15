@@ -288,28 +288,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   _updateProduct() async {
-    if (_formKey.currentState!.validate() && _imageUrls.isNotEmpty) {
+    if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       _showLoadingDialog();
 
       try {
-        // Filter out URLs from _imageUrls
-        List<File> files = _imageUrls
-            .where((item) => item is File)
-            .map<File>((item) => item as File)
-            .toList();
+        // Check if there are any new images to upload
+        final newImageFiles = _imageUrls.where((item) => item is File).toList();
 
-        // Upload images
-        final List<String?> downloadUrls = await _uploadImagesUpdate(files);
+        // If no new images, use existing image URLs
+        final imageUrlsToUpdate = newImageFiles.isNotEmpty
+            ? await _uploadImagesUpdate(newImageFiles)
+            : widget.productData['imageURLs'];
 
-        final List<String> validImageUrls = downloadUrls
-            .where((url) => url != null)
-            .map((url) => url!)
-            .toList();
+        // Only keep valid image URLs
+        final validImageUrls =
+            imageUrlsToUpdate?.where((url) => url != null)?.toList() ?? [];
 
         // Use the existing product ID to update the document
-        String itemId = widget.productData[
-            'itemID']; // Assuming 'itemID' is a field within the document
+        String itemId = widget.productData['itemID'];
         QuerySnapshot querySnapshot = await firestore
             .collection('Item')
             .where('itemID', isEqualTo: itemId)
@@ -496,53 +493,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     final User? user = FirebaseAuth.instance.currentUser;
     final String uid = user?.uid ?? "Not Signed In";
     return uid;
-  }
-
-  Future<void> _submitProduct() async {
-    if (_formKey.currentState!.validate() && _images.isNotEmpty) {
-      setState(() => _isLoading = true);
-      _showLoadingDialog();
-      try {
-        final List<String?> imageUrls = await _uploadImages(_images);
-        final List<String> validImageUrls =
-            imageUrls.where((url) => url != null).map((url) => url!).toList();
-
-        // Map the selected category to its English translation
-        final String translatedCategory =
-            _translateToEnglish(_selectedCategory);
-        final String translatedcondtion =
-            _translateToEnglishcondtion(_selectedCondition);
-        String userEmail = await getCurrentUserEmailByUserId();
-
-        DocumentReference docRef =
-            FirebaseFirestore.instance.collection('Item').doc();
-        String itemId = docRef.id;
-
-        await FirebaseFirestore.instance.collection('Item').add({
-          'title': _nameController.text,
-          'price': _priceController.text,
-          'discountedPrice':
-              _discountPriceController.text, // Added discounted price field
-          'description': _descriptionController.text,
-          'sellerID': getCurrentUserUid(),
-          'category': translatedCategory, // Use the translated category
-          'condition': translatedcondtion,
-          'user': userEmail,
-          'itemID': itemId,
-          'imageURLs': validImageUrls,
-          'status': 'available', // Add item status
-          'timestamp': Timestamp.now(),
-        });
-
-        Navigator.of(context).pop();
-        showSuccessMessage(context, S.of(context).Productaddedsuccessfully);
-        Navigator.of(context).pop();
-      } catch (e) {
-        Navigator.of(context).pop();
-        showErrorMessage(context, "Some error happened: ${e.toString()}");
-      }
-      setState(() => _isLoading = false);
-    }
   }
 
   Future<String> getCurrentUserEmailByUserId() async {
