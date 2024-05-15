@@ -8,7 +8,7 @@ class SettingsService {
 
   Future<String> locale() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('locale') ?? 'ar'; // Default locale code
+    return prefs.getString('locale') ?? 'en'; // Default locale code
   }
 
   Future<void> updateLocale(String localeCode) async {
@@ -17,4 +17,3 @@ class SettingsService {
     print('Updated locale to: $localeCode');
   }
 }
-

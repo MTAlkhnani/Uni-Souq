@@ -15,6 +15,7 @@ import 'package:unisouq/routes/app_routes.dart';
 
 import 'package:unisouq/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:unisouq/service/notification_service.dart';
+import 'package:unisouq/utils/size_utils.dart';
 
 import '../../components/background.dart';
 
@@ -150,15 +151,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const SizedBox(height: 100),
-                    Text(
-                      S.of(context).trans,
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                fontFamily:
-                                    'GreatVibes', // Apply the GreatVibes font family here
-                              ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3.v),
+                      child: Text(
+                        S.of(context).trans,
+                        style:
+                            Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily:
+                                      'GreatVibes', // Apply the GreatVibes font family here
+                                ),
+                      ),
                     ),
                     const SizedBox(height: 30),
                     Text(
